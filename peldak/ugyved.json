@@ -1,0 +1,100 @@
+{
+  "_": "Második minta – így néz ki egy MÁSIK stílus ugyanezen a kódon. Kipróbálás: index.html?config=ugyved.json (a fájlnak a gyökérben kell lennie), vagy másold site.json néven.",
+
+  "meta": { "app": "DilaWEB Sablontervező", "version": 3, "lang": "hu", "trade": "law" },
+
+  "content": {
+    "company": "Dr. Kovács Ügyvédi Iroda",
+    "tagline": "Cég-, ingatlan- és munkajog kisvállalkozásoknak. Az első konzultáció díjmentes, és a végén megmondom, ha nem éri meg pereskedni.",
+    "about": "Dr. Kovács Eszter vagyok, 2009 óta ügyvéd, 2016 óta önálló irodával. Cég- és ingatlanjoggal, valamint munkajogi vitákkal foglalkozom – elsősorban kis- és középvállalkozásoknak, illetve magánszemélyeknek.\n\nMinden ügyet személyesen viszek, nem adom tovább ügyvédjelöltnek. A díjazást előre, írásban rögzítjük: nem lesz meglepetés a számlán.",
+    "address": "1054 Budapest, Alkotmány utca 12. II/4.",
+    "phone": "+36 1 445 2130",
+    "email": "iroda@kovacsugyved.hu",
+
+    "seoTitle": "Dr. Kovács Ügyvédi Iroda – cég-, ingatlan- és munkajog",
+    "seoDescription": "Ügyvédi iroda Budapesten kis- és középvállalkozásoknak. Cégalapítás, szerződések, munkaügyi viták. Az első konzultáció díjmentes.",
+
+    "logo": "",
+    "images": [
+      { "src": "iroda-1.jpg", "alt": "Az iroda tárgyalója" },
+      { "src": "portre.jpg", "alt": "Dr. Kovács Eszter" }
+    ],
+
+    "services": [
+      { "name": "Cégjog", "text": "Alapítás, átalakulás, tulajdonosi szerződések. Az e-cégeljárás öt nap alatt lefut." },
+      { "name": "Ingatlanjog", "text": "Adásvétel, ügyvédi letét, tulajdoni lap ellenőrzése – a földhivatali ügyintézéssel együtt." },
+      { "name": "Munkajog", "text": "Felmondás, elmaradt bér, versenytilalmi megállapodás. Munkáltatói és munkavállalói oldalon egyaránt." },
+      { "name": "Szerződések", "text": "Véleményezés vagy megírás. Egy oldalban leírom, hol van benne kockázat, és mit érdemes átírni." }
+    ],
+
+    "pricing": {
+      "enabled": true,
+      "items": [
+        { "name": "Első konzultáció (45 perc)", "price": "díjmentes" },
+        { "name": "Óradíj", "price": "25 000 Ft + áfa" },
+        { "name": "Cégalapítás, átalánydíjban", "price": "80 000 Ft-tól" },
+        { "name": "Szerződés véleményezése", "price": "35 000 Ft-tól" },
+        { "name": "Peres képviselet", "price": "egyedi megállapodás" }
+      ]
+    },
+
+    "booking": { "enabled": false },
+
+    "references": [
+      { "caption": "Kft. alapítás öt nap alatt, e-cégeljárással", "image": "ref-1.jpg" },
+      { "caption": "Munkaügyi per: négy havi elmaradt bér megítélve", "image": "ref-2.jpg" },
+      { "caption": "Ingatlan adásvétel ügyvédi letéttel", "image": "ref-3.jpg" }
+    ],
+
+    "texts": {
+      "pv.servicesEyebrow": "Jogterületek",
+      "pv.servicesTitle": "Amiben segíteni tudok",
+      "pv.servicesLead": "Négy terület, amit személyesen viszek – nem adom tovább ügyvédjelöltnek.",
+      "pv.refEyebrow": "Ügyek",
+      "pv.refTitle": "Néhány lezárt ügy",
+      "pv.cta": "Konzultációt kérek"
+    }
+  },
+
+  "design": {
+    "mode": "light",
+    "colors": {
+      "light": { "primary": "#1B3A6B", "secondary": "#9A7B4F", "bg": "#F6F7F9", "text": "#11161F" },
+      "dark":  { "primary": "#6E9BD8", "secondary": "#C4A87A", "bg": "#0B0E13", "text": "#E6E9EF" }
+    },
+    "font": "inter",
+    "fontHead": "cormorant",
+    "align": "left",
+    "radius": 4,
+    "layout": "split",
+    "hero": "left",
+    "cols": 2,
+    "width": 70,
+    "spacing": 115,
+    "imgRatio": 133,
+    "typeset": "editorial",
+    "surface": "outline",
+    "texture": "grain",
+    "reveal": "fade",
+    "divider": "line",
+    "accent": "rule",
+    "media": "mono",
+    "btn": "outline",
+    "navBg": "solid",
+    "navShape": "boxed",
+    "navAlign": "end",
+    "navLink": "caps",
+    "navPos": "sticky",
+    "seed": 7
+  },
+
+  "_sections": "Ügyvédnél a bizalom megy elöl: előbb ki vagyok és mit csináltam, csak utána a jogterületek.",
+  "sections": [
+    { "id": "hero", "on": true, "sub": [] },
+    { "id": "about", "on": true, "sub": [] },
+    { "id": "references", "on": true, "sub": [] },
+    { "id": "services", "on": true, "sub": [] },
+    { "id": "contact", "on": true, "sub": [] },
+    { "id": "map", "on": true, "sub": [] }
+  ]
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Az oldal nem található</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#070B11">
+
+  <!-- A hibaoldal bármelyik útvonalon megjelenhet (/nincs/ilyen/oldal), ezért a
+       hivatkozások a gyökérhez igazodnak – enélkül a CSS és a site.json nem
+       töltődne be egy mélyebb címen. -->
+  <base href="/">
+
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="pv.css">
+</head>
+
+<body class="pv" id="pv" data-mode="dark">
+
+  <a class="skip-link" href="#pv-main">Ugrás a tartalomra</a>
+
+  <header class="pv-header">
+   <div class="pv-header__inner">
+    <a class="pv-brand" href="/">
+      <img id="pv-logo" alt="" width="40" height="40">
+      <span id="pv-company-sm">Cégnév</span>
+    </a>
+   </div>
+  </header>
+
+  <main class="pv-main" id="pv-main">
+    <section class="pv-section pv-err" id="pv-error">
+      <div class="pv-wrap">
+        <p class="pv-err__code" aria-hidden="true">404</p>
+        <header class="pv-head">
+          <h1>Ez az oldal nincs meg</h1>
+          <p class="pv-muted">Elképzelhető, hogy elírás történt a címben, vagy az oldal időközben megszűnt.</p>
+        </header>
+        <p class="pv-actions">
+          <a href="/" class="pv-btn pv-btn--primary">Vissza a főoldalra</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pv-footer">
+    <span>&copy; <span id="pv-year">2026</span> <span id="pv-company-ft">Cégnév</span></span>
+    <nav class="pv-footer__links" aria-label="Jogi információk">
+      <a href="adatkezeles.html" data-i18n="pv.privacy">Adatkezelési tájékoztató</a>
+      <a href="impresszum.html" data-i18n="pv.imprint">Impresszum</a>
+    </nav>
+  </footer>
+
+  <!-- A site.js innen csak az arculatot és a cégnevet tölti be: tartalom-blokk
+       nincs az oldalon, a címét pedig szándékosan meghagyja. -->
+  <script src="site.js"></script>
+</body>
+</html>

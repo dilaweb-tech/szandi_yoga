@@ -1,0 +1,11 @@
+node_modules/
+site.json.bak
+.firebase/
+*.log
+
+# Ügyfél-titkok: sose kerüljenek a repóba
+*service-account*.json
+.env
+
+# Belso munkajegyzet: a repo masolata lesz az ugyfel docrootja, ez nem valo bele.
+todo.md

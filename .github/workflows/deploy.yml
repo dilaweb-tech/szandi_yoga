@@ -1,0 +1,66 @@
+# Élesítés: minden ügyféloldal ENNEK a repónak egy külön klónja a tárhelyen,
+# tehát az élesítés ott is `git pull`. Ügyfeleket viszont NEM frissítünk
+# magától: ez a munkafolyamat csak kézzel indul, és megmondod, melyik oldalt.
+#
+# EGYSZERI BEÁLLÍTÁS (Settings → Secrets and variables → Actions):
+#   SSH_HOST, SSH_USER, SSH_KEY, SSH_PORT (nem kötelező), SSH_KNOWN_HOSTS (ajánlott)
+#
+# A könyvtárat futtatáskor adod meg – így egy elgépelt titok nem visz ki
+# véletlenül semmit rossz helyre.
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      dir:
+        description: "Az ügyféloldal könyvtára a tárhelyen (pl. /home/UGYFEL/sites/fodrasz.hu/public_html)"
+        required: true
+      branch:
+        description: "Melyik ágról"
+        required: true
+        default: main
+
+concurrency:
+  group: deploy-termek
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: node test-site.mjs
+
+      - name: SSH előkészítés
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          KNOWN: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          [ -n "${SSH_KEY:-}" ] || { echo "Hiányzik az SSH_KEY titok – lásd a fájl fejlécét."; exit 1; }
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          if [ -n "${KNOWN:-}" ]; then
+            printf '%s\n' "$KNOWN" > ~/.ssh/known_hosts
+          else
+            echo "SSH_KNOWN_HOSTS nincs beállítva – kulcs-ellenőrzés nélkül csatlakozunk."
+            ssh-keyscan -p "${SSH_PORT:-22}" "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          fi
+
+      - name: Élesítés (git pull az ügyfél könyvtárában)
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          DIR: ${{ inputs.dir }}
+          BRANCH: ${{ inputs.branch }}
+        run: |
+          set -euo pipefail
+          ssh -i ~/.ssh/id_deploy -p "${SSH_PORT:-22}" "$SSH_USER@$SSH_HOST" \
+            "set -e; cd '$DIR'; git fetch --quiet origin '$BRANCH'; git merge --ff-only 'origin/$BRANCH'; git log --oneline -1"

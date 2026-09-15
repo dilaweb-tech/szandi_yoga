@@ -1,0 +1,44 @@
+Mentett stílus (JSON) betöltése a termékoldalra
+================================================
+
+A tervezőből letöltött fájl (dilaweb-<cegnev>.json) formátuma AZONOS a
+site.json-nal – a betöltés maga másolás. Ezt a parancsot használd, mert
+közben megmondja, mi hiányzik még (kép, szöveg):
+
+    node tools/plan-to-site.mjs ~/Downloads/dilaweb-aurora-hajszalon.json
+
+Ez a régi site.json-t site.json.bak néven félreteszi, beírja az újat, majd
+kiírja a teendőket (pl. hiányzó kép az images/ mappából).
+
+
+Váltás egy másik, már meglévő stílusra
+=======================================
+
+Ugyanaz a parancs, csak a másik JSON-nal:
+
+    node tools/plan-to-site.mjs peldak/ugyved.json
+    node tools/plan-to-site.mjs peldak/fodrasz.json
+
+Bármelyik korábban lementett JSON mehet paraméterként, nem csak a peldak/
+mappabeliek.
+
+
+Kipróbálás fájlcsere NÉLKÜL (gyors megtekintés)
+=================================================
+
+Tedd a JSON-t a gyökérbe, majd nyisd meg a főoldalt ?config= paraméterrel:
+
+    index.html?config=ugyved.json
+    index.html?config=fodrasz.json
+
+Csak sima fájlnevet fogad el (a-z, 0-9, kötőjel, .json) – idegen URL-ről
+nem tölt be semmit. Ez NEM írja felül a site.json-t, csak megnézésre jó.
+
+
+Ellenőrzés betöltés után
+=========================
+
+    node test-site.mjs
+
+148 ellenőrzés fut le: hiányzó DOM-id, ismeretlen felirat-kulcs, rossz
+design-érték a JSON-ban. Ha ez zöld, mehet az images/ feltöltés és a deploy.

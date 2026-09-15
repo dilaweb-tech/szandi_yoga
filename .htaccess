@@ -1,0 +1,48 @@
+# ==========================================================================
+# Ügyféloldal – Apache konfiguráció
+#
+# A dokumentumgyökér MAGA ennek a repónak a klónja: statikus lap, nincs
+# szerveroldali kód.
+#
+# HA FELTÖLTÉS UTÁN 500-AS HIBÁT AD A LAP: a tárhelyen `AllowOverride None`,
+# tehát a .htaccess tiltott – töröld a fájlt a docrootból.
+# ==========================================================================
+
+# Ponttal kezdődő fájlok és mappák elzárása (.git, .claude, .env). A
+# .well-known kivétel, különben a Let's Encrypt megújítás áll. 404 és nem 403,
+# mert a 403 elárulná, hogy a fájl létezik.
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+    RewriteRule (^|/)\.(?!well-known) - [R=404,L]
+
+    # ENGEDÉLYLISTA: csak a látogatónak szánt fájltípusok mennek ki, minden
+    # más 404. A tiltólista mindig egy lépéssel le van maradva – a sablonon
+    # 2026-08-27-ig emiatt volt letölthető egy belső jegyzet (.txt). Így az
+    # ügyfél docrootjába tévedt jegyzet, ajánlat vagy tábla (.pdf, .docx,
+    # .csv) alapból ZÁRT, nem kell minden új kiterjesztésre gondolni.
+    #
+    # A .json BENNE van: azt a site.js tölti be (site.json). A minta-oldalak
+    # (peldak/) ettől függetlenül zárva maradnak, lásd lentebb.
+    RewriteCond %{REQUEST_URI} !^/robots\.txt$
+    RewriteCond %{REQUEST_URI} !^/\.well-known/
+    RewriteCond %{REQUEST_URI} \.[A-Za-z0-9]+$
+    RewriteCond %{REQUEST_URI} !\.(html|css|js|json|svg|png|jpe?g|webp|avif|ico|woff2)$ [NC]
+    RewriteRule ^ - [R=404,L]
+</IfModule>
+
+# A .json engedélyezett (site.json), ezért a minta-oldalakat mappa szerint
+# kell zárni – különben a fodrász oldala kiszolgálná az ügyvéd mintaadatait.
+<IfModule mod_alias.c>
+  # Belső mappák: a generáló eszközök és a minta-oldalak (másik szakma
+  # adatai) nem az ügyfél látogatójának szólnak.
+  RedirectMatch 404 "(?i)^/(tools|peldak)(/|$)"
+</IfModule>
+
+# Saját hibaoldal. A 404.html a `<base href="/">` miatt gyökérhez igazodva
+# tölti a CSS-t és a site.json-t, tehát mély, nem létező úton is helyesen
+# jelenik meg.
+ErrorDocument 404 /404.html

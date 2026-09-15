@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- A közösségi crawler (Facebook, Messenger, LinkedIn) NEM futtat JS-t: amit
+       a site.js írna ide, azt megosztáskor nem látja. Ezt a blokkot ezért a
+       tools/plan-to-site.mjs süti be a site.json-ból – kézzel ne írd át. -->
+  <!-- >>> META -->
+  <title>Mészáros Alexandra · Ashtanga jóga – Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban</title>
+  <meta name="description" content="Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban. Minden héten ugyanaz a sorozat, a légzés ütemére – kezdőként is jöhetsz.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Mészáros Alexandra · Ashtanga jóga – Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban">
+  <meta property="og:description" content="Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban. Minden héten ugyanaz a sorozat, a légzés ütemére – kezdőként is jöhetsz.">
+  <meta property="og:site_name" content="Mészáros Alexandra · Ashtanga jóga">
+  <meta property="og:locale" content="hu_HU">
+  <meta name="twitter:card" content="summary">
+  <!-- <<< META -->
+  <meta name="theme-color" content="#070B11">
+
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- A betűtípus-linket a site.js tölti ki: csak a ténylegesen használt két
+       család töltődik le, nem az összes választható. -->
+  <link rel="stylesheet" href="pv.css">
+</head>
+
+<!-- A tervező előnézetében ez a blokk egy dobozban élt; itt maga az oldal.
+     Az adatokat és a data-* kapcsolókat a site.js teszi rá a site.json-ból. -->
+<body class="pv" id="pv" data-layout="grid" data-hero="right" data-mode="dark">
+
+  <a class="skip-link" href="#pv-main">Ugrás a tartalomra</a>
+
+  <!-- Felső infósáv (navTop, pv.css 8.2/d): a site.js tölti ki. A fejléc ELŐTT áll:
+       görgetve elmegy, a ragadós menü marad. -->
+  <div class="pv-topbar">
+    <div class="pv-topbar__inner">
+      <p class="pv-topbar__info">
+        <span class="pv-topbar__status" id="pv-topbar-status" hidden></span>
+        <span class="pv-topbar__addr" id="pv-topbar-addr"></span>
+      </p>
+      <p class="pv-topbar__contact">
+        <a id="pv-topbar-phone" href="tel:">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"></path></svg><span></span>
+        </a>
+        <a class="pv-topbar__mail" id="pv-topbar-mail" href="mailto:">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg><span></span>
+        </a>
+      </p>
+    </div>
+  </div>
+
+  <header class="pv-header">
+   <div class="pv-header__inner">
+    <a class="pv-brand" href="#pv">
+      <img id="pv-logo" alt="" width="40" height="40">
+      <span id="pv-company-sm">Cégnév</span>
+    </a>
+
+    <div class="pv-header__end">
+      <!-- Mobil menü kapcsolója: 44rem fölött a CSS elrejti, ott a sáv menüje látszik -->
+      <button type="button" class="pv-burger" id="pv-burger" aria-expanded="false" aria-controls="pv-nav" aria-label="Menü">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+      </button>
+      <nav class="pv-nav" id="pv-nav" aria-label="Fő menü"></nav>
+      <!-- Hívás-gomb (navCall, pv.css 8.2/c): a site.js adja a tel: címet, szám nélkül rejtve -->
+      <a class="pv-mode pv-call" id="pv-call" href="tel:" hidden data-i18n-label="a11y.pvCall" aria-label="Hívás">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"></path>
+        </svg>
+      </a>
+      <button type="button" class="pv-mode" id="pv-mode-toggle" aria-label="Világos és sötét mód">
+        <svg class="icon icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+        </svg>
+        <svg class="icon icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+        </svg>
+      </button>
+      <a href="#sec-contact" class="pv-nav__cta" data-cta-main data-cta-sec="contact" data-i18n="pv.cta">Ajánlatot kérek</a>
+    </div>
+   </div>
+  </header>
+
+  <main class="pv-main" id="pv-main">
+
+    <!-- JS nélküli tartalék: a lap többi szövegét a site.js írja, enélkül
+         csak a helykitöltő látszana. A tools/plan-to-site.mjs tölti ki. -->
+    <!-- >>> NOSCRIPT -->
+    <noscript>
+      <section class="pv-section is-first">
+        <div class="pv-wrap">
+          <h1>Mészáros Alexandra · Ashtanga jóga</h1>
+          <p class="pv-lead">Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban. Minden héten ugyanaz a sorozat, a légzés ütemére – kezdőként is jöhetsz.</p>
+          <ul class="pv-contact__list">
+            <li><span class="pv-muted">Elhelyezkedés</span><strong>Joy of Yoga Stúdió, 6722 Szeged, Gutenberg utca 14.</strong></li>
+            <li><span class="pv-muted">Telefon</span><a href="tel:+36305012453">+36 30 501 2453</a></li>
+            <li><span class="pv-muted">E-mail</span><a href="mailto:info@joyofyoga.hu">info@joyofyoga.hu</a></li>
+          </ul>
+          <p class="pv-muted">Az oldal teljes tartalmához engedélyezd a JavaScriptet a böngésződben.</p>
+        </div>
+      </section>
+    </noscript>
+    <!-- <<< NOSCRIPT -->
+
+    <!-- Háttér-rétegek (pv.css 8.8/b): az első a mintaréteg, a második a köztes
+         parallax-réteg. Rögzített háttérnél sticky, gördülőnél a lapra terül –
+         a döntést a data-bg-depth hozza. E NÉLKÜL egyetlen háttérminta sem
+         látszik: a textúrák mind erre a rétegre festenek. -->
+    <div class="pv-fx" aria-hidden="true"><i></i><i></i></div>
+
+    <!-- Mozgó háttér (pv.css 8.9/b). A három réteget a választott motívum tölti
+         meg CSS-ből – kikapcsolva (bgArt: none) egyik sem látszik. -->
+    <div class="pv-bg" aria-hidden="true"><i></i><i></i><i></i></div>
+
+    <!-- HERO -->
+    <section class="pv-hero" id="sec-hero" data-sec="hero">
+      <div class="pv-wrap pv-hero__inner">
+        <div class="pv-hero__copy">
+          <p class="pv-eyebrow"><span class="pv-dot" aria-hidden="true"></span><span id="pv-address-top">Cím</span>
+            <!-- ÉLŐ állapot, nem dísz: a látogató órája és a nyitvatartás dönti
+                 el (site.js → openState). Nyitvatartás nélkül nincs a lapon. -->
+            <span class="pv-status" id="pv-status" hidden></span></p>
+          <h1 id="pv-company">Cégnév</h1>
+          <p class="pv-lead" id="pv-tagline">Rövid leírás</p>
+          <div class="pv-actions">
+            <a href="#sec-contact" class="pv-btn pv-btn--primary" data-cta-main data-cta-sec="contact" data-i18n="pv.cta">Ajánlatot kérek</a>
+            <!-- A második gomb célját és feliratát is a site.js adja (content.cta2) -->
+            <a href="#sec-services" class="pv-btn pv-btn--ghost" id="pv-cta2" data-cta-sec="services">Szolgáltatásaink</a>
+          </div>
+        </div>
+        <!-- Hero slide-ok: minden felvett kép egy slide, a sávot a site.js írja -->
+        <figure class="pv-hero__media pv-slider">
+          <div class="pv-slides" id="pv-hero-slides"></div>
+          <button type="button" class="pv-slider__nav pv-slider__nav--prev" data-slide="-1" aria-label="Előző kép">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+          </button>
+          <button type="button" class="pv-slider__nav pv-slider__nav--next" data-slide="1" aria-label="Következő kép">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+          </button>
+        </figure>
+      </div>
+      <!-- Kézjegy-szalag (sig="marquee", pv.css 8.12/d): a szolgáltatások nevei
+           vízszintesen vonulnak a hero alatt. A site.js KÉTSZER írja ki a
+           listát – fél szalagnyi eltolásnál a két készlet fedésbe kerül, tehát
+           varrat nélkül ismétlődik. Az egész szalag aria-hidden: ugyanazok a
+           nevek olvashatóan ott vannak a szolgáltatás-blokkban. -->
+      <div class="pv-ribbon" aria-hidden="true"><div class="pv-ribbon__track" id="pv-ribbon"></div></div>
+    </section>
+
+    <!-- SZOLGÁLTATÁSOK – a kártyákat a site.json content.services írja felül -->
+    <section class="pv-section" id="sec-services" data-sec="services">
+      <div class="pv-wrap">
+        <header class="pv-head">
+          <p class="pv-eyebrow"><span class="pv-dot" aria-hidden="true"></span><span data-i18n="pv.servicesEyebrow">Amit kínálunk</span></p>
+          <h2 data-i18n="pv.servicesTitle">Szolgáltatásaink</h2>
+          <p class="pv-muted" data-i18n="pv.servicesLead">Rövid blokkok arról, amiben a legjobb vagy.</p>
+        </header>
+        <ul class="pv-items" id="pv-items"></ul>
+      </div>
+    </section>
+
+    <!-- ÁRJEGYZÉK -->
+    <section class="pv-section pv-pricing" id="sec-pricing" data-sec="pricing" hidden>
+      <div class="pv-wrap">
+        <header class="pv-head">
+          <p class="pv-eyebrow"><span class="pv-dot" aria-hidden="true"></span><span data-i18n="pv.pricingEyebrow">Áraink</span></p>
+          <h2 data-i18n="pv.pricingTitle">Árjegyzék</h2>
+        </header>
+        <!-- Kategória-szűrő: csak akkor kerül ide sor, ha a tételeken van
+             kategória (site.js → chipRow) -->
+        <div id="pv-price-chips"></div>
+        <ul class="pv-prices" id="pv-prices"></ul>
+        <!-- Egy gomb az árlista alatt: aki az árat elfogadta, ott foglaljon,
+             ne kelljen visszagörgetnie a heróig. -->
+        <p class="pv-prices__cta">
+          <a href="#sec-contact" class="pv-btn pv-btn--primary" data-cta-main data-cta-sec="contact" data-i18n="pv.cta">Ajánlatot kérek</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- IDŐPONTFOGLALÁS – a varázsló markupját a közös booking.js írja bele,
+         ugyanúgy, mint a tervező előnézetében. A profil és az admin nézet a
+         fiókoldalon (foglalas.html) él. -->
+    <section class="pv-section pv-booking" id="sec-booking" data-sec="booking" hidden>
+      <div class="pv-wrap">
+        <header class="pv-head">
+          <p class="pv-eyebrow"><span class="pv-dot" aria-hidden="true"></span><span data-i18n="pv.bookingEyebrow">Időpontfoglalás</span></p>
+          <h2 data-i18n="pv.bookingTitle">Foglaljon időpontot</h2>
+        </header>
+        <div class="bk" id="bk-root"></div>
+      </div>
+    </section>
+
+    <!-- REFERENCIÁK -->
+    <section class="pv-section" id="sec-references" data-sec="references">
+      <div class="pv-wrap">
+        <header class="pv-head">
+          <p class="pv-eyebrow"><span class="pv-dot" aria-hidden="true"></span><span data-i18n="pv.refEyebrow">Munkáink</span></p>
+          <h2 data-i18n="pv.refTitle">Referenciák</h2>
+        </header>
+        <div class="pv-slider">
+          <ul class="pv-slides pv-slides--cols" id="pv-refs"></ul>
+          <button type="button" class="pv-slider__nav pv-slider__nav--prev" data-slide="-1" aria-label="Előző kép">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+          </button>
+          <button type="button" class="pv-slider__nav pv-slider__nav--next" data-slide="1" aria-label="Következő kép">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- RÓLUNK -->
+    <section class="pv-section pv-about" id="sec-about" data-sec="about">
+      <div class="pv-wrap pv-about__inner">
+        <!-- a képhely sorszámát a site.js adja: a szolgáltatás-kártyák után jön -->
+        <figure class="pv-about__media"><img id="pv-about-img" data-img-slot="4" alt="" width="800" height="600" loading="lazy"></figure>
+        <div class="pv-about__copy">
+          <p class="pv-eyebrow"><span class="pv-dot" aria-hidden="true"></span><span data-i18n="pv.aboutEyebrow">Rólunk</span></p>
+          <h2 data-i18n="pv.aboutTitle">Néhány szó rólunk</h2>
+          <p id="pv-about">Bemutatkozó szöveg</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÉRKÉP -->
+    <section class="pv-section pv-map" id="sec-map" data-sec="map">
+      <div class="pv-wrap">
+        <header class="pv-head">
+          <p class="pv-eyebrow"><span class="pv-dot" aria-hidden="true"></span><span data-i18n="pv.mapEyebrow">Hol találsz minket</span></p>
+          <h2 data-i18n="pv.mapTitle">Itt vagyunk</h2>
+          <p class="pv-muted" id="pv-map-address">Cím</p>
+        </header>
+        <div class="pv-map__frame">
+          <iframe id="pv-map" title="Térkép" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        </div>
+        <p class="pv-map__link">
+          <a id="pv-map-link" href="#" target="_blank" rel="noopener noreferrer" data-goal="route" data-i18n="pv.mapLink">Megnyitás a Google Térképen</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- KAPCSOLAT -->
+    <section class="pv-section pv-contact" id="sec-contact" data-sec="contact">
+      <div class="pv-wrap">
+        <header class="pv-head">
+          <p class="pv-eyebrow"><span class="pv-dot" aria-hidden="true"></span><span data-i18n="pv.contactEyebrow">Kapcsolat</span></p>
+          <h2 data-i18n="pv.contactTitle">Keress minket bizalommal</h2>
+        </header>
+        <ul class="pv-contact__list">
+          <li>
+            <span class="pv-muted" data-i18n="pv.lblAddress">Elhelyezkedés</span>
+            <strong id="pv-address">Cím</strong>
+          </li>
+          <li>
+            <span class="pv-muted" data-i18n="pv.lblPhone">Telefon</span>
+            <a id="pv-phone" href="#" data-goal="call">Telefonszám</a>
+          </li>
+          <li>
+            <span class="pv-muted" data-i18n="pv.lblEmail">E-mail</span>
+            <a id="pv-email" href="#" data-goal="mail">E-mail cím</a>
+          </li>
+        </ul>
+        <!-- Nyitvatartás: a mai nap kiemelve. Csak akkor kerül ki, ha a tervben
+             be van kapcsolva (content.hoursShow). -->
+        <div class="pv-hours" id="pv-hours" hidden>
+          <h3 data-i18n="pv.hoursTitle">Nyitvatartás</h3>
+          <ul id="pv-hours-list"></ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- A jogi linkek kötelezőek: impresszum (Ekertv. 4. §) és adatkezelési
+       tájékoztató (GDPR). Ne vedd ki őket az ügyfél kérésére sem. -->
+  <footer class="pv-footer">
+    <span>&copy; <span id="pv-year">2026</span> <span id="pv-company-ft">Cégnév</span></span>
+    <span data-i18n="pv.rights">Minden jog fenntartva.</span>
+    <nav class="pv-footer__links" aria-label="Jogi információk">
+      <a href="adatkezeles.html" data-i18n="pv.privacy">Adatkezelési tájékoztató</a>
+      <a href="impresszum.html" data-i18n="pv.imprint">Impresszum</a>
+    </nav>
+  </footer>
+
+  <!-- Ragadós CTA-sáv (pv.css 8.14/b). Telefonon a fejléc gombja elgörgetve nem
+       látszik – ez a sáv hozza vissza a fő akciót a hüvelykujj mellé. Feliratot
+       és célt a site.js ad neki (data-cta-main), tehát ugyanaz, mint a hero
+       gombja. Széles nézetben nem kell: ott a fejléc gombja végig látszik. -->
+  <div class="pv-cta-bar" id="pv-cta-bar">
+    <a href="#sec-contact" class="pv-btn pv-btn--primary" data-cta-main data-cta-sec="contact" data-i18n="pv.cta">Ajánlatot kérek</a>
+  </div>
+
+  <!-- Vissza a lap tetejére (pv.css 8.14). A lap UTOLSÓ eleme, hogy a sticky
+       ragasztás végig kitartson, és a billentyűzetes sorrendben is a végén
+       álljon. A párbeszédablakok ez alatt következnek: azok nem a lap folyamának
+       részei (a <dialog> a felső rétegben nyílik). -->
+  <button type="button" class="pv-top" id="pv-top"
+          data-i18n-label="a11y.pvTop" aria-label="Vissza az oldal tetejére">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 19V6M5.5 12.5L12 6l6.5 6.5"></path>
+    </svg>
+  </button>
+
+  <!-- Belépés a foglaláshoz. Csak akkor nyílik meg, ha a varázsló kéri – a
+       fejléc szándékosan nem tesz ki belépés gombot, ahogy az előnézetben sem. -->
+  <dialog class="dlg" id="auth-dlg">
+    <h2 id="auth-title">Belépés</h2>
+    <form id="auth-form">
+      <label class="bk-field"><span data-lv="lv.email">E-mail cím</span>
+        <input type="email" id="auth-email" autocomplete="email" required></label>
+      <label class="bk-field"><span data-lv="lv.pass">Jelszó</span>
+        <input type="password" id="auth-pass" autocomplete="current-password" minlength="6" required></label>
+      <div id="auth-extra" hidden>
+        <label class="bk-field"><span data-lv="lv.name">Név</span>
+          <input type="text" id="auth-name" autocomplete="name"></label>
+        <label class="bk-field"><span data-lv="lv.phone">Telefonszám</span>
+          <input type="tel" id="auth-phone" autocomplete="tel"></label>
+      </div>
+      <p class="lv-msg" id="auth-msg" role="alert" aria-live="assertive"></p>
+      <button type="submit" class="bk-btn bk-btn--primary" id="auth-submit">Belépés</button>
+    </form>
+    <div class="dlg__links">
+      <button type="button" id="auth-toggle">Még nincs fiókom</button>
+      <button type="button" id="auth-forgot" data-lv="lv.forgot">Elfelejtett jelszó</button>
+      <button type="button" id="auth-close" data-lv="lv.close">Bezárás</button>
+    </div>
+  </dialog>
+
+  <script src="site.js"></script>
+</body>
+</html>

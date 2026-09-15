@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Időpontfoglalás</title>
+  <meta name="description" content="Online időpontfoglalás: válasszon szolgáltatást, munkatársat és időpontot.">
+  <meta name="theme-color" content="#070B11">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Ugyanaz az arculat, mint a főoldalon: a tokeneket a site.js teszi rá a
+       site.json-ból, a foglalási varázsló (booking.css) ezekből dolgozik. -->
+  <link rel="stylesheet" href="pv.css">
+  <link rel="stylesheet" href="booking.css">
+
+  <style>
+    /* A fejlécben itt eggyel több gomb van (nyelv, belépés), ezért a cégnév
+       csak szélesebb sávban fér ki – a logó viszont mindig visz a főoldalra. */
+    .pv-brand span { display: none; }
+    /* `font: inherit` nélkül a böngésző saját gomb-betűje ütne ki a menüből */
+    .pv-nav__top { background: none; border: 0; padding: 0; font: inherit; text-align: inherit; cursor: pointer; }
+    @container (min-width: 44rem) { .pv-brand span { display: block; } }
+
+    /* Csak ezen az oldalon kell: a profil-nézet a varázsló osztályaival */
+    .lv-h { font-size: 1.05rem; margin-top: 0.6rem; }
+    .lv-h--past { color: var(--pv-muted); }
+    .lv-form { display: flex; flex-direction: column; gap: 0.6rem; max-width: 22rem; }
+    .lv-form .bk-btn { align-self: flex-start; }
+    .lv-list { display: flex; flex-direction: column; gap: 0.4rem; }
+    .lv-list--past { opacity: 0.6; }
+    .lv-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      padding: 0.7rem 0.9rem;
+      border: var(--pv-box-line); border-radius: var(--pv-radius);
+    }
+    .lv-row__meta { display: block; font-size: 0.82rem; color: var(--pv-muted); }
+    /* A .dlg és a .lv-msg a pv.css-ben van – mindkét oldal használja */
+  </style>
+</head>
+
+<body class="pv" data-layout="grid" data-mode="dark">
+
+  <a class="skip-link" href="#pv-main">Ugrás a tartalomra</a>
+
+  <header class="pv-header">
+   <div class="pv-header__inner">
+    <a class="pv-brand" href="index.html">
+      <img id="pv-logo" alt="" width="40" height="40">
+      <span id="pv-company-sm">Cégnév</span>
+    </a>
+
+    <div class="pv-header__end">
+      <button type="button" class="pv-burger" id="pv-burger" aria-expanded="false" aria-controls="pv-nav" aria-label="Menü">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+      </button>
+
+      <!-- A gombok wrapper nélkül állnak: a varázsló kódja a `hidden`-t rájuk
+           teszi, üres burok pedig rést hagyna a sávban. -->
+      <nav class="pv-nav" id="pv-nav" aria-label="Fő menü">
+        <a class="pv-nav__top" href="index.html">Főoldal</a>
+        <button type="button" class="pv-nav__top" data-view="book" data-lv="lv.book">Foglalás</button>
+        <button type="button" class="pv-nav__top" data-view="profile" id="nav-profile" data-lv="lv.profile" hidden>Profilom</button>
+      </nav>
+
+      <button type="button" class="pv-mode" id="lang-btn" data-lv-label="lv.lang" aria-label="Nyelv váltása">EN</button>
+
+      <button type="button" class="pv-mode" id="pv-mode-toggle" aria-label="Világos és sötét mód">
+        <svg class="icon icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+        </svg>
+        <svg class="icon icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+        </svg>
+      </button>
+
+      <button type="button" class="pv-nav__cta" id="auth-btn" data-lv="lv.login">Belépés</button>
+    </div>
+   </div>
+  </header>
+
+  <main class="pv-main" id="pv-main">
+
+    <section class="pv-section is-first" id="view-book" data-band="0">
+      <div class="pv-wrap">
+        <header class="pv-head">
+          <p class="pv-eyebrow"><span class="pv-dot" aria-hidden="true"></span><span data-lv="lv.book">Foglalás</span></p>
+          <h1 data-lv="lv.bookTitle">Foglaljon időpontot</h1>
+        </header>
+        <!-- A varázsló markupját a közös booking.js írja bele -->
+        <div class="bk" id="bk-root"></div>
+      </div>
+    </section>
+
+    <section class="pv-section is-first" id="view-profile" data-band="0" hidden>
+      <div class="pv-wrap">
+        <header class="pv-head"><h1 data-lv="lv.myBookings">Foglalásaim</h1></header>
+        <div id="profile-body"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- A foglalási oldalon a tájékoztató külön is fontos: itt adja meg a
+       látogató a nevét, e-mail-címét és telefonszámát. -->
+  <footer class="pv-footer">
+    <span>&copy; <span id="pv-year">2026</span> <span id="pv-company-ft">Cégnév</span></span>
+    <nav class="pv-footer__links" aria-label="Jogi információk">
+      <a href="adatkezeles.html" data-i18n="pv.privacy">Adatkezelési tájékoztató</a>
+      <a href="impresszum.html" data-i18n="pv.imprint">Impresszum</a>
+    </nav>
+  </footer>
+
+  <!-- Vissza a lap tetejére (pv.css 8.14). A foglalási varázsló telefonon
+       hosszú lap: a naptártól a megerősítésig itt van a legnagyobb szükség rá. -->
+  <button type="button" class="pv-top" id="pv-top"
+          data-i18n-label="a11y.pvTop" aria-label="Vissza az oldal tetejére">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 19V6M5.5 12.5L12 6l6.5 6.5"></path>
+    </svg>
+  </button>
+
+  <dialog class="dlg" id="auth-dlg">
+    <h2 id="auth-title">Belépés</h2>
+    <form id="auth-form">
+      <label class="bk-field"><span data-lv="lv.email">E-mail cím</span>
+        <input type="email" id="auth-email" autocomplete="email" required></label>
+      <label class="bk-field"><span data-lv="lv.pass">Jelszó</span>
+        <input type="password" id="auth-pass" autocomplete="current-password" minlength="6" required></label>
+      <div id="auth-extra" hidden>
+        <label class="bk-field"><span data-lv="lv.name">Név</span>
+          <input type="text" id="auth-name" autocomplete="name"></label>
+        <label class="bk-field"><span data-lv="lv.phone">Telefonszám</span>
+          <input type="tel" id="auth-phone" autocomplete="tel"></label>
+      </div>
+      <p class="lv-msg" id="auth-msg" role="alert" aria-live="assertive"></p>
+      <button type="submit" class="bk-btn bk-btn--primary" id="auth-submit">Belépés</button>
+    </form>
+    <div class="dlg__links">
+      <button type="button" id="auth-toggle">Még nincs fiókom</button>
+      <button type="button" id="auth-forgot" data-lv="lv.forgot">Elfelejtett jelszó</button>
+      <button type="button" id="auth-close" data-lv="lv.close">Bezárás</button>
+    </div>
+  </dialog>
+
+  <script src="booking.js"></script>
+  <script src="site.js"></script>
+  <!-- Adapter: DilaWEB backend (/api/*), azonos origin. -->
+  <script type="module" src="booking-api.js"></script>
+</body>
+</html>

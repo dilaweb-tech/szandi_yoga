@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Adatkezelési tájékoztató</title>
+  <meta name="description" content="Milyen személyes adatokat kezelünk, milyen célból, meddig, és milyen jogaid vannak.">
+  <meta name="theme-color" content="#070B11">
+
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="pv.css">
+</head>
+
+<!-- A cégadatokat és a megőrzési időt a site.js írja be a site.json `legal`
+     blokkjából. A jogi szöveg állandó, csak az adat ügyfélfüggő. -->
+<body class="pv" id="pv" data-mode="dark">
+
+  <a class="skip-link" href="#pv-main">Ugrás a tartalomra</a>
+
+  <header class="pv-header">
+   <div class="pv-header__inner">
+    <a class="pv-brand" href="index.html">
+      <img id="pv-logo" alt="" width="40" height="40">
+      <span id="pv-company-sm">Cégnév</span>
+    </a>
+   </div>
+  </header>
+
+  <main class="pv-main" id="pv-main">
+    <section class="pv-section">
+      <div class="pv-wrap pv-legal">
+
+        <header class="pv-head">
+          <p class="pv-eyebrow"><span class="pv-dot" aria-hidden="true"></span><span>Jogi tudnivalók</span></p>
+          <h1>Adatkezelési tájékoztató</h1>
+          <p class="pv-muted">
+            Ez a tájékoztató azt írja le, milyen személyes adatot kezelünk rólad
+            ezen a weboldalon, miért, meddig, és mit tehetsz ezzel kapcsolatban.
+          </p>
+        </header>
+
+        <h2>1. Ki kezeli az adataidat?</h2>
+        <p>Az adatkezelő, vagyis aki eldönti, mi történik az adataiddal:</p>
+        <dl class="pv-legal__facts">
+          <div>
+            <dt>Név</dt>
+            <dd data-legal="name">—</dd>
+          </div>
+          <div>
+            <dt>Székhely</dt>
+            <dd data-legal="seat">—</dd>
+          </div>
+          <div>
+            <dt>Nyilvántartási / cégjegyzékszám</dt>
+            <dd data-legal="regNumber">—</dd>
+          </div>
+          <div>
+            <dt>E-mail</dt>
+            <dd><a data-legal="email" href="#">—</a></dd>
+          </div>
+        </dl>
+        <p>
+          Adatvédelmi tisztviselőt nem alkalmazunk, mert a tevékenységünk nem
+          teszi kötelezővé. Az adatvédelemmel kapcsolatos kérdéseidre a fenti
+          e-mail-címen válaszolunk.
+        </p>
+
+        <h2>2. Milyen adatokat kezelünk, és miért?</h2>
+
+        <!-- A foglalási szakasz csak akkor jelenik meg, ha a modul be van
+             kapcsolva (site.json content.booking.enabled). -->
+        <div data-legal-if="booking" hidden>
+          <h3>2.1 Időpontfoglalás</h3>
+          <p>
+            Ha időpontot foglalsz az oldalon, megadod a nevedet, az e-mail-címedet
+            és a telefonszámodat, valamint kiválasztod a szolgáltatást, a
+            munkatársat és az időpontot. Ezekre azért van szükség, hogy a
+            foglalást rögzíteni és visszaigazolni tudjuk, illetve hogy változás
+            esetén el tudjunk érni.
+          </p>
+          <p>
+            <strong>Jogalap:</strong> a szerződés teljesítése, illetve a
+            szerződéskötést megelőző lépések megtétele
+            (GDPR 6. cikk (1) bekezdés b) pont). Ezeket az adatokat nem
+            adhatod meg „opcionálisan”: nélkülük a foglalás nem rögzíthető.
+          </p>
+          <p>
+            Ha fiókot is létrehozol, az e-mail-címedet és a jelszavad titkosított
+            lenyomatát tároljuk, hogy később megnézhesd és lemondhasd a
+            foglalásaidat. A jelszót magát nem ismerjük és nem tudjuk visszafejteni.
+          </p>
+        </div>
+
+        <h3>2.2 Kapcsolatfelvétel</h3>
+        <p>
+          Ha e-mailben vagy telefonon keresel minket, a megkeresésed tartalmát és
+          az elérhetőségedet addig kezeljük, amíg az ügyet le nem zárjuk.
+          <strong>Jogalap:</strong> jogos érdek a megkeresések megválaszolásához
+          (GDPR 6. cikk (1) bekezdés f) pont).
+        </p>
+
+        <h3>2.3 Szerver- és tárhelynaplók</h3>
+        <p>
+          A weboldalt kiszolgáló szerver automatikusan naplózza a látogatások
+          technikai adatait: az IP-címet, a lekért oldal címét, az időpontot, a
+          böngésző típusát. Ez minden weboldalnál így működik, és az üzemeltetés
+          biztonságához kell – ebből derül ki, ha valaki támadni próbálja az
+          oldalt. <strong>Jogalap:</strong> jogos érdek a szolgáltatás biztonságos
+          működtetéséhez (GDPR 6. cikk (1) bekezdés f) pont).
+        </p>
+
+        <h3>2.4 Beágyazott Google-térkép</h3>
+        <p>
+          A kapcsolat szakaszban a Google Térkép beágyazott változata mutatja meg,
+          hol találsz minket. A térkép betöltésekor a böngésződ közvetlenül a
+          Google szervereihez fordul, így a Google megkapja az IP-címedet, és
+          sütiket helyezhet el. Erre nekünk nincs ráhatásunk. A Google
+          adatkezeléséről a
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google adatvédelmi irányelvei</a>
+          szólnak. Ha ezt el szeretnéd kerülni, a böngésződ beállításaival
+          letilthatod a harmadik féltől származó tartalmak betöltését.
+        </p>
+
+        <h3>2.5 Betűtípusok</h3>
+        <p>
+          Az oldal betűtípusait a Google Fonts szolgáltatás tölti be, ezért a
+          betöltéskor az IP-címed a Google-höz kerül. A Google Fonts a saját
+          tájékoztatása szerint ehhez nem használ sütiket, és a lekéréseket nem
+          köti felhasználói profilhoz.
+        </p>
+
+        <h2>3. Cookie-k és helyi tárolás</h2>
+        <p>
+          <strong>Ez az oldal nem használ sütit sem méréshez, sem hirdetéshez, és
+          nem követi a látogatóit.</strong> Nincs Google Analytics, nincs
+          közösségimédia-pixel.
+        </p>
+        <p>
+          A böngésződ helyi tárolójában (localStorage) néhány beállítás marad meg,
+          hogy ne kelljen újra megadnod őket. Ezek nem kerülnek el a böngésződből,
+          és nem alkalmasak azonosításra:
+        </p>
+        <ul>
+          <li><code>dilaweb:mode</code> – világos vagy sötét megjelenést választottál-e</li>
+          <li><code>bk:lang</code>, <code>bk:theme</code> – a foglalási felület nyelve és megjelenése</li>
+          <li data-legal-if="booking" hidden><code>dw:token</code> – a belépési azonosítód, ha bejelentkeztél a fiókodba. Kijelentkezéskor törlődik.</li>
+        </ul>
+        <p>
+          Mindezt bármikor törölheted a böngésződ „böngészési adatok törlése”
+          funkciójával. Mivel egyik sem szolgál mérésre vagy hirdetésre, a
+          használatukhoz nem kell külön hozzájárulás.
+        </p>
+
+        <h2>4. Kik látják még az adataidat?</h2>
+        <p>
+          Az adataidat nem adjuk el, és nem adjuk át harmadik félnek marketing
+          célra. Az alábbi közreműködők – adatfeldolgozók – férnek hozzá annyiban,
+          amennyiben a feladatuk megkívánja:
+        </p>
+        <dl class="pv-legal__facts">
+          <div>
+            <dt>Tárhely és üzemeltetés</dt>
+            <dd data-legal="hostName">—</dd>
+          </div>
+          <div>
+            <dt>Elérhetőség</dt>
+            <dd><a data-legal="hostMail" href="#">—</a></dd>
+          </div>
+        </dl>
+        <p>
+          Az adatfeldolgozó a saját céljaira nem használhatja fel az adataidat,
+          csak az utasításunk szerint járhat el – ezt írásbeli szerződés rögzíti.
+        </p>
+        <p>
+          Ezen túl hatóság megkeresésére jogszabályi kötelezettség alapján adhatunk
+          ki adatot, illetve a számlázási adatokat a könyvelés és az adóhatóság
+          felé továbbítjuk, ha szolgáltatást veszel igénybe.
+        </p>
+
+        <h2>5. Meddig tartjuk meg?</h2>
+        <ul>
+          <li data-legal-if="booking" hidden>
+            <strong>Foglalási adatok:</strong> a foglalás időpontjától számított
+            <span data-legal="retention">12</span> hónapig, hogy a visszatérő
+            vendégek előzményei elérhetők legyenek, és vitás esetben tisztázható
+            legyen, mi történt. Ezután töröljük őket.
+          </li>
+          <li><strong>Megkeresések, levelezés:</strong> az ügy lezárásától számított 1 évig.</li>
+          <li><strong>Szerver- és tárhelynaplók:</strong> legfeljebb 12 hónapig.</li>
+          <li>
+            <strong>Számlák és számviteli bizonylatok:</strong> 8 évig – ezt a
+            számvitelről szóló 2000. évi C. törvény írja elő, ettől nem térhetünk el.
+          </li>
+        </ul>
+
+        <h2>6. Milyen jogaid vannak?</h2>
+        <p>Bármikor kérheted tőlünk, hogy</p>
+        <ul>
+          <li><strong>tájékoztassunk</strong> arról, milyen adatot kezelünk rólad, és másolatot adjunk róla;</li>
+          <li><strong>helyesbítsük</strong>, ha valamelyik adatod pontatlan vagy hiányos;</li>
+          <li><strong>töröljük</strong> az adataidat, ha már nincs okunk kezelni őket;</li>
+          <li><strong>korlátozzuk</strong> a kezelést, amíg egy vitás kérdés tisztázódik;</li>
+          <li><strong>kiadjuk</strong> az általad megadott adatokat géppel olvasható formában, hogy máshova vihesd;</li>
+          <li>
+            <strong>tiltakozz</strong> a jogos érdeken alapuló adatkezelés ellen –
+            ilyenkor csak akkor folytatjuk, ha kényszerítő erejű jogos okunk van rá.
+          </li>
+        </ul>
+        <p>
+          A kérésedre legkésőbb egy hónapon belül válaszolunk, díjmentesen. Írj a
+          fenti e-mail-címre. Ha nem tudunk eleget tenni a kérésnek, megindokoljuk,
+          miért.
+        </p>
+        <p>
+          Ne feledd: a törlésnek van határa. A már kiállított számlát például nem
+          törölhetjük, mert a számviteli törvény kötelez a megőrzésére.
+        </p>
+
+        <h2>7. Hova fordulhatsz, ha nem vagy elégedett?</h2>
+        <p>
+          Először érdemes minket megkeresni – a legtöbb kérdés így oldódik meg a
+          leggyorsabban. Ha ezzel nem jutottál eredményre, panasszal fordulhatsz a
+          felügyeleti hatósághoz:
+        </p>
+        <dl class="pv-legal__facts">
+          <div>
+            <dt>Hatóság</dt>
+            <dd>Nemzeti Adatvédelmi és Információszabadság Hatóság (NAIH)</dd>
+          </div>
+          <div>
+            <dt>Cím</dt>
+            <dd>1055 Budapest, Falk Miksa utca 9–11.</dd>
+          </div>
+          <div>
+            <dt>Postacím</dt>
+            <dd>1363 Budapest, Pf. 9.</dd>
+          </div>
+          <div>
+            <dt>E-mail</dt>
+            <dd><a href="mailto:ugyfelszolgalat@naih.hu">ugyfelszolgalat@naih.hu</a></dd>
+          </div>
+        </dl>
+        <p>
+          Bírósághoz is fordulhatsz: a pert a lakóhelyed szerinti törvényszék előtt
+          is megindíthatod.
+        </p>
+
+        <h2>8. A tájékoztató módosítása</h2>
+        <p>
+          Ha a szolgáltatás változik, ezt a tájékoztatót is frissítjük. A
+          módosítás a közzététellel lép hatályba, a dátumot alább mindig
+          feltüntetjük.
+        </p>
+        <p class="pv-legal__updated pv-muted">
+          Hatályos: <span data-legal="updated">—</span>
+        </p>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="pv-footer">
+    <span>&copy; <span id="pv-year">2026</span> <span id="pv-company-ft">Cégnév</span></span>
+    <nav class="pv-footer__links" aria-label="Jogi információk">
+      <a href="adatkezeles.html" aria-current="page">Adatkezelési tájékoztató</a>
+      <a href="impresszum.html">Impresszum</a>
+    </nav>
+  </footer>
+
+  <script src="site.js"></script>
+</body>
+</html>

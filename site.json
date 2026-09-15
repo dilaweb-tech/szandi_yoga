@@ -1,0 +1,375 @@
+{
+  "meta": {
+    "app": "DilaWEB Sablontervező",
+    "version": 3,
+    "lang": "hu",
+    "trade": "yoga",
+    "note": "Mészáros Alexandra (Szandi) – Ashtanga oktató a Joy of Yoga Stúdióban, Szeged. Esti, nyugodt arculat, időpontfoglaló nélkül (a jelentkezés a stúdió rendszerében megy). Minden adat a joyofyoga.hu-ról; a [szögletes zárójeles] részt Alexandra tölti ki."
+  },
+  "content": {
+    "company": "Mészáros Alexandra · Ashtanga jóga",
+    "tagline": "Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban. Minden héten ugyanaz a sorozat, a légzés ütemére – kezdőként is jöhetsz.",
+    "about": "Szandi vagyok, én tartom a keddi Ashtanga Half Led órát a Joy of Yoga Stúdióban.\n\nAz Ashtanga kötött sorozat: minden alkalommal ugyanazok a pózok jönnek, ugyanabban a sorrendben, és mindegyik a légzéshez kötődik. A Half Led órán az elsődleges sorozat első felét vezetem végig, egyenletes számolással, a végén záró pózok és pihenés következik. Nem kell figyelned, mi jön – elég, ha a számolást és a saját légzésedet követed.\n\n[Ide jön a saját történetem: mióta gyakorlok, hol tanultam, és miért éppen az Ashtanga.]",
+    "address": "Joy of Yoga Stúdió, 6722 Szeged, Gutenberg utca 14.",
+    "phone": "+36 30 501 2453",
+    "email": "info@joyofyoga.hu",
+    "logo": "",
+    "images": [
+      {
+        "spot": "Hero",
+        "src": "",
+        "focus": "top",
+        "media": ""
+      },
+      {
+        "spot": "Bemutatkozás",
+        "src": "",
+        "focus": "top",
+        "media": ""
+      },
+      {
+        "spot": "Kapcsolat",
+        "src": "",
+        "focus": "center",
+        "media": ""
+      }
+    ],
+    "uploadedFiles": [],
+    "services": [
+      {
+        "name": "Ashtanga Half Led",
+        "text": "Kedd 17:00–18:30. Az elsődleges sorozat első fele vezetett ütemben, számolással; a végén záró pózok és pihenés."
+      },
+      {
+        "name": "Ha most kezded",
+        "text": "Szólj előtte nekem vagy a stúdiónak: a nehezebb pózokhoz könnyebb változatot mutatok. A sorozat ismétlődik, pár alkalom után már tudod, mi jön."
+      },
+      {
+        "name": "Ami a stúdióban vár",
+        "text": "Matracot és eszközt helyben kapsz. A csoport 2–10 fős, a stúdió fél órával a kezdés előtt nyit."
+      }
+    ],
+    "lists": {
+      "gallery": [],
+      "videos": [],
+      "team": [],
+      "faq": [
+        {
+          "name": "Kezdőként jöhetek Ashtangára?",
+          "text": "Igen. Jelezd előre, és a nehezebb pózokhoz könnyebb változatot mutatok. Tapasztalat nem kell.",
+          "tag": "",
+          "image": ""
+        },
+        {
+          "name": "Mit hozzak magammal?",
+          "text": "Kényelmes, rugalmas ruhát. Mezítláb gyakorlunk, matracot és eszközt a stúdió ad.",
+          "tag": "",
+          "image": ""
+        },
+        {
+          "name": "Ehetek az óra előtt?",
+          "text": "Kezdés előtt 1,5–2 órával már ne egyél nehéz ételt.",
+          "tag": "",
+          "image": ""
+        },
+        {
+          "name": "Hogyan jelentkezem és mondom le?",
+          "text": "A Joy of Yoga online foglalási rendszerében, előzetes regisztrációval. Csoportos órát legkésőbb 12 órával a kezdés előtt lehet lemondani.",
+          "tag": "",
+          "image": ""
+        },
+        {
+          "name": "Hogyan fizethetek?",
+          "text": "Készpénzzel vagy átutalással, a stúdió jegyeivel és bérleteivel.",
+          "tag": "",
+          "image": ""
+        },
+        {
+          "name": "Várandósan is jöhetek?",
+          "text": "Várandósan az Ashtanga helyett a stúdió csütörtöki kismamajóga óráját ajánlom (10:30), a 12. héttől, orvosi egyeztetés után.",
+          "tag": "",
+          "image": ""
+        }
+      ],
+      "rating": [],
+      "stats": [
+        {
+          "name": "90 perc",
+          "text": "egy óra hossza",
+          "tag": "",
+          "image": ""
+        },
+        {
+          "name": "2–10 fő",
+          "text": "egy csoportban",
+          "tag": "",
+          "image": ""
+        },
+        {
+          "name": "1 sorozat",
+          "text": "minden héten ugyanaz",
+          "tag": "",
+          "image": ""
+        }
+      ],
+      "reviews": [],
+      "process": [
+        {
+          "name": "Regisztrálj a stúdiónál",
+          "text": "Jelentkezni a Joy of Yoga online foglalási rendszerében lehet. Ha elakadsz, hívd a stúdiót.",
+          "tag": "",
+          "image": ""
+        },
+        {
+          "name": "Érkezz 10–15 perccel előbb",
+          "text": "Így lesz időd átöltözni és lecsendesedni. A matrac és az eszközök már ott várnak.",
+          "tag": "",
+          "image": ""
+        },
+        {
+          "name": "Kövesd a számolást",
+          "text": "Az óra a légzés ütemére halad. Ha elfáradsz, gyermekpózban megpihenhetsz, és onnan csatlakozol vissza.",
+          "tag": "",
+          "image": ""
+        }
+      ],
+      "logos": []
+    },
+    "pricing": {
+      "enabled": true,
+      "cards": false,
+      "items": [
+        {
+          "name": "Egyszeri belépő",
+          "price": "3 800 Ft",
+          "tag": "",
+          "time": "bármely csoportos órára",
+          "image": ""
+        },
+        {
+          "name": "3 alkalmas bérlet",
+          "price": "11 000 Ft",
+          "tag": "",
+          "time": "2 hónapig érvényes",
+          "image": ""
+        },
+        {
+          "name": "6 alkalmas bérlet",
+          "price": "21 000 Ft",
+          "tag": "Legjobb ár",
+          "time": "3 hónapig érvényes",
+          "image": ""
+        },
+        {
+          "name": "9 alkalmas bérlet",
+          "price": "31 000 Ft",
+          "tag": "",
+          "time": "2 hónapig érvényes",
+          "image": ""
+        }
+      ]
+    },
+    "hoursShow": false,
+    "cta2": "about",
+    "booking": {
+      "enabled": false,
+      "services": [],
+      "staff": [],
+      "slot": 30,
+      "currency": "HUF"
+    },
+    "references": []
+  },
+  "design": {
+    "mode": "light",
+    "colors": {
+      "dark": {
+        "primary": "#B7CDBF",
+        "secondary": "#8C88B8",
+        "bg": "#17162A",
+        "text": "#ECEAF3"
+      },
+      "light": {
+        "primary": "#3E3A6B",
+        "secondary": "#7F9A89",
+        "bg": "#F2F4F1",
+        "text": "#1C1B2B"
+      }
+    },
+    "font": "dmsans",
+    "fontHead": "instrument",
+    "align": "left",
+    "radius": 24,
+    "layout": "minimal",
+    "hero": "below",
+    "secHead": "stack",
+    "edge": "none",
+    "flow": "column",
+    "cols": 2,
+    "width": 54,
+    "spacing": 125,
+    "imgRatio": 80,
+    "typeset": "airy",
+    "surface": "inset",
+    "texture": "none",
+    "bgDepth": "scroll",
+    "bgArt": "none",
+    "bgMotion": "still",
+    "bgSpot": "spread",
+    "reveal": "fade",
+    "band": "soft",
+    "divider": "fade",
+    "accent": "none",
+    "sig": "focus",
+    "media": "arch",
+    "btn": "pill",
+    "hover": "none",
+    "navBg": "blur",
+    "navShape": "float",
+    "navAlign": "end",
+    "navLink": "plain",
+    "navPos": "hide",
+    "navProgress": "none",
+    "navCall": "none",
+    "navTop": "none",
+    "seed": 7,
+    "fontScale": "md",
+    "fontScaleBy": {}
+  },
+  "sections": [
+    {
+      "id": "hero",
+      "on": true,
+      "nav": true,
+      "plate": false,
+      "sub": []
+    },
+    {
+      "id": "stats",
+      "on": true,
+      "nav": false,
+      "plate": false,
+      "sub": []
+    },
+    {
+      "id": "about",
+      "on": true,
+      "nav": true,
+      "plate": false,
+      "sub": []
+    },
+    {
+      "id": "services",
+      "on": true,
+      "nav": true,
+      "plate": false,
+      "sub": []
+    },
+    {
+      "id": "process",
+      "on": true,
+      "nav": false,
+      "plate": false,
+      "sub": []
+    },
+    {
+      "id": "faq",
+      "on": true,
+      "nav": true,
+      "plate": false,
+      "sub": []
+    },
+    {
+      "id": "contact",
+      "on": true,
+      "nav": true,
+      "plate": false,
+      "sub": []
+    },
+    {
+      "id": "map",
+      "on": true,
+      "nav": false,
+      "plate": false,
+      "sub": []
+    },
+    {
+      "id": "rating",
+      "on": false,
+      "nav": true,
+      "plate": false,
+      "sub": []
+    },
+    {
+      "id": "reviews",
+      "on": false,
+      "nav": true,
+      "plate": false,
+      "sub": []
+    },
+    {
+      "id": "references",
+      "on": false,
+      "nav": true,
+      "plate": false,
+      "sub": []
+    },
+    {
+      "id": "gallery",
+      "on": false,
+      "nav": true,
+      "plate": false,
+      "sub": []
+    },
+    {
+      "id": "videos",
+      "on": false,
+      "nav": true,
+      "plate": false,
+      "sub": []
+    },
+    {
+      "id": "team",
+      "on": false,
+      "nav": true,
+      "plate": false,
+      "sub": []
+    },
+    {
+      "id": "logos",
+      "on": false,
+      "nav": true,
+      "plate": false,
+      "sub": []
+    }
+  ],
+  "moduleAfter": {
+    "pricing": "services",
+    "booking": "services"
+  },
+  "legal": {
+    "_name": "A szolgáltató teljes, hivatalos neve – egyéni vállalkozónál a személynév, cégnél a cégforma is.",
+    "name": "",
+    "seat": "",
+    "_regNumber": "Cégjegyzékszám, egyéni vállalkozónál a nyilvántartási szám.",
+    "regNumber": "",
+    "taxNumber": "",
+    "_representative": "A képviseletre jogosult neve. Egyéni vállalkozónál ugyanaz, mint a név.",
+    "representative": "",
+    "_contact": "Ha üresen hagyod, a content.email és content.phone értéke kerül be.",
+    "email": "",
+    "phone": "",
+    "_supervisor": "Ha a szakma engedélyköteles vagy kamarai: a felügyeleti szerv, illetve a kamara neve. Üresen a blokk nem jelenik meg.",
+    "supervisor": "",
+    "_hosting": "A tárhelyszolgáltató – ez a DilaWEB, ha a karbantartási csomag részeként mi üzemeltetjük.",
+    "hosting": {
+      "name": "Látkóczki Dániel e.v. és Dinya Kristóf e.v. (DilaWEB)",
+      "seat": "",
+      "email": "info@dilaweb.hu"
+    },
+    "_retentionMonths": "A foglalási adatok megőrzési ideje hónapban. Az adatkezelési tájékoztatóban ez jelenik meg.",
+    "retentionMonths": 12,
+    "_updated": "A tájékoztató hatálybalépésének dátuma (ÉÉÉÉ-HH-NN).",
+    "updated": "2026-08-26"
+  }
+}

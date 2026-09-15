@@ -1,0 +1,135 @@
+{
+  "_": "A tervezőből mentett fájl (dilaweb-*.json) másolata. Az oldal MINDEN szövege és beállítása innen jön – kódot nem kell hozzányúlni. Az itt látható tartalom mintaadat, átadás előtt cseréld.",
+
+  "meta": {
+    "app": "DilaWEB Sablontervező",
+    "version": 3,
+    "lang": "hu",
+    "trade": "hair"
+  },
+
+  "content": {
+    "company": "Aurora Hajszalon",
+    "tagline": "Hajvágás, festés és melír a belvárosban. Foglalj időpontot online, két perc alatt – szabad időpont már holnapra is van.",
+    "about": "Tizenkét éve dolgozunk együtt, négy székkel és azzal a meggyőződéssel, hogy egy jó hajvágás nem harminc perc, hanem egy beszélgetés arról, mennyi időd van reggelente a hajadra.\n\nWella és Olaplex termékekkel dolgozunk, festés előtt mindig csinálunk egy díjmentes hajállapot-felmérést. Ha nem tudod pontosan, mit szeretnél, hozz képeket – a többit közösen kitaláljuk.",
+    "address": "1075 Budapest, Király utca 42.",
+    "phone": "+36 30 214 7788",
+    "email": "szia@aurorahajszalon.hu",
+
+    "_seo": "Ha üresen hagyod, a cégnévből és a bevezetőből épül a böngészőcím és a leírás.",
+    "seoTitle": "Aurora Hajszalon – fodrász a VII. kerületben",
+    "seoDescription": "Hajvágás, festés, melír és alkalmi frizura a Király utcában. Online időpontfoglalás, szabad időpont akár holnapra.",
+
+    "_logo": "Fájlnév az images/ mappából, vagy teljes URL. Üresen a cégnév monogramja látszik.",
+    "logo": "",
+
+    "_images": "Sorrendben: a hero minden képet külön slide-ként mutat, a szolgáltatás- és bemutatkozó képhelyeken pedig körbeforognak. A fájlok az images/ mappába kerülnek.",
+    "images": [
+      { "src": "szalon-1.jpg", "alt": "A szalon belső tere" },
+      { "src": "szalon-2.jpg", "alt": "Festés közben" },
+      { "src": "szalon-3.jpg", "alt": "Kész frizura" }
+    ],
+
+    "_services": "A szolgáltatás-kártyák. A `image` elhagyható – akkor a fenti képlistából kap egyet.",
+    "services": [
+      { "name": "Hajvágás", "text": "Női és férfi vágás mosással, szárítással. A fazon a hajad természetes eséséhez igazodik, nem fordítva." },
+      { "name": "Festés és melír", "text": "Tőfestés, fóliás melír, balayage – minden színezés előtt díjmentes hajállapot-felméréssel." },
+      { "name": "Alkalmi frizura", "text": "Esküvőre, ballagásra, fotózásra. Próbafrizulát is kérhetsz az esemény előtt." },
+      { "name": "Hajápolás", "text": "Olaplex és Wella kezelések festett, szőkített vagy igénybe vett hajra." }
+    ],
+
+    "pricing": {
+      "enabled": true,
+      "items": [
+        { "name": "Női hajvágás (mosás, szárítás)", "price": "9 000 Ft" },
+        { "name": "Férfi hajvágás", "price": "6 000 Ft" },
+        { "name": "Tőfestés", "price": "14 000 Ft-tól" },
+        { "name": "Fóliás melír", "price": "24 000 Ft-tól" },
+        { "name": "Alkalmi frizura", "price": "18 000 Ft" }
+      ]
+    },
+
+    "_booking": "Az `enabled` dönti el, látszik-e a foglalás blokk és a fejléc gombja. A szolgáltatások, munkatársak és a nyitvatartás a Firestore-ba kerülnek (admin/seed-booking.js), a foglalás a foglalas.html oldalon fut.",
+    "booking": {
+      "enabled": true,
+      "slot": 30,
+      "currency": "HUF",
+      "services": [
+        { "id": "s1", "name": "Női hajvágás", "durationMin": 60, "price": "9000" },
+        { "id": "s2", "name": "Férfi hajvágás", "durationMin": 30, "price": "6000" },
+        { "id": "s3", "name": "Festés + vágás", "durationMin": 120, "price": "22000" },
+        { "id": "s4", "name": "Melír", "durationMin": 150, "price": "26000" }
+      ],
+      "staff": [
+        { "id": "w1", "name": "Szabó Anna", "serviceIds": ["s1", "s2", "s3", "s4"] },
+        { "id": "w2", "name": "Kiss Réka", "serviceIds": ["s1", "s3", "s4"] }
+      ],
+      "hours": {
+        "mon": { "open": "09:00", "close": "17:00", "closed": false },
+        "tue": { "open": "09:00", "close": "17:00", "closed": false },
+        "wed": { "open": "09:00", "close": "17:00", "closed": false },
+        "thu": { "open": "09:00", "close": "17:00", "closed": false },
+        "fri": { "open": "09:00", "close": "17:00", "closed": false },
+        "sat": { "open": "09:00", "close": "14:00", "closed": false },
+        "sun": { "open": "09:00", "close": "17:00", "closed": true }
+      }
+    },
+
+    "references": [
+      { "caption": "Balayage: sötétbarnából hamvas, három óra alatt", "image": "ref-1.jpg" },
+      { "caption": "Bob fazon vastag, hullámos hajra", "image": "ref-2.jpg" },
+      { "caption": "Alkalmi konty esküvőre", "image": "ref-3.jpg" }
+    ],
+
+    "_texts": "Az oldal állandó feliratai. Csak azt vedd fel, amit át akarsz írni – a többi az alapértelmezett magyar szöveg marad.",
+    "texts": {
+      "pv.servicesEyebrow": "Amit kínálunk",
+      "pv.servicesTitle": "Szolgáltatásaink",
+      "pv.servicesLead": "Vágás, szín és ápolás – mind ugyanattól a csapattól, ugyanabban a székben.",
+      "pv.aboutTitle": "Néhány szó rólunk",
+      "pv.contactTitle": "Keress minket bizalommal"
+    }
+  },
+
+  "design": {
+    "mode": "light",
+    "colors": {
+      "light": { "primary": "#A8385B", "secondary": "#D98CA6", "bg": "#FFF7F4", "text": "#2C1A21" },
+      "dark":  { "primary": "#E0708F", "secondary": "#D98CA6", "bg": "#140A0D", "text": "#F2E2E6" }
+    },
+    "font": "nunito",
+    "fontHead": "playfair",
+    "align": "left",
+    "radius": 22,
+    "layout": "cards",
+    "hero": "right",
+    "cols": 3,
+    "width": 66,
+    "spacing": 110,
+    "imgRatio": 120,
+    "typeset": "airy",
+    "surface": "soft",
+    "texture": "glow",
+    "reveal": "fade",
+    "divider": "arc",
+    "accent": "stamp",
+    "media": "arch",
+    "btn": "pill",
+    "navBg": "clear",
+    "navShape": "float",
+    "navAlign": "center",
+    "navLink": "plain",
+    "navPos": "sticky",
+    "seed": 42
+  },
+
+  "_sections": "Sorrend és láthatóság. `custom: true` = saját menüpont (nincs mögötte szekció, a `href` viszi tovább). A `sub` elemei lehetnek feliratok vagy { \"label\", \"href\" } linkek.",
+  "sections": [
+    { "id": "hero", "on": true, "sub": [] },
+    { "id": "services", "on": true, "sub": [] },
+    { "id": "references", "on": true, "sub": [] },
+    { "id": "about", "on": true, "sub": [] },
+    { "id": "map", "on": true, "sub": [] },
+    { "id": "contact", "on": true, "sub": [] }
+  ]
+}
