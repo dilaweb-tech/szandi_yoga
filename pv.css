@@ -4060,8 +4060,11 @@ iframe { border: 0; }
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
     .pv[data-sig="mat"] .pv-list--process .pv-items {
-      --pv-mat-run: cover 40vh cover calc(100% - 60vh);
-      --pv-mat-out: cover calc(100% - 60vh) cover calc(100% - 48vh);
+      /* dvh, nem vh: telefonon a vh a címsor NÉLKÜLI magasság, a görgetés
+         viszont a ténylegesen látható képernyőhöz igazodik – vh-val a henger és
+         a felirat egy címsornyival elcsúszna egymástól */
+      --pv-mat-run: cover 40dvh cover calc(100% - 60dvh);
+      --pv-mat-out: cover calc(100% - 60dvh) cover calc(100% - 48dvh);
     }
     .pv[data-sig="mat"] .pv-list--process .pv-items::before,
     .pv[data-sig="mat"] .pv-list--process .pv-items::after,
@@ -4081,17 +4084,21 @@ iframe { border: 0; }
       animation-timeline: --pv-mat, --pv-mat;
       animation-range: var(--pv-mat-run), var(--pv-mat-out);
     }
-    /* a henger ~1,5–2rem-rel a lépés teteje után ér a pöttyhöz, a szöveghez */
+    /* Felirat CSAK ott, ahol már van szőnyeg: a lépés akkor érkezik, amikor az
+       ALJA is fél remmel a henger vonala (a képernyő 60%-a) fölé ért – a
+       tartomány ezért a doboz magasságával később indul (100% - 60dvh). A
+       pötty a lépés tetején ül (0,9rem térköz + 2,5rem), az akkor áll a
+       helyére, amikor a henger már elhaladt alatta. */
     .pv[data-sig="mat"] .pv-list--process .pv-item {
       view-timeline: --pv-mat-step block;
       animation-name: pv-mat-step;
       animation-timeline: --pv-mat-step;
-      animation-range: cover calc(40vh + 2rem) cover calc(40vh + 6rem);
+      animation-range: cover calc(100% - 60dvh + 0.5rem) cover calc(100% - 50dvh);
     }
     .pv[data-sig="mat"] .pv-list--process .pv-item::before {
       animation-name: pv-mat-dot;
       animation-timeline: --pv-mat-step;
-      animation-range: cover calc(40vh + 1.5rem) cover calc(40vh + 4rem);
+      animation-range: cover calc(40dvh + 3.6rem) cover calc(40dvh + 6rem);
     }
     @container (min-width: 46rem) {
       .pv[data-sig="mat"] .pv-list--process .pv-items {
