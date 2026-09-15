@@ -618,7 +618,9 @@ function loadFonts() {
   }));
 }
 
-const MODE_KEY = "dilaweb:mode";
+/* Saját kulcs: a közös "dilaweb:mode" alatt egy másik DilaWEB-oldalon (pl. a
+   sötét termék-demón) mentett választás ide is átöröklődne. */
+const MODE_KEY = "szandi:mode";
 /* „4,9" → „98.0%": a csillagsor kitöltése (pv.css 8.13). Az ügyfél szabad
    szöveget ír a mezőbe, ezért a szemét és az ötnél nagyobb szám is értelmes
    végeredményt ad – öt csillagnál több nincs. */

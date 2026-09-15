@@ -178,49 +178,54 @@
       "slot": 30,
       "currency": "HUF"
     },
-    "references": []
+    "references": [],
+    "texts": {
+      "pv.cta": "Jelentkezem",
+      "pv.contactTitle": "Gyere el egy keddi órára",
+      "pv.lblAddress": "A stúdió címe"
+    }
   },
   "design": {
     "mode": "light",
     "colors": {
       "dark": {
-        "primary": "#B7CDBF",
-        "secondary": "#8C88B8",
-        "bg": "#17162A",
-        "text": "#ECEAF3"
+        "primary": "#D2B89F",
+        "secondary": "#9C8470",
+        "bg": "#1E1814",
+        "text": "#F1E9DF"
       },
       "light": {
-        "primary": "#3E3A6B",
-        "secondary": "#7F9A89",
-        "bg": "#F2F4F1",
-        "text": "#1C1B2B"
+        "primary": "#8A6A52",
+        "secondary": "#BFA58D",
+        "bg": "#F6EFE6",
+        "text": "#2B211B"
       }
     },
     "font": "dmsans",
     "fontHead": "instrument",
     "align": "left",
     "radius": 24,
-    "layout": "minimal",
+    "layout": "split",
     "hero": "below",
-    "secHead": "stack",
+    "secHead": "side",
     "edge": "none",
-    "flow": "column",
-    "cols": 2,
-    "width": 54,
-    "spacing": 125,
+    "flow": "stack",
+    "cols": 3,
+    "width": 76,
+    "spacing": 95,
     "imgRatio": 80,
     "typeset": "airy",
     "surface": "inset",
     "texture": "none",
     "bgDepth": "scroll",
-    "bgArt": "none",
-    "bgMotion": "still",
+    "bgArt": "candle",
+    "bgMotion": "own",
     "bgSpot": "spread",
     "reveal": "fade",
-    "band": "soft",
-    "divider": "fade",
+    "band": "brand",
+    "divider": "wave",
     "accent": "none",
-    "sig": "focus",
+    "sig": "mat",
     "media": "arch",
     "btn": "pill",
     "hover": "none",
@@ -233,7 +238,7 @@
     "navCall": "none",
     "navTop": "none",
     "seed": 7,
-    "fontScale": "md",
+    "fontScale": "lg",
     "fontScaleBy": {}
   },
   "sections": [
