@@ -602,6 +602,7 @@ function applyDesign() {
 
   /* a böngésző saját felületei (görgetősáv, űrlapmezők) is kövessék a módot */
   document.documentElement.style.colorScheme = MODE;
+  document.documentElement.style.background = c.bg;
   $('meta[name="theme-color"]')?.setAttribute("content", c.bg);
 }
 
@@ -611,12 +612,25 @@ function loadFonts() {
   const hand = DESIGN.accent === "note" || DESIGN.sig === "signature";
   const fams = [...new Set([DESIGN.fontHead, DESIGN.font, hand && "caveat"])]
     .map((k) => FONTS[k]?.g).filter(Boolean);
-  if (!fams.length) return;
-  document.head.append(Object.assign(document.createElement("link"), {
+  if (!fams.length) return Promise.resolve();
+  const link = Object.assign(document.createElement("link"), {
     rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?" + fams.map((f) => "family=" + f).join("&") + "&display=swap",
-  }));
+  });
+  /* A betűfájlokra csak a stíluslap UTÁN lehet várni – előtte a böngésző nem
+     is tudja, milyen fájlok tartoznak a családhoz. A címsor és a folyószöveg
+     (normál + félkövér) kell az első képhez; a többi súly ráér. Hiba esetén is
+     teljesül: a lap sosem várhat egy betűre. */
+  const sheet = new Promise((ok) => { link.onload = link.onerror = ok; });
+  document.head.append(link);
+  const h = FONTS[DESIGN.fontHead]?.s, b = FONTS[DESIGN.font]?.s;
+  return sheet.then(() => Promise.all([h && `1em ${h}`, b && `1em ${b}`, b && `600 1em ${b}`]
+    .filter(Boolean).map((f) => document.fonts?.load(f).catch(() => null))));
 }
+
+/* Villanásmentes indulás (a HTML <head>-je rejtve tartja a lapot): megjelenés,
+   ha az arculat és a tartalom a helyén van. */
+const reveal = () => document.documentElement.classList.add("pv-ready");
 
 /* Saját kulcs: a közös "dilaweb:mode" alatt egy másik DilaWEB-oldalon (pl. a
    sötét termék-demón) mentett választás ide is átöröklődne. */
@@ -1312,12 +1326,12 @@ function initEvents() {
   /* Vissza a lap tetejére (pv.css 8.14). A gomb csak akkor bukkan elő, ha a
      látogató legalább egy képernyőnyit görgetett – rövid lapon fel sem tűnik.
      A figyelő PASSZÍV: a görgetést semmiképp nem késleltetheti. */
-  /* Ugyanaz a küszöb viszi a ragadós CTA-sávot (pv.css 8.14/b): mindkettő akkor
-     kell, amikor a hero – és benne a fő gomb – már elgörgött. */
+  /* Szandi oldalán telefonon NINCS ragadós CTA-sáv (pv.css 8.14/b): a hero és
+     a fejléc gombja elég, az alsó sáv a nyugodt laphoz tolakodónak hatott. */
   /* Ugyanez a figyelő viszi a fejléc görgetés-jeleit (pv.css 8.2/c) és az
      aktuális menüpontot – ugyanaz a logika, mint a tervező előnézetében. Előbb
      minden OLVASÁS, utána az írás: egy görgetés, egy elrendezés-számolás. */
-  const topBtn = $("#pv-top"), ctaBar = $("#pv-cta-bar"), header = $(".pv-header");
+  const topBtn = $("#pv-top"), header = $(".pv-header");
   let lastY = 0;
   const syncTop = () => {
     const y = scrollY, h = innerHeight, max = document.documentElement.scrollHeight - h;
@@ -1334,7 +1348,6 @@ function initEvents() {
     $$("#pv-nav [aria-current]").forEach((a) => a !== cur && a.removeAttribute("aria-current"));
     cur?.setAttribute("aria-current", "location");
     topBtn?.classList.toggle("is-on", past);
-    ctaBar?.classList.toggle("is-on", past);
     if (header) {
       header.classList.toggle("is-scrolled", y > 8);
       /* az apró oda-vissza rezgést (érintőpad, rugalmas görgetés) a 6px szűri */
@@ -1411,6 +1424,7 @@ async function init() {
     live = lists;
   } catch (err) {
     console.error(`Nem sikerült betölteni: ${file}`, err);
+    reveal();                                    /* az alap-lap is jobb, mint az üres */
     return;
   }
   CFG.content ||= {};
@@ -1432,13 +1446,16 @@ async function init() {
   try { saved = localStorage.getItem(MODE_KEY); } catch {}
   MODE = saved === "light" || saved === "dark" ? saved : (DESIGN.mode || BASE.mode);
 
-  loadFonts();
+  const fonts = loadFonts();
   applyDesign();
   applyChrome();
   applySeo();
   if ($("#pv-hero-slides")) applyContent();     /* a foglalási oldalon nincs mit */
   if ($("[data-legal]")) applyLegal();          /* impresszum és adatkezelés */
   initEvents();
+  /* A betűkre legfeljebb 1,2 mp-et várunk: lassú hálón inkább a tartalék betű
+     jelenjen meg, mint az üres lap. */
+  Promise.race([fonts, new Promise((ok) => setTimeout(ok, 1200))]).then(reveal, reveal);
 }
 
 init();

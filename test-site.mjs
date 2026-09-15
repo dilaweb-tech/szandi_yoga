@@ -305,7 +305,7 @@ const HAS = {
   "pv-chip":     { js: "chipRow", html: "pv-price-chips", css: ".pv-chip" },
   "pv-status":   { js: "openState", html: "pv-status", css: ".pv-status" },
   "pv-hours":    { js: "pv-hours-list", html: "pv-hours", css: ".pv-hours" },
-  "pv-cta-bar":  { js: "pv-cta-bar", html: "pv-cta-bar", css: ".pv-cta-bar" },
+  /* pv-cta-bar: Szandi oldalán szándékosan nincs ragadós CTA-sáv (site.js 8.14/b) */
   "pv-cta2":     { js: "pv.ctaRoute", html: "pv-cta2", css: null },
   "plate":       { js: "dataset.plate", html: null, css: `[data-plate="1"]` },
   "price-cards": { js: "pv-prices--cards", html: null, css: ".pv-prices--cards" },

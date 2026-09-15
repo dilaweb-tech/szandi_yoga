@@ -26,6 +26,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- A betűtípus-linket a site.js tölti ki: csak a ténylegesen használt két
        család töltődik le, nem az összes választható. -->
+  <!-- Villanásmentes indulás. A pv.css alapértékei a sablon arculatát rajzolnák,
+       amíg a site.js a site.json-ból fel nem rakja Szandiét – ezért a lap addig
+       Szandi színén, rejtve áll (site.js → init, reveal). Ha a szkript nem fut
+       le, 3 mp múlva magától megjelenik; JavaScript nélkül azonnal. -->
+  <style>
+    html { background: #F6EFE6; }
+    html:not(.pv-ready) body { visibility: hidden; animation: pv-boot 0s 3s forwards; }
+    @keyframes pv-boot { to { visibility: visible; } }
+    @media (prefers-reduced-motion: no-preference) { html.pv-ready body { animation: pv-in 0.3s ease-out; } }
+    @keyframes pv-in { from { opacity: 0; } }
+  </style>
+  <!-- a mentett sötét mód már az első képkockán: a kulcs a site.js MODE_KEY-e -->
+  <script>try { if (localStorage.getItem("szandi:mode") === "dark") document.documentElement.style.background = "#1E1814"; } catch {}</script>
+  <noscript><style>html:not(.pv-ready) body { visibility: visible; animation: none; }</style></noscript>
   <link rel="stylesheet" href="pv.css">
 </head>
 
@@ -290,14 +304,6 @@
       <a href="impresszum.html" data-i18n="pv.imprint">Impresszum</a>
     </nav>
   </footer>
-
-  <!-- Ragadós CTA-sáv (pv.css 8.14/b). Telefonon a fejléc gombja elgörgetve nem
-       látszik – ez a sáv hozza vissza a fő akciót a hüvelykujj mellé. Feliratot
-       és célt a site.js ad neki (data-cta-main), tehát ugyanaz, mint a hero
-       gombja. Széles nézetben nem kell: ott a fejléc gombja végig látszik. -->
-  <div class="pv-cta-bar" id="pv-cta-bar">
-    <a href="#sec-contact" class="pv-btn pv-btn--primary" data-cta-main data-cta-sec="contact" data-i18n="pv.cta">Ajánlatot kérek</a>
-  </div>
 
   <!-- Vissza a lap tetejére (pv.css 8.14). A lap UTOLSÓ eleme, hogy a sticky
        ragasztás végig kitartson, és a billentyűzetes sorrendben is a végén
