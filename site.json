@@ -16,22 +16,32 @@
     "logo": "",
     "images": [
       {
-        "spot": "Hero",
-        "src": "",
-        "focus": "top",
-        "media": ""
-      },
-      {
-        "spot": "Bemutatkozás",
-        "src": "",
-        "focus": "top",
-        "media": ""
-      },
-      {
-        "spot": "Kapcsolat",
-        "src": "",
+        "spot": "Nyitókép · Ashtanga Half Led",
+        "src": "lotusz.jpg",
         "focus": "center",
-        "media": ""
+        "media": "",
+        "alt": "Rózsaszín lótuszvirág harmatcseppekkel, zöld levelek között"
+      },
+      {
+        "spot": "Nyitókép · Ha most kezded",
+        "src": "gyertya-kezben.jpg",
+        "focus": "center",
+        "media": "",
+        "alt": "Égő gyertya egy nyitott tenyéren, sötét háttér előtt"
+      },
+      {
+        "spot": "Nyitókép · Ami a stúdióban vár",
+        "src": "joga-parna-gyertya.jpg",
+        "focus": "center",
+        "media": "",
+        "alt": "Két jógapárna és három gyertya a stúdió fapadlóján"
+      },
+      {
+        "spot": "Nyitókép · Bemutatkozás",
+        "src": "meditacios-kez.jpg",
+        "focus": "left",
+        "media": "",
+        "alt": "Meditációs kéztartás: térdre engedett, laza kéz fehér vászonruhán"
       }
     ],
     "uploadedFiles": [],
