@@ -79,6 +79,8 @@ const BASE = {
   layout: "grid", hero: "right", cols: 3, width: 68, spacing: 100, imgRatio: 133,
   /* karakter-tengelyek: a sávozás (band) az erősség, a szekcióhatár (divider) az él */
   typeset: "classic", surface: "soft", texture: "none", reveal: "fade", band: "soft", divider: "none",
+  /* a texture: "art" háttérképe – fájlnév az images/ mappából */
+  bgImage: "",
   /* lapszerkezet: hol áll a szekciócím, és mi keretezi a lapot */
   secHead: "stack", edge: "none",
   /* lapritmus (pv.css 8.12/c): a szekciók EGYMÁSHOZ való viszonya – ez adja a
@@ -588,6 +590,7 @@ function applyDesign() {
     "--pv-max": DESIGN.width >= 100 ? "none" : DESIGN.width + "rem",
     "--pv-space": DESIGN.spacing / 100,
     "--pv-ratio": DESIGN.imgRatio / 100,
+    "--pv-bg-img": DESIGN.bgImage ? `url("${imgSrc(DESIGN.bgImage)}")` : "none",
   };
   for (const [k, v] of Object.entries(tokens)) pv.style.setProperty(k, v);
   PV_FLAGS.forEach((k) => (pv.dataset[k] = k === "mode" ? MODE : DESIGN[k]));
@@ -967,6 +970,7 @@ function applyContent() {
          `content:` sztringet vár – és így öröklődik a belső ál-elemekig. */
       el.style.setProperty("--pv-idx", `"${String(i + 1).padStart(2, "0")}"`);
       el.classList.toggle("is-first", i === 0);
+      el.classList.toggle("is-second", i === 1);   /* a hero-t érintő szekcióhatárhoz (pv.css) */
     });
 
   /* Szolgáltatás-kártyák: a JSON-ból, vagy négy kitöltendő alapkártya */
@@ -1385,6 +1389,10 @@ function initEvents() {
     }
   };
   addEventListener("scroll", syncTop, { passive: true });
+  /* a rögzített háttérréteg a lap tetejéről induljon (pv.css 8.8/b, --pv-fx-top) */
+  const main = $(".pv-main");
+  const fxTop = () => document.body.style.setProperty("--pv-fx-top", main.offsetTop + "px");
+  if (header && main) { fxTop(); new ResizeObserver(fxTop).observe(header); }
   topBtn?.addEventListener("click", () => glide(0));
   syncTop();
 

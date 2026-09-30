@@ -110,7 +110,7 @@
           "image": ""
         },
         {
-          "name": "2–10 fő",
+          "name": "1–20 fő",
           "text": "egy csoportban",
           "tag": "",
           "image": ""
@@ -242,7 +242,7 @@
     "align": "left",
     "radius": 24,
     "layout": "split",
-    "hero": "below",
+    "hero": "banner",
     "secHead": "side",
     "edge": "none",
     "flow": "stack",
@@ -252,8 +252,9 @@
     "imgRatio": 80,
     "typeset": "airy",
     "surface": "inset",
-    "texture": "none",
-    "bgDepth": "scroll",
+    "texture": "art",
+    "bgImage": "meditalo-alak.png",
+    "bgDepth": "fixed",
     "bgArt": "candle",
     "bgMotion": "own",
     "bgSpot": "spread",
@@ -329,7 +330,7 @@
     },
     {
       "id": "map",
-      "on": true,
+      "on": false,
       "nav": false,
       "plate": false,
       "sub": []

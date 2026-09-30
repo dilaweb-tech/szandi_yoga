@@ -1248,6 +1248,9 @@ iframe { border: 0; }
 
 /* --- 8.7 lábléc ---------------------------------------------------------- */
 .pv-footer {
+  /* a tapadó háttérréteg (.pv-fx, z-index 0) fölé – különben a kép átüt rajta */
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem 1rem;
@@ -1643,8 +1646,15 @@ iframe { border: 0; }
      háttér sem látszott. A 0 a .pv-bg-vel azonos szint: a fanézetben ez áll
      előrébb, tehát a minta alulra, a motívum fölé kerül. */
   z-index: 0;
-  height: 100dvh;
-  margin-bottom: -100dvh;      /* a folyamban nem foglal helyet */
+  /* `lvh`, nem `dvh`: telefonon a címsor ki-be csúszásától a dvh görgetés
+     közben változik – a réteg átméreteződött, a rajta ülő kép ugrált. Az lvh
+     állandó, és mindig kitölti a teljes kijelzőt. */
+  height: 100lvh;
+  /* A lap TETEJÉN kezdődik, nem a fejléc alatt (a fejléc magasságát a site.js
+     méri: --pv-fx-top) – különben az első pár pixel görgetésnél a lappal megy,
+     aztán megáll. A két margó összege nulla: a folyamban nem foglal helyet. */
+  margin-top: calc(-1 * var(--pv-fx-top, 0px));
+  margin-bottom: calc(var(--pv-fx-top, 0px) - 100lvh);
   overflow: hidden;            /* a köztes réteg túllógása nem görgethet */
   pointer-events: none;
 }
@@ -1654,7 +1664,7 @@ iframe { border: 0; }
   position: absolute;
   inset: 0;
   height: auto;
-  margin-bottom: 0;
+  margin: 0;
 }
 .pv-fx i { position: absolute; inset: 0; display: block; }
 
@@ -1698,6 +1708,23 @@ iframe { border: 0; }
    sarokból induló színátmenet a generált oldalak legárulkodóbb jegye, és rácsos
    vagy pontrasztere állított háttéren ráadásul összekeveredik a mintával. */
 .pv:not([data-texture="glow"]) .pv-hero { background: none; }
+
+/* Saját háttérkép (texture: "art"): kivágott, átlátszó hátterű illusztráció a
+   lap színén. A kép az ügyfélé (design.bgImage → --pv-bg-img), a hely és a
+   halványítás közös. Rögzített mélységnél (bgDepth: fixed) az ablak aljához
+   tapad, a tartalom elhalad előtte. Telefonon a szélesség, tágas lapon a
+   magasság szab határt – sosem nő a szöveg fölé. */
+/* A kép a KIS nézet (svh) aljára ül: a címsor sosem takarja, és görgetés
+   közben sem mozdul el. */
+.pv[data-texture="art"] .pv-fx i:nth-child(1) {
+  bottom: auto;
+  height: 100svh;
+  background: var(--pv-bg-img) no-repeat 50% 100% / min(96%, 62svh * 1.51) auto;
+  opacity: 0.42;
+}
+.pv[data-texture="art"][data-mode="dark"] .pv-fx i:nth-child(1) { opacity: 0.3; }
+/* a sávozott szekció ugyanazt a színt adja, de ÁTTETSZŐN – a kép átlátszik rajta */
+.pv[data-texture="art"][data-band="brand"] { --pv-band: color-mix(in srgb, var(--pv-primary) 12%, transparent); }
 
 .pv[data-texture="glow"] .pv-fx i:nth-child(1) {
   background-image:
@@ -2512,6 +2539,39 @@ iframe { border: 0; }
     pv-flame-light 5.1s -2.3s ease-in-out infinite;
 }
 .pv[data-bg-art="candle"][data-bg-motion="own"] .pv-bg::before, .pv[data-bg-art="candle"][data-bg-motion="own"] .pv-bg::after { content: ""; }
+/* SAJÁT: lótuszos banner-hero. Nincs slideshow – csak az első kép (lótusz) a
+   teljes hero háttere. A nagy gyertya jobbra, kicsit befelé kerül, és a fotó
+   ELÉ: a hero stacking-kontextusát feloldjuk, a kép és a fátyol a .pv-bg alá,
+   a szöveg fölé. A többi szekció a DOM-sorrend miatt továbbra is fölötte ül. */
+.pv[data-hero="banner"] #pv-hero-slides > :nth-child(n + 2) { display: none; }
+/* telefonon a szöveg a teljes szélességen fut, a sötét fotórészen is: ott egyenletes fátyol kell */
+.pv[data-hero="banner"] .pv-hero::after {
+  background: linear-gradient(100deg, color-mix(in srgb, var(--pv-bg) 82%, transparent) 25%, color-mix(in srgb, var(--pv-bg) 60%, transparent));
+}
+@container (min-width: 46rem) {
+  .pv[data-hero="banner"] .pv-hero::after {
+    background: linear-gradient(100deg, var(--pv-bg) 8%, color-mix(in srgb, var(--pv-bg) 55%, transparent) 55%, transparent 95%);
+  }
+}
+.pv[data-bg-art="candle"][data-hero="banner"] .pv-bg { z-index: 1; }
+.pv[data-bg-art="candle"][data-hero="banner"] .pv-hero { z-index: auto; }
+.pv[data-bg-art="candle"][data-hero="banner"] .pv-hero__copy { z-index: 2; }
+.pv[data-bg-art="candle"][data-hero="banner"] .pv-bg i:nth-child(1),
+.pv[data-bg-art="candle"][data-bg-motion="own"][data-hero="banner"] .pv-bg::before {
+  /* a hero-n belül maradjon: a fejléc alatt kezd, plafonnal – a banner magassága
+     30rem-nél megáll, a gyertya se nőjön tovább, különben átlóg a hullámon */
+  width: min(30cqi, 28rem); inset-inline: auto 9cqi; top: calc(var(--pv-nav-h) + min(3cqi, 2rem));
+}
+/* A hero alatti hullám TÖMÖR: az áttetsző sávszín (texture: art) a fotót és a
+   gyertyát mutatta át. A tömör keverék a figura nélküli lapon ugyanaz a szín. */
+.pv[data-hero="banner"] .pv-section.is-second::before {
+  background: color-mix(in srgb, var(--pv-primary) 12%, var(--pv-bg));
+}
+/* A meditáló figura a nyitóképen még nincs ott: az első görgetésre úszik be.
+   A jelző a fejléc .is-scrolled osztálya (site.js, 8px után) – a scroll()
+   idővonal itt nem jó, a .pv-fx overflow:hidden-je maga is görgetődoboz. */
+.pv[data-texture="art"][data-hero="banner"] .pv-fx i:nth-child(1) { transition: opacity 0.9s ease; }
+.pv[data-texture="art"][data-hero="banner"]:not(:has(.pv-header.is-scrolled)) .pv-fx i:nth-child(1) { opacity: 0; }
 /* a kis gyertya csak tágasabb lapon van kint (8.9/b); ott a láng alakja is él */
 @container (min-width: 46rem) {
   .pv[data-bg-art="candle"][data-bg-motion="own"] .pv-bg::after { display: block; }
@@ -4733,52 +4793,101 @@ iframe { border: 0; }
   filter: none;
 }
 
-/* --- menü: lapos, tömör sáv a lap színében, egy hajszálvonallal ----------
-   Nincs lebegő kapszula, üveg, pirula és körbekeretezett ikon – ez a
-   „generált” fejléc kelléktára. Név szedve, linkek szövegként, a helyet
-   egy vékony aláhúzás jelöli, mint egy nyomtatott tartalomjegyzékben. */
-.pv[data-mode][data-nav-pos]:not([data-nav-bg="tint"]) .pv-header {
-  --pv-nav-muted: color-mix(in srgb, var(--pv-text) 72%, var(--pv-bg));
-  --pv-nav-accent: var(--sz-head);
-  background: var(--pv-bg);
-  border-bottom: 1px solid color-mix(in srgb, var(--sz-head) 22%, var(--pv-bg));
+/* --- menü: burgundi sáv, a jógaszőnyeg krémszínű szegélyével -------------
+   A lábléc burgundija a lap tetején is: a két sáv közrefogja a zsályát. Az
+   alsó krémcsík a szőnyeg (sig: mat) szövött széle – ez az egyetlen dísz.
+   Nincs lebegő kapszula, üveg, pirula, körbekeretezett ikon. */
+.pv[data-mode] {
+  --sz-bar:      #5B3F3E;   /* sáv: Deep Burgundy */
+  --sz-bar-ink:  #F7EFEF;   /* felirat: Blush (kontraszt 9,6) */
+  --sz-bar-edge: #F5DEB3;   /* szegély, kiemelés: Cream */
 }
-.pv[data-mode] .pv-header.is-scrolled { box-shadow: none; }
+.pv[data-mode="dark"] { --sz-bar: #2E2221; }
+.pv[data-mode][data-nav-pos]:not([data-nav-bg="tint"]) .pv-header {
+  --pv-nav-muted: color-mix(in srgb, var(--sz-bar-ink) 82%, var(--sz-bar));
+  --pv-nav-ink: var(--sz-bar-ink);
+  --pv-nav-accent: var(--sz-bar-edge);
+  padding-block: 0.7rem;
+  background: var(--sz-bar);
+  border-bottom: 3px solid var(--sz-bar-edge);
+  color: var(--sz-bar-ink);
+}
+.pv[data-mode] .pv-header.is-scrolled { box-shadow: 0 10px 24px -18px rgba(20, 20, 20, 0.6); }
+.pv[data-mode] .pv-header :focus-visible { outline-color: var(--sz-bar-edge); }
 .pv[data-mode] .pv-brand img { display: none; }   /* monogram-pötty helyett a név */
 .pv[data-mode] .pv-brand {
-  color: var(--sz-head);
+  color: var(--sz-bar-ink);
   font-weight: 400;
-  font-size: calc(1.05rem * var(--pv-fs));
+  font-size: calc(1.3rem * var(--pv-fs));
   letter-spacing: 0;
 }
 /* név fölül, szakma alatta kisebben – nem csonkul „Mészáros…”-ra */
-.pv[data-mode] .pv-brand span { white-space: normal; line-height: 1.15; }
+.pv[data-mode] .pv-brand span { white-space: normal; line-height: 1.05; }
 .pv[data-mode] .pv-brand small {
   display: none;                 /* telefonon csak a név: a gombok mellett nincs hely */
   white-space: nowrap;
-  margin-top: 0.15rem;
+  margin-top: 0.3rem;
   font-family: var(--pv-font);
-  font-size: 0.68em;
-  letter-spacing: 0.08em;
+  font-size: 0.56em;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--pv-nav-muted);
+  color: var(--sz-bar-edge);
 }
 @media (min-width: 30rem) {
+  .pv[data-mode] .pv-brand { font-size: calc(1.5rem * var(--pv-fs)); }
   .pv[data-mode] .pv-brand span { white-space: nowrap; }
   .pv[data-mode] .pv-brand small { display: block; }
 }
-.pv[data-mode] .pv-nav__top { transition: color 0.2s var(--ease); }
+.pv[data-mode] .pv-nav { column-gap: 1.6rem; }
+.pv[data-mode] .pv-nav__top {
+  font-size: calc(1rem * var(--pv-fs));
+  font-weight: 600;
+  transition: color 0.2s var(--ease);
+}
+/* ahol a látogató jár: krémszínű, vastag aláhúzás – a szőnyegszegély párja */
 .pv[data-mode] .pv-nav__top[aria-current] {
   color: var(--pv-nav-ink);
-  text-decoration: underline 1px var(--pv-nav-accent);
-  text-underline-offset: 0.5em;
+  text-decoration: underline 3px var(--pv-nav-accent);
+  text-underline-offset: 0.55em;
 }
-.pv[data-mode] .pv-nav__item:is(:hover, :has(:focus-visible)) .pv-nav__top { color: var(--sz-head); }
+.pv[data-mode] .pv-nav__item:is(:hover, :has(:focus-visible)) .pv-nav__top { color: var(--sz-bar-edge); }
 /* kapcsoló és hamburger: keret nélküli ikon, 44px-es érintési felülettel */
-.pv[data-mode] :is(.pv-mode, .pv-burger) { border-color: transparent; }
-.pv[data-mode] :is(.pv-mode, .pv-burger):is(:hover, :focus-visible) { background: transparent; border-color: transparent; color: var(--sz-hover); }
-.pv[data-mode] .pv-nav__cta { box-shadow: none; }
-.pv[data-mode] .pv-nav.is-open { border-color: transparent; background: var(--sz-box); }
+.pv[data-mode] .pv-header :is(.pv-mode, .pv-burger) { border-color: transparent; background: transparent; color: inherit; }
+.pv[data-mode] .pv-header :is(.pv-mode, .pv-burger):is(:hover, :focus-visible) { background: transparent; border-color: transparent; color: var(--sz-bar-edge); }
+.pv[data-mode] .pv-burger .icon, .pv[data-mode] .pv-burger svg { width: 1.5rem; height: 1.5rem; }
+/* fő gomb: krém a burgundin, szögletesebb, mint a lap pirulái – a sávhoz tartozik */
+.pv[data-mode] .pv-header .pv-nav__cta {
+  border-radius: 0.4rem;
+  background: var(--sz-bar-edge);
+  color: #3A2827;
+  font-weight: 700;
+  box-shadow: none;
+}
+.pv[data-mode] .pv-header .pv-nav__cta:is(:hover, :focus-visible) { background: var(--sz-bar-ink); color: #3A2827; }
+@media (min-width: 44rem) {
+  .pv[data-mode] .pv-header .pv-nav__cta { font-size: calc(0.95rem * var(--pv-fs)); padding: 0.6rem 1.15rem; }
+}
+/* telefonos panel: a sáv folytatása, nagy, szedett menüpontokkal */
+.pv[data-mode] .pv-nav.is-open {
+  --pv-nav-ink: var(--sz-bar-ink);
+  --pv-nav-accent: var(--sz-bar-edge);
+  inset-inline: 0;
+  margin-top: 3px;               /* a krém szegély alatt kezdődik */
+  padding: 0.5rem clamp(1.1rem, 5cqi, 3.5rem) 1.2rem;
+  border: 0;
+  border-radius: 0;
+  background: var(--sz-bar);
+}
+.pv[data-mode] .pv-nav.is-open .pv-nav__top {
+  padding-inline: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--sz-bar-ink) 18%, transparent);
+  border-radius: 0;
+  color: var(--sz-bar-ink);
+  font-family: var(--pv-font-head);
+  font-size: calc(1.45rem * var(--pv-fs));
+  font-weight: 400;
+}
 
 /* --- lábléc: burgundi alap, Dusty Rose felirat --------------------------- */
 .pv .pv-footer { border-top: 0; background: var(--sz-foot-bg); color: var(--sz-foot); }
@@ -4795,7 +4904,8 @@ iframe { border: 0; }
    jön (aspect-ratio) – rácsban telefonon nullára esett, és a kártya a
    szövegdobozra csúszott. */
 .pv .sz-collage { position: relative; z-index: 2; display: flex; flex-direction: column; }
-.pv .sz-collage > .pv-about__media { flex: none; width: 100%; height: auto; }
+/* a boltív keskenyebb és lejjebb ül: a kártya (és árnyéka) nem takarja a tetejét */
+.pv .sz-collage > .pv-about__media { flex: none; width: 80%; height: auto; align-self: center; margin-top: 1.5rem; }
 [data-layout="split"] .sz-collage { order: 1; }
 
 /* Órarend-kártya: a hét hét pöttye, a kedd kitöltve. Cream, mert „kisebb
