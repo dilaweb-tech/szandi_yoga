@@ -43,6 +43,19 @@
   RedirectMatch 404 "(?i)^/(tools|peldak|szandi_gyertya)(/|$)"
 </IfModule>
 
+# Deploy után azonnal friss lap: a HTML, CSS, JS és JSON minden betöltésnél
+# visszakérdez (ETag → 304, olcsó), így a telefon sem ragad a régi változaton.
+# A képek egy óráig élnek – azonos néven cserélt fotó is legkésőbb ennyi után
+# látszik. (A GitHub Pages ezt nem olvassa; ott a site.js checkFresh() dolgozik.)
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|css|js|json)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  <FilesMatch "\.(svg|png|jpe?g|webp|avif|ico)$">
+    Header set Cache-Control "max-age=3600"
+  </FilesMatch>
+</IfModule>
+
 # Saját hibaoldal. A 404.html a `<base href="/">` miatt gyökérhez igazodva
 # tölti a CSS-t és a site.json-t, tehát mély, nem létező úton is helyesen
 # jelenik meg.

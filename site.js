@@ -1532,6 +1532,35 @@ async function init() {
   Promise.race([fonts, new Promise((ok) => setTimeout(ok, 1200))]).then(reveal, reveal);
 }
 
+/* Friss deploy után a telefon se ragadjon a régi változaton. A GitHub Pages
+   minden fájlt 10 percig cache-eltet (max-age=600, nem állítható), a telefon
+   böngészője pedig a háttérből visszahozott fület le sem kéri újra. Ezért
+   betöltéskor és minden visszatéréskor egy HEAD-kérés megnézi a lap
+   Last-Modified-ját a szerveren; ha újabb, mint a betöltötté
+   (document.lastModified), a lap saját fájljait a cache-t megkerülve újra
+   lekéri, és frissít. Egy változatért egyszer próbál – CDN-átmenetnél sem lesz
+   végtelen újratöltés. Fejléc nélkül (helyi szerver) nem csinál semmit. */
+let freshAt = 0;
+async function checkFresh() {
+  if (Date.now() - freshAt < 60e3) return;
+  freshAt = Date.now();
+  try {
+    const page = location.href.split("#")[0];
+    const stamp = (await fetch(page, { method: "HEAD", cache: "no-store" })).headers.get("last-modified");
+    if (!stamp || Date.parse(stamp) - Date.parse(document.lastModified) < 2000) return;
+    if (sessionStorage.getItem("szandi:fresh") === stamp) return;
+    sessionStorage.setItem("szandi:fresh", stamp);
+    const own = [...document.querySelectorAll("link[rel=stylesheet][href], script[src]")]
+      .map((e) => e.href || e.src).filter((u) => u.startsWith(location.origin));
+    await Promise.all([page, new URL("site.json", document.baseURI).href, ...own]
+      .map((u) => fetch(u, { cache: "reload" })));
+    location.reload();
+  } catch {}
+}
+
 init();
 initStats();
+checkFresh();
+addEventListener("pageshow", (e) => { if (e.persisted) { freshAt = 0; checkFresh(); } });
+document.addEventListener("visibilitychange", () => { if (!document.hidden) checkFresh(); });
 })();
