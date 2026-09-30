@@ -4650,10 +4650,10 @@ iframe { border: 0; }
   gap: 0;
   max-width: 34rem;
   padding: 0.3rem clamp(1rem, 4cqi, 1.8rem);
-  border: 1px solid var(--pv-line);
+  border: var(--sz-line) solid var(--sz-tus);
   border-radius: calc(var(--pv-radius) * 1.1);
   background: var(--sz-box);
-  box-shadow: 0 22px 44px -30px color-mix(in srgb, var(--pv-text) 45%, transparent);
+  box-shadow: var(--sz-shadow);
 }
 .pv .pv-section.pv-contact .pv-contact__list li {
   position: relative;
@@ -4706,15 +4706,15 @@ iframe { border: 0; }
    szabályok nem változnak. A lap alapszínei (háttér, szöveg, olívazöld) a
    site.json-ból jönnek; ezek a szerepek arra épülnek rá.
    Kontraszt (világos mód, WCAG): szöveg a zsályán 8,4 · burgundi cím a zsályán
-   4,3 (csak nagy címre) · taupe alfelirat a blush dobozon 4,7 · rózsa a
+   5,5 · részlet a zsályán 7,1 · taupe alfelirat a blush dobozon 6,4 · rózsa a
    burgundi láblécen 4,5 · fekete a Ripe Olive menüpöttyön 4,8 · fehér az
    olívazöld gombon 6,0. A fehér a Ripe Olive-on csak 3,8 lenne – ezért fekete.
    ========================================================================== */
 .pv[data-mode] {
   --sz-ink:       #141414;   /* szöveg világos felületen */
-  --sz-detail:    #333333;   /* részletek: felülcím, keret, halvány szöveg */
-  --sz-head:      #5B3F3E;   /* Deep Burgundy – fő feliratok */
-  --sz-sub:       #7A6759;   /* Warm Taupe – alfeliratok világos dobozon */
+  --sz-detail:    #242424;   /* részletek: felülcím, keret, halvány szöveg */
+  --sz-head:      #4A302F;   /* Deep Burgundy, egy fokkal mélyebben – fő feliratok */
+  --sz-sub:       #665446;   /* Warm Taupe, mélyebben – alfeliratok világos dobozon */
   --sz-box:       #F7EFEF;   /* Soft White / Blush – szövegdoboz */
   --sz-box-warm:  #F5DEB3;   /* Cream – meleg szövegdoboz (jógaórák) */
   --sz-btn:       #5B3F3E;   /* gomb nyugalomban */
@@ -4739,9 +4739,9 @@ iframe { border: 0; }
 }
 /* Sötét mód: ugyanazok a szerepek, éjszakai olívára hangolva */
 .pv[data-mode="dark"] {
-  --sz-detail:    #C9CDBF;
-  --sz-head:      #E6BDBA;
-  --sz-sub:       #CDBBAE;
+  --sz-detail:    #DADDD2;
+  --sz-head:      #F0CDCA;
+  --sz-sub:       #DCCCC0;
   --sz-box:       #262C20;
   --sz-box-warm:  #2F2A21;
   --sz-btn:       #D9A7A5;
@@ -4770,8 +4770,9 @@ iframe { border: 0; }
 .pv .pv-section[data-sec="pricing"] .pv-prices {
   padding: clamp(1.1rem, 4cqi, 1.8rem);
   border-radius: calc(var(--pv-radius) * 1.1);
+  border: var(--sz-line) solid var(--sz-tus);
   background: var(--sz-box);
-  box-shadow: 0 22px 44px -30px color-mix(in srgb, var(--sz-ink) 45%, transparent);
+  box-shadow: var(--sz-shadow);
 }
 .pv .pv-section[data-sec="services"] .pv-item__body { background: var(--sz-box-warm); }
 .pv .pv-section[data-sec="pricing"] .pv-prices { gap: 0; padding-block: 0.4rem; }
@@ -4787,7 +4788,7 @@ iframe { border: 0; }
 .pv .pv-btn--ghost { border-color: transparent; background: var(--sz-box); color: var(--sz-head); }
 .pv :is(.pv-mode, .pv-burger) { background: transparent; }
 .pv :is(.pv-btn, .pv-nav__cta, .pv-mode, .pv-burger, .pv-top):is(:hover, :focus-visible) {
-  border-color: var(--sz-hover);
+  border-color: var(--sz-tus);
   background: var(--sz-hover);
   color: var(--sz-hover-ink);
   filter: none;
@@ -4920,7 +4921,8 @@ iframe { border: 0; }
   border-radius: calc(var(--pv-radius) * 0.9);
   background: var(--sz-box-warm);
   color: var(--pv-text);
-  box-shadow: 0 26px 40px -26px color-mix(in srgb, var(--sz-ink) 55%, transparent);
+  border: var(--sz-line) solid var(--sz-tus);
+  box-shadow: var(--sz-shadow);
   text-align: start;
 }
 /* <ol>: a reset csak az <ul>-t nullázza – az alap 40px-es behúzás kitolta
@@ -4932,7 +4934,7 @@ iframe { border: 0; }
   position: relative;
   width: 2rem;
   aspect-ratio: 1;
-  border: 1px solid color-mix(in srgb, var(--sz-detail) 35%, transparent);
+  border: 1.5px solid var(--sz-tus);
   border-radius: 50%;
   font-size: calc(0.72rem * var(--pv-fs));
   font-weight: 500;
@@ -5032,3 +5034,144 @@ iframe { border: 0; }
   .pv .sz-breath { animation: none; transform: scaleY(0.7); }
 }
 
+
+/* ==========================================================================
+   SZANDI – BLENDER-GYERTYA (szandi_gyertya/, gyertya_blender.py)
+   A sablon rajzolt gyertyája (8.9/b, candle) helyett renderelt kép: a test
+   egy átlátszó webp, a láng 64 kockás, varrat nélküli hurok 8×8-as
+   sprite-lapon. A sablon háttér-gyertyái (hero, „Lépésről lépésre”) lekerülnek,
+   a lótusz-réteg marad.
+   ========================================================================== */
+.pv[data-bg-art="candle"] .pv-bg { opacity: 1; }
+.pv[data-bg-art="candle"] .pv-bg i:is(:nth-child(1), :nth-child(3)) { display: none; }
+.pv[data-bg-art="candle"][data-bg-motion] .pv-bg::before,
+.pv[data-bg-art="candle"][data-bg-motion] .pv-bg::after { content: none; }
+
+/* HELYE: a „Számokban” címe mellett, közvetlenül a nyitókép alatt („Amit
+   eddig letettünk az asztalra” – a gyertya az asztalon). Az a szekció a
+   site.js-ből épül, ezért a szandiCandle() teszi át oda; ha ki van kapcsolva,
+   a gyertya a Kapcsolat címénél marad (index.html).
+   Telefonon a cím jobb oldalán, tágas lapon a cím alatt (oldalcímes hasáb).
+   A kép dobozában bő levegő van a gyertya körül (a fény miatt), ezt a negatív
+   margó veszi vissza. */
+.pv .pv-head:has(> .sz-candle) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 0.5rem;
+  align-items: center;
+}
+.pv .pv-head:has(> .sz-candle) > :not(.sz-candle) { grid-column: 1; }
+.sz-candle {
+  position: relative;
+  display: block;
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  width: clamp(7rem, 34cqi, 9.5rem);
+  aspect-ratio: 1;
+  margin: -1.8rem -0.5rem -1.4rem 0;
+  --g: var(--pv-candle-glow, #ffd98a);
+}
+@container (min-width: 52rem) {
+  .pv .pv-head:has(> .sz-candle) { grid-template-columns: minmax(0, 1fr); }
+  .sz-candle { grid-column: 1; grid-row: auto; width: 13rem; margin: -1.5rem 0 -2rem -2.4rem; }
+}
+/* meleg fény a láng körül – a test mögött, halkan pislákol */
+.sz-candle::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50.4% 38%,
+    color-mix(in srgb, var(--g) 55%, transparent),
+    color-mix(in srgb, var(--g) 18%, transparent) 12%, transparent 26%);
+  animation: sz-candle-glow 4.3s ease-in-out infinite;
+}
+.sz-candle__body {
+  position: absolute;
+  inset: 0;
+  background: url("images/gyertya.webp") center / contain no-repeat;
+}
+/* a láng ablaka (lang.json: left/top/width/height); forgáspont a láng töve */
+.sz-candle__flame {
+  position: absolute;
+  left: 45.703%;
+  top: 30.859%;
+  width: 9.18%;
+  height: 20.02%;
+  overflow: hidden;
+  transform-origin: 50% 89%;
+  animation: pv-flame-sway 6.7s ease-in-out infinite;
+}
+.sz-candle__flame::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 800%;
+  height: 800%;
+  background: url("images/gyertya-lang.webp") 0 0 / 100% 100% no-repeat;
+  /* 64 kocka, 24 fps: oszlop 8 lépésben (1/3 mp), sor 8 lépésben (2,67 mp) –
+     két független lépő animáció, csak transform/translate mozog */
+  animation: sz-candle-col calc(8s / 24) steps(8) infinite, sz-candle-row calc(64s / 24) steps(8) infinite;
+}
+@keyframes sz-candle-col { to { translate: -100% 0; } }
+@keyframes sz-candle-row { to { transform: translateY(-100%); } }
+@keyframes sz-candle-glow {
+  0%, 100% { opacity: 1; } 30% { opacity: 0.82; } 55% { opacity: 1; } 62% { opacity: 0.7; } 80% { opacity: 0.94; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sz-candle::before, .sz-candle__flame, .sz-candle__flame::before { animation: none; }
+}
+
+/* ==========================================================================
+   SZANDI – GÖRGETÉSRE ÉRKEZŐ ELEMEK (8.11 kiegészítés)
+   A sablon „fade” megjelenése telefonon alig látszik (14px). Keskeny nézetben
+   erősebb: lentről, enyhe kicsinyítésből úszik be, a fotó pedig közelről
+   húzódik a helyére; tágas lapon marad a sablon finom halványítása. A lista
+   bővül a számolással. Az órarend-kártya
+   (benne a gomb) és a GYIK gombszerű sorai szándékosan állnak: görgetéskor
+   nem csúszhatnak szét. Ahol nincs nézet-idővonal (iOS 26
+   előtti Safari, Firefox), ott a site.js szandiReveal()-je adja ugyanezt.
+   ========================================================================== */
+.pv[data-reveal="fade"] .pv-main { --pv-rv: sz-rv-up; }
+@container (min-width: 46rem) {
+  .pv[data-reveal="fade"] .pv-main { --pv-rv: pv-rv-fade; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .pv:not([data-reveal="none"]) .sz-count > span {
+      animation-name: var(--pv-rv);
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry 4% cover 24%;
+    }
+    /* egymás után érkeznek, mint a kártyák */
+    .pv:not([data-reveal="none"]) .sz-count > span:nth-child(2) { animation-range: entry 4% cover 30%; }
+    .pv:not([data-reveal="none"]) .sz-count > span:nth-child(n + 3) { animation-range: entry 4% cover 36%; }
+    .pv:not([data-reveal="none"]) .pv-about__media img {
+      animation: sz-rv-zoom linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 55%;
+    }
+  }
+  /* tartalék (site.js): ugyanaz a mozdulat, átmenettel */
+  .sz-rv { transition: opacity 0.8s var(--ease), translate 0.8s var(--ease), scale 0.8s var(--ease); }
+  .sz-rv:not(.is-in) { opacity: 0; translate: 0 2rem; scale: 0.96; }
+}
+@keyframes sz-rv-up   { from { opacity: 0; translate: 0 2rem; scale: 0.96; } to { opacity: 1; translate: none; scale: none; } }
+@keyframes sz-rv-zoom { from { scale: 1.14; } to { scale: none; } }
+
+/* ==========================================================================
+   SZANDI – TUSKONTÚR (a Blender-gyertya vonala az egész lapon)
+   A gyertya körvonalas rajz; a lap tárgyai (szövegdobozok, kapcsolat-panel,
+   órarend, GYIK, képek, gombok) ugyanazt a tusvonalat kapják – de csak a
+   vonalat: az árnyék marad lágy, nem képregényes. A számok (stats) sima
+   felületek maradnak, ott a keret zavaró. A tokeneket a saját szabályaik használják (fent).
+   ========================================================================== */
+.pv {
+  --sz-tus: #231a19;
+  --sz-line: 2px;
+  --sz-shadow: 0 22px 44px -30px color-mix(in srgb, var(--sz-ink) 45%, transparent);
+}
+.pv[data-mode="dark"] { --sz-tus: #070806; }
+.pv :is(.pv-faq, .pv-item__media, .pv-about__media, .pv-btn, .pv-nav__cta, .pv-top) { border: var(--sz-line) solid var(--sz-tus); }

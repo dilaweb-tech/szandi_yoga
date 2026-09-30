@@ -37,9 +37,10 @@
 # A .json engedélyezett (site.json), ezért a minta-oldalakat mappa szerint
 # kell zárni – különben a fodrász oldala kiszolgálná az ügyvéd mintaadatait.
 <IfModule mod_alias.c>
-  # Belső mappák: a generáló eszközök és a minta-oldalak (másik szakma
-  # adatai) nem az ügyfél látogatójának szólnak.
-  RedirectMatch 404 "(?i)^/(tools|peldak)(/|$)"
+  # Belső mappák: a generáló eszközök, a minta-oldalak (másik szakma
+  # adatai) és a gyertya Blender-forrása (szandi_gyertya: .blend, zip,
+  # előnézet) nem az ügyfél látogatójának szólnak. A repóban maradnak.
+  RedirectMatch 404 "(?i)^/(tools|peldak|szandi_gyertya)(/|$)"
 </IfModule>
 
 # Saját hibaoldal. A 404.html a `<base href="/">` miatt gyökérhez igazodva

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Szandi gyertya</title>
+<!--
+  SZANDI GYERTYA – az oldal illusztrációjának stílusában, Blenderben renderelt 3D
+  =============================================================================
+  Forrás: gyertya_blender.py (a jelenet kódból épül, újrarenderelhető; gyertya.blend-et
+  a `mode=blend` ment). A kimenet az img/ mappában:
+    gyertya.webp       – a gyertyatest a tállal, átlátszó háttér, 1024×1024
+    gyertya-lang.webp  – a láng 64 kockás, varrat nélküli hurka, 8×8-as sprite-lap
+    lang.json          – a láng helye a dobozban (%) – ebből jönnek az alábbi számok
+
+  BEILLESZTÉS: az img/ három képe az oldal images/ mappájába, a <style> „GYERTYA”
+  blokkja a CSS-be, a .candle markup oda, ahol a régi CSS-gyertya volt. A doboz
+  ugyanaz a négyzet, mint régen, a gyertya ugyanott ül benne → a régi helyére cserélhető.
+
+  MOZGÁS: a sprite-ot két, egymástól független lépő animáció viszi (translate: oszlop,
+  transform: sor) – csak transform és opacity mozog. A kilengés és a fény más ütemű,
+  így a 2,67 mp-es hurok nem látszik ismétlődőnek. Csökkentett mozgásnál áll a láng.
+-->
+<style>
+  /* ---------------- GYERTYA ---------------- */
+  .candle {
+    --glow: #ffd98a;
+    position: relative;
+    width: min(86vw, 26rem);
+    aspect-ratio: 1;
+  }
+  /* meleg fény a láng körül – a test mögött, halkan pislákol */
+  .candle::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50.4% 38%,
+      color-mix(in srgb, var(--glow) 55%, transparent),
+      color-mix(in srgb, var(--glow) 18%, transparent) 12%, transparent 26%);
+    animation: candle-glow 4.3s ease-in-out infinite;
+  }
+  .candle__body {
+    position: absolute;
+    inset: 0;
+    background: url("img/gyertya.webp") center / contain no-repeat;
+  }
+  /* a láng ablaka: lang.json left/top/width/height; a forgáspont a láng töve (base_y) */
+  .candle__flame {
+    position: absolute;
+    left: 45.703%;
+    top: 30.859%;
+    width: 9.18%;
+    height: 20.02%;
+    overflow: hidden;
+    transform-origin: 50% 89%;
+    animation: candle-sway 6.7s ease-in-out infinite;
+  }
+  .candle__flame::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 800%;
+    height: 800%;
+    background: url("img/gyertya-lang.webp") 0 0 / 100% 100% no-repeat;
+    /* 64 kocka, 24 fps: oszlop 8 lépésben (1/3 mp), sor 8 lépésben (2,67 mp) */
+    animation: candle-col calc(8s / 24) steps(8) infinite, candle-row calc(64s / 24) steps(8) infinite;
+  }
+  @keyframes candle-col { to { translate: -100% 0; } }
+  @keyframes candle-row { to { transform: translateY(-100%); } }
+  @keyframes candle-sway {
+    0%, 100% { rotate: 0deg; } 20% { rotate: 1.2deg; } 45% { rotate: -.8deg; } 58% { rotate: 2deg; }
+    63% { rotate: -1.4deg; } 70% { rotate: .6deg; } 85% { rotate: -1deg; }
+  }
+  @keyframes candle-glow {
+    0%, 100% { opacity: 1; } 30% { opacity: .82; } 55% { opacity: 1; } 62% { opacity: .7; } 80% { opacity: .94; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .candle::before, .candle__flame, .candle__flame::before { animation: none; }
+  }
+  /* ---------------- /GYERTYA ---------------- */
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    padding: 1.5rem 1rem;
+    background: #fff;
+    color: #161616;
+    font: 400 1rem/1.5 system-ui, sans-serif;
+  }
+</style>
+</head>
+<body>
+  <div class="candle" role="img" aria-label="Égő gyertya rózsaszín kerámiatálban, lobogó lánggal">
+    <i class="candle__body"></i>
+    <span class="candle__flame"></span>
+  </div>
+</body>
+</html>

@@ -831,6 +831,36 @@ function szandiBreath() {
   }
 }
 
+/* SZANDI: görgetésre érkező elemek ott, ahol a CSS nézet-idővonala nem megy
+   (iOS 26 előtti Safari, Firefox). Ugyanazok az elemek, mint a pv.css 8.11-ben
+   és a SZANDI kiegészítésben; ahol a CSS megy, ott ez nem csinál semmit. A
+   hero kimarad: az betöltéskor már a helyén van. Gomb és gombszerű sor (GYIK,
+   órarend-kártya) sem úszik: görgetéskor nem csúszhat szét. */
+const RV_SEL = ".pv-head, .pv-item, .pv-contact__list li, .pv-prices li, .pv-about__media, .pv-about__copy, " +
+  ".pv-map__frame, .pv-slider, .sz-count > span";
+const rvIO = !CSS.supports("animation-timeline: view()") && "IntersectionObserver" in window &&
+  !matchMedia("(prefers-reduced-motion: reduce)").matches &&
+  new IntersectionObserver((es) => es.forEach((e) => {
+    if (e.isIntersecting) { e.target.classList.add("is-in"); rvIO.unobserve(e.target); }
+  }), { rootMargin: "0px 0px -8% 0px" });
+function szandiReveal() {
+  if (!rvIO || DESIGN.reveal === "none") return;
+  $$(RV_SEL).forEach((el) => {
+    if (el.closest(".pv-hero") || el.classList.contains("sz-rv")) return;
+    el.classList.add("sz-rv");
+    rvIO.observe(el);
+  });
+}
+
+/* SZANDI: a Blender-gyertya a „Számokban” címe mellé kerül – közvetlenül a
+   nyitókép alatt, ahol mindenki látja. Azt a szekciót a renderLists() minden
+   körben újraírja, ezért minden kör után áttesszük. Ha a szekció nincs a
+   lapon, a gyertya a Kapcsolat címénél marad (index.html). */
+function szandiCandle(on) {
+  const candle = $(".sz-candle"), head = on && $('[data-sec="stats"] .pv-head');
+  if (candle && head && candle.parentNode !== head) head.append(candle);
+}
+
 function applyContent() {
   const c = CFG.content;
   /* Aloldalon a saját szekciólistája dönt, a főoldalon a site.json sections-e */
@@ -840,6 +870,8 @@ function applyContent() {
   const bookingOn = !!c.booking?.enabled;
   renderLists(c);                              /* előbb legyen meg a szekció, aztán rendezzük */
   szandiBreath();
+  szandiCandle(sections.some((s) => s.id === "stats" && s.on));
+  szandiReveal();
   /* betűméret-kivételek szekciónként – a generált listásakra is */
   $$("[data-sec]").forEach((el) => setFs(el, DESIGN.fontScaleBy?.[el.dataset.sec]));
 
