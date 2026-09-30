@@ -9,15 +9,15 @@
        tools/plan-to-site.mjs süti be a site.json-ból – kézzel ne írd át. -->
   <!-- >>> META -->
   <title>Mészáros Alexandra · Ashtanga jóga – Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban</title>
-  <meta name="description" content="Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban. Minden héten ugyanaz a sorozat, a légzés ütemére – kezdőként is jöhetsz.">
+  <meta name="description" content="Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban. Mellette irodai jóga cégeknek és privát óra – a légzés ütemére, kezdőként is.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Mészáros Alexandra · Ashtanga jóga – Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban">
-  <meta property="og:description" content="Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban. Minden héten ugyanaz a sorozat, a légzés ütemére – kezdőként is jöhetsz.">
+  <meta property="og:description" content="Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban. Mellette irodai jóga cégeknek és privát óra – a légzés ütemére, kezdőként is.">
   <meta property="og:site_name" content="Mészáros Alexandra · Ashtanga jóga">
   <meta property="og:locale" content="hu_HU">
   <meta name="twitter:card" content="summary">
   <!-- <<< META -->
-  <meta name="theme-color" content="#F6EFE6">
+  <meta name="theme-color" content="#A7B58C">
   <!-- DEMÓ (GitHub Pages): ne kerüljön keresőbe, amíg helykitöltő szöveg és üres impresszum van benne. Élesítéskor TÖRÖLD. -->
   <meta name="robots" content="noindex">
 
@@ -31,14 +31,14 @@
        Szandi színén, rejtve áll (site.js → init, reveal). Ha a szkript nem fut
        le, 3 mp múlva magától megjelenik; JavaScript nélkül azonnal. -->
   <style>
-    html { background: #F6EFE6; }
+    html { background: #A7B58C; }
     html:not(.pv-ready) body { visibility: hidden; animation: pv-boot 0s 3s forwards; }
     @keyframes pv-boot { to { visibility: visible; } }
     @media (prefers-reduced-motion: no-preference) { html.pv-ready body { animation: pv-in 0.3s ease-out; } }
     @keyframes pv-in { from { opacity: 0; } }
   </style>
   <!-- a mentett sötét mód már az első képkockán: a kulcs a site.js MODE_KEY-e -->
-  <script>try { if (localStorage.getItem("szandi:mode") === "dark") document.documentElement.style.background = "#1E1814"; } catch {}</script>
+  <script>try { if (localStorage.getItem("szandi:mode") === "dark") document.documentElement.style.background = "#1C2117"; } catch {}</script>
   <noscript><style>html:not(.pv-ready) body { visibility: visible; animation: none; }</style></noscript>
   <link rel="stylesheet" href="pv.css">
 </head>
@@ -112,7 +112,7 @@
       <section class="pv-section is-first">
         <div class="pv-wrap">
           <h1>Mészáros Alexandra · Ashtanga jóga</h1>
-          <p class="pv-lead">Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban. Minden héten ugyanaz a sorozat, a légzés ütemére – kezdőként is jöhetsz.</p>
+          <p class="pv-lead">Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban. Mellette irodai jóga cégeknek és privát óra – a légzés ütemére, kezdőként is.</p>
           <ul class="pv-contact__list">
             <li><span class="pv-muted">Elhelyezkedés</span><strong>Joy of Yoga Stúdió, 6722 Szeged, Gutenberg utca 14.</strong></li>
             <li><span class="pv-muted">Telefon</span><a href="tel:+36305012453">+36 30 501 2453</a></li>
@@ -234,13 +234,36 @@
 
     <!-- RÓLUNK -->
     <section class="pv-section pv-about" id="sec-about" data-sec="about">
+      <!-- SZANDI: a légzés-vonal – egy belégzés, egy kilégzés hullámként a
+           szekción át, a kép MÖGÖTT. Csak széles nézetben (pv.css, SZANDI). -->
+      <svg class="sz-breath" viewBox="0 0 1200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path d="M0 50C100 50 200 8 300 8S500 92 600 92 800 8 900 8s200 42 300 42" />
+      </svg>
       <div class="pv-wrap pv-about__inner">
-        <!-- a képhely sorszámát a site.js adja: a szolgáltatás-kártyák után jön -->
-        <figure class="pv-about__media"><img id="pv-about-img" data-img-slot="4" alt="" width="800" height="600" loading="lazy"></figure>
+        <!-- SZANDI: kollázs = boltíves fotó + ráfekvő órarend-kártya -->
+        <div class="sz-collage">
+          <!-- a képhely sorszámát a site.js adja: a szolgáltatás-kártyák után jön -->
+          <figure class="pv-about__media"><img id="pv-about-img" data-img-slot="4" alt="" width="800" height="600" loading="lazy"></figure>
+          <aside class="sz-week" aria-label="Mikor tartok órát">
+            <!-- a napsor csak kép: ugyanezt a szöveg alatta kimondja -->
+            <ol class="sz-week__days" aria-hidden="true">
+              <li>H</li><li class="is-on">K<small>17:00</small></li><li>Sz</li><li>Cs</li><li>P</li><li>Sz</li><li>V</li>
+            </ol>
+            <p class="sz-week__when"><b>Kedd 17:00–18:30</b> Ashtanga Half Led, Joy of Yoga Stúdió</p>
+            <p class="sz-week__rest">A hét többi napján irodai és privát óra, egyeztetés szerint.</p>
+            <a href="#sec-contact" class="pv-btn pv-btn--primary" data-cta-main data-cta-sec="contact" data-i18n="pv.cta">Jelentkezem</a>
+          </aside>
+        </div>
         <div class="pv-about__copy">
           <p class="pv-eyebrow"><span class="pv-dot" aria-hidden="true"></span><span data-i18n="pv.aboutEyebrow">Rólunk</span></p>
           <h2 data-i18n="pv.aboutTitle">Néhány szó rólunk</h2>
           <p id="pv-about">Bemutatkozó szöveg</p>
+          <!-- SZANDI: az óra saját hangja – így szól a vezetett számolás -->
+          <p class="sz-count">
+            <span><b lang="sa-Latn">Ekam</b> belégzés</span>
+            <span><b lang="sa-Latn">dve</b> kilégzés</span>
+            <span><b lang="sa-Latn">trīṇi</b> belégzés</span>
+          </p>
         </div>
       </div>
     </section>

@@ -51,7 +51,7 @@
 - Nem tudod, van-e skill? Nézd a listát, ne improvizálj.
 - Kis, egyértelmű feladatnál ne hívj skillt – az is token. Ez az egyetlen fék: arány, nem engedély.
 - **Kivétel – subagent**: `Agent` tool és a subagentet indító skillek (`do`, workflow-k) csak kifejezett kérésre. Hidegen indul, drága.
-- **Tiltva – `run`**: ez a skill elindítaná az appot. Ebben a projektben nincs előnézet (lásd **Ellenőrzés**), az eredmény szövegben megy.
+- **`run` skill helyett** a böngésző-panel (`preview_start`) – lásd **Ellenőrzés**.
 
 ### A projekt saját eszközei
 | Mikor | Mi | Hol |
@@ -158,7 +158,7 @@ Mozgás és háttér **ne fejből** készüljön; ezekből induljunk ki:
 - `src/app.html` vagy `src/app.js` módosítása után: **`node admin/pack-app.js --push`** – kérdés nélkül. A `--push` nélküli csomagolás nem jut el a belépőkódhoz.
 - **Ne szerkeszd kézzel**: `app.enc` (generált), `admin/service-account.json`, `admin/app-key.txt` (titkos kulcsok).
 - Auth / belépőkód / ügyfél-adat érintve → `security-review` élesítés előtt.
-- Ne indíts szervert, böngésző-panelt, ne csinálj screenshotot – az eredmény szövegben megy. A `run` skill ezért tiltott.
+- **Vizuális változás után kötelező a böngészős ellenőrzés** (a felhasználó 2026-09-30-án engedélyezte): `preview_start` a `.claude/launch.json` alapján (Live Server, 127.0.0.1:5502), átnézés **360 px-en és asztalon**, screenshottal. Késznek csak az mondható, amit így láttál.
 
 ## Végcél
 **Eladható, profitábilis üzleti modell** a projekten keresztül. Nem hobbi, nem demó – termék.

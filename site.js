@@ -809,6 +809,25 @@ function renderLists(c) {
   }
 }
 
+/* SZANDI: a Rólam szekció légzés-vonala visszatér néhány másik szekció mögött
+   is. Szekciónként: [magasság a szekcióban, tükrözés, ütem-eltolás mp-ben] – a
+   szórt helyek és fázisok miatt nem hat ismétlésnek. A listás szekciókat a
+   renderLists() minden körben újraírja, ezért a vonal minden kör után kerül be. */
+/* csak magas szekció jöhet szóba: a vonal + fent-lent 3.5rem kell (pv.css) –
+   a Számokban asztalon ehhez túl alacsony, átlógna a hullámos határon */
+const BREATH_AT = { services: [18, -1, -5], pricing: [45, 1, -2], faq: [62, -1, -3.5], contact: [40, 1, -6.5] };
+function szandiBreath() {
+  const src = $(".sz-breath");
+  if (!src) return;
+  for (const [id, [y, flip, delay]] of Object.entries(BREATH_AT)) {
+    const sec = $(`[data-sec="${id}"]`);
+    if (!sec || $(":scope > .sz-breath", sec)) continue;
+    const line = src.cloneNode(true);
+    line.style.cssText = `--sz-y:${y}%;--sz-flip:${flip};animation-delay:${delay}s`;
+    sec.prepend(line);
+  }
+}
+
 function applyContent() {
   const c = CFG.content;
   /* Aloldalon a saját szekciólistája dönt, a főoldalon a site.json sections-e */
@@ -817,6 +836,7 @@ function applyContent() {
     : SECTION_IDS.map((id) => ({ id, on: true, sub: [] }));
   const bookingOn = !!c.booking?.enabled;
   renderLists(c);                              /* előbb legyen meg a szekció, aztán rendezzük */
+  szandiBreath();
   /* betűméret-kivételek szekciónként – a generált listásakra is */
   $$("[data-sec]").forEach((el) => setFs(el, DESIGN.fontScaleBy?.[el.dataset.sec]));
 
@@ -1004,7 +1024,6 @@ function applyContent() {
   /* az aláírás (sig="signature") ugyanígy attribútumból veszi a nevet */
   const aboutCopy = $(".pv-about__copy");
   if (aboutCopy) aboutCopy.dataset.sign = plain(c.company);
-  setText("pv-company-sm", c.company);
   setText("pv-company-ft", c.company);
   setRich("pv-tagline", c.tagline);
   setRich("pv-about", c.about);
@@ -1112,6 +1131,13 @@ function applyChrome() {
   /* Feliratok, amik nem szövegek, hanem gomb- és vezérlő-nevek: aria-label */
   $$("[data-i18n-label]").forEach((el) => el.setAttribute("aria-label", t(el.dataset.i18nLabel)));
   $$("#pv-company-sm, #pv-company-ft").forEach((el) => (el.textContent = plain(c.company)));
+  /* Fejléc: a „ · ” utáni rész (szakma) saját, kisebb sorba – telefonon így
+     a név nem tör három sorra */
+  const sm = $("#pv-company-sm"), [who, ...what] = plain(c.company).split(" · ");
+  if (sm && what.length) {
+    sm.textContent = who;
+    sm.append(Object.assign(document.createElement("small"), { textContent: what.join(" · ") }));
+  }
   const year = $("#pv-year");
   if (year) year.textContent = new Date().getFullYear();
 }
@@ -1217,7 +1243,7 @@ function syncSliders() {
    és „Do Not Track" mellett egyetlen kérés sem indul.
    -------------------------------------------------------------------------- */
 function initStats() {
-  if (navigator.doNotTrack === "1") return;
+  if (!HAS_API || navigator.doNotTrack === "1") return;
 
   const send = (body) => {
     try {
@@ -1392,6 +1418,13 @@ const configFile = () => {
   return /^[\w-]+\.json$/.test(q || "") ? q : "site.json";
 };
 
+/* Van-e mögöttünk backend (/api/*). Helyi fejlesztésnél (Live Server,
+   fájlból nyitva) és a GitHub Pages demón nincs: ott a hívás csak piros
+   404/405 sorokat szórna a konzolba. Élesben a tárhelyen mindig ott van.
+   ponytail: host-lista, nem kapcsoló – ha egyszer backenddel együtt futtatod
+   helyben, ide kell egy `?api=1` kivétel. */
+const HAS_API = !/^(localhost|127\.0\.0\.1|\[::1\]|)$|\.github\.io$/.test(location.hostname);
+
 /* Az admin felületen szerkesztett elemlisták: a backend `content` táblájának
    `lists` kulcsa. A galéria képeit és videóit az ügyfél OTT tölti fel, nem ebbe
    a fájlba – a lapnak tehát onnan is olvasnia kell, különben a feltöltés sosem
@@ -1400,6 +1433,7 @@ const configFile = () => {
    Hibánál, időtúllépésnél és backend nélküli másolatnál (peldak/) is null: a lap
    ilyenkor a site.json-ból dolgozik, és sosem áll meg a backend miatt. */
 async function liveLists() {
+  if (!HAS_API) return null;
   try {
     const res = await fetch("/api/content", { signal: AbortSignal.timeout(2500) });
     return res.ok ? (await res.json())?.lists ?? null : null;

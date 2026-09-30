@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="hu" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Élő gyertya</title>
+<!--
+  ÉLŐ GYERTYA – önálló bemutató
+  ==============================
+  Egyetlen fájl, külső függőség nélkül: minden kép SVG data-URI a CSS-ben.
+  Ugyanaz a kód, ami a szandi_yoga oldalon (pv.css, „ÉLŐ GYERTYA" blokk) és a
+  DilaWEB sablonban háttérelemként fut – itt kiemelve, középre téve.
+
+  FELÉPÍTÉS – két elem egy közös, négyzet alakú dobozban (.candle); minden
+  méret a doboz %-a, így bármekkorára skálázható:
+
+  1) .candle__body – a gyertya TESTE. Maszk (--sv-candle-body: a henger, a
+     túlfolyó csepp, a kanóc és a tál sziluettje egy 24×24-es rácson) vágja ki
+     az alakot; a színt és a fényt egymásra rakott CSS-átmenetek adják, felülről:
+       részlet-réteg (--sv-candle-detail: olvadt perem, csorgások, kanóc,
+       árnyékok – csak áttetsző fehér/fekete, ezért bármilyen színen jó)
+       · olvadt viasztó · a láng fénye a viaszban · meleg fény a gyertya tetején
+       · a henger alsó íve · hengeres fény-árnyék · túlfolyó csepp
+       · a tál pereme, belseje, teste · árnyék a felületen.
+     A színek tokenek: --pv-candle-wax, --pv-candle-dish, --pv-candle-shade,
+     --pv-candle-glow – más palettához csak ezeket kell cserélni.
+
+  2) .candle__flame – a LÁNG és mögötte a meleg fény. Könnycsepp-SVG
+     (--sv-flame-live: a lángforma SMIL-lel hullámzik; --sv-flame: álló kép
+     csökkentett mozgáshoz). Három, egymással nem osztható ütemű CSS-mozdulat
+     (lobbanás, kilengés, fényerő) – a pislákolás így sosem ismétlődik
+     láthatóan. A láng töve maszkkal áttetsző: a kanóc átsejlik rajta.
+
+  GEOMETRIA: a gyertya teteje egy ellipszis (12/11.15, rx 3.4, ry .62 a
+  24-es rácson) – ebből rajzol a viasztó, a perem fénye, a függöny és minden
+  csorgás teteje. A henger alja és a tál pereme ugyanakkora rálátással
+  (ry/rx ≈ .18) készül, ezért ül bele a gyertya a tálba. A láng a doboz
+  12% széles, 30% magas sávja, a töve 45%-on.
+-->
+<style>
+  /* A gyertya színei – más palettához ezt a blokkot kell cserélni */
+  :root {
+    --pv-primary: #556B2F;
+    --pv-candle-wax: color-mix(in srgb, #F5DEB3 60%, #FFFBF3);
+    --pv-candle-dish: #5B3F3E;
+    --pv-candle-shade: #2a1d14;
+    --pv-candle-glow: #ffc75a;
+    --pv-candle-o: 1;
+    --pv-flame-o: 0.9;
+    --page-bg: #A7B58C;
+    --page-ink: #141414;
+  }
+  :root[data-theme="dark"] { --page-ink: #F7EFEF; --pv-flame-o: 1; }
+
+  /* A rajzok (SVG data-URI) – a pv.css-ből, változatlanul */
+  :root {
+    --sv-flame: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 100'%3E%3Cdefs%3E%3CradialGradient id='o' cx='.5' cy='.68' r='.62' fx='.5' fy='.72'%3E%3Cstop offset='0' stop-color='%23fffdf2'/%3E%3Cstop offset='.2' stop-color='%23fff1b8'/%3E%3Cstop offset='.46' stop-color='%23ffc245'/%3E%3Cstop offset='.76' stop-color='%23ff8a1f' stop-opacity='.85'/%3E%3Cstop offset='1' stop-color='%23ff5a0a' stop-opacity='0'/%3E%3C/radialGradient%3E%3CradialGradient id='c' cx='.5' cy='.6' r='.5'%3E%3Cstop offset='0' stop-color='%23fff'/%3E%3Cstop offset='.6' stop-color='%23fffbe6' stop-opacity='.9'/%3E%3Cstop offset='1' stop-color='%23fff3c4' stop-opacity='0'/%3E%3C/radialGradient%3E%3CradialGradient id='b' cx='.5' cy='.5' r='.5'%3E%3Cstop offset='0' stop-color='%233d6bff' stop-opacity='.7'/%3E%3Cstop offset='1' stop-color='%233d6bff' stop-opacity='0'/%3E%3C/radialGradient%3E%3Cfilter id='s' x='-50%25' y='-20%25' width='200%25' height='140%25'%3E%3CfeGaussianBlur stdDeviation='1.6'/%3E%3C/filter%3E%3Cfilter id='t' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='.9'/%3E%3C/filter%3E%3C/defs%3E%3Cpath filter='url(%23s)' fill='url(%23o)' d='M20 3C23 20 33 44 33 64C33 83 27 95 20 95C13 95 7 83 7 64C7 44 17 20 20 3Z'%3E%3C/path%3E%3Cellipse cx='20' cy='90' rx='6' ry='4' fill='url(%23b)' opacity='.55' filter='url(%23t)'/%3E%3Cellipse cx='20' cy='68' rx='6.5' ry='17' fill='url(%23c)' filter='url(%23t)'%3E%3C/ellipse%3E%3C/svg%3E");
+    --sv-flame-live: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 100'%3E%3Cdefs%3E%3CradialGradient id='o' cx='.5' cy='.68' r='.62' fx='.5' fy='.72'%3E%3Cstop offset='0' stop-color='%23fffdf2'/%3E%3Cstop offset='.2' stop-color='%23fff1b8'/%3E%3Cstop offset='.46' stop-color='%23ffc245'/%3E%3Cstop offset='.76' stop-color='%23ff8a1f' stop-opacity='.85'/%3E%3Cstop offset='1' stop-color='%23ff5a0a' stop-opacity='0'/%3E%3C/radialGradient%3E%3CradialGradient id='c' cx='.5' cy='.6' r='.5'%3E%3Cstop offset='0' stop-color='%23fff'/%3E%3Cstop offset='.6' stop-color='%23fffbe6' stop-opacity='.9'/%3E%3Cstop offset='1' stop-color='%23fff3c4' stop-opacity='0'/%3E%3C/radialGradient%3E%3CradialGradient id='b' cx='.5' cy='.5' r='.5'%3E%3Cstop offset='0' stop-color='%233d6bff' stop-opacity='.7'/%3E%3Cstop offset='1' stop-color='%233d6bff' stop-opacity='0'/%3E%3C/radialGradient%3E%3Cfilter id='s' x='-50%25' y='-20%25' width='200%25' height='140%25'%3E%3CfeGaussianBlur stdDeviation='1.6'/%3E%3C/filter%3E%3Cfilter id='t' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='.9'/%3E%3C/filter%3E%3C/defs%3E%3Cpath filter='url(%23s)' fill='url(%23o)' d='M20 3C23 20 33 44 33 64C33 83 27 95 20 95C13 95 7 83 7 64C7 44 17 20 20 3Z'%3E%3Canimate attributeName='d' dur='2.3s' repeatCount='indefinite' calcMode='spline' keyTimes='0;.3;.55;.8;1' keySplines='.4 0 .6 1;.4 0 .6 1;.4 0 .6 1;.4 0 .6 1' values='M20 3C23 20 33 44 33 64C33 83 27 95 20 95C13 95 7 83 7 64C7 44 17 20 20 3Z;M22.5 1C24.5 19 33.5 43 33 64C32.5 83 27 95 20 95C13 95 7.5 83 7.5 64C7.5 45 19 21 22.5 1Z;M19 7C22.5 23 34 45 33.5 65C33 83 27 95 20 95C13 95 6.5 83 6.5 65C6.5 45 16 23 19 7Z;M17.5 2C21 20 32.5 44 32.5 64C32.5 83 27 95 20 95C13 95 7 83 7.5 64C8 43 14.5 20 17.5 2Z;M20 3C23 20 33 44 33 64C33 83 27 95 20 95C13 95 7 83 7 64C7 44 17 20 20 3Z'/%3E%3C/path%3E%3Cellipse cx='20' cy='90' rx='6' ry='4' fill='url(%23b)' opacity='.55' filter='url(%23t)'/%3E%3Cellipse cx='20' cy='68' rx='6.5' ry='17' fill='url(%23c)' filter='url(%23t)'%3E%3Canimate attributeName='ry' dur='1.37s' values='17;19;16;18.5;17' repeatCount='indefinite'/%3E%3C/ellipse%3E%3C/svg%3E");
+    --sv-candle-body: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3Cfilter id='g' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='.38'/%3E%3C/filter%3E%3C/defs%3E%3Cpath d='M8.6 11.15A3.4 .62 0 0 1 15.4 11.15L15.4 21.1C15.4 21.43 13.88 21.7 12 21.7C10.12 21.7 8.6 21.43 8.6 21.1Z'/%3E%3Cpath d='M14.82 11.496C14.868 11.971 14.988 12.256 15.024 12.937C15.024 13.126 14.91 13.207 14.91 13.369C14.91 13.564 15.45 13.564 15.45 13.369C15.45 13.207 15.336 13.126 15.336 12.937C15.3 12.256 15.372 11.971 15.42 11.15Q15.12 11.47 14.82 11.496Z'/%3E%3Cpath d='M6.4 21A5.6 1 0 0 1 17.6 21L17.52 21.35A5.5 1.05 0 0 1 6.48 21.35Z'/%3E%3Cellipse cx='12' cy='22.45' rx='6.2' ry='.55' filter='url(%23g)'/%3E%3Cpath d='M12 11.25C12 10.7 12.02 10.25 12.08 9.98C12.13 9.76 12.2 9.62 12.28 9.55' stroke='%23000' stroke-width='.2' stroke-linecap='round' fill='none'/%3E%3C/svg%3E");
+    --sv-candle-detail: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3Cfilter id='b' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='.07'/%3E%3C/filter%3E%3Cfilter id='s' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='.16'/%3E%3C/filter%3E%3Cfilter id='t' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='.3'/%3E%3C/filter%3E%3ClinearGradient id='d' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop offset='0' stop-color='%23fff' stop-opacity='.42'/%3E%3Cstop offset='.3' stop-color='%23fff' stop-opacity='.16'/%3E%3Cstop offset='.62' stop-color='%23fff' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='.14'/%3E%3C/linearGradient%3E%3ClinearGradient id='c' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fff' stop-opacity='.45'/%3E%3Cstop offset='.5' stop-color='%23fff' stop-opacity='.14'/%3E%3Cstop offset='1' stop-color='%23fff' stop-opacity='.04'/%3E%3C/linearGradient%3E%3ClinearGradient id='w' x1='0' y1='1' x2='0' y2='0'%3E%3Cstop offset='0' stop-color='%233b2a1f'/%3E%3Cstop offset='.55' stop-color='%231d130d'/%3E%3Cstop offset='1' stop-color='%23050302'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M8.35 21.12A3.65 .68 0 0 0 15.65 21.12' fill='none' stroke='%23000' stroke-width='.3' opacity='.28' filter='url(%23s)'/%3E%3Cpath d='M6.75 21.28A5.3 .96 0 0 0 17.25 21.28' fill='none' stroke='%23fff' stroke-width='.07' opacity='.4' filter='url(%23b)'/%3E%3Cpath d='M8.8 11.15A3.2 .56 0 0 1 15.2 11.15A3.2 .4 0 0 0 8.8 11.15Z' fill='%23000' opacity='.14' filter='url(%23b)'/%3E%3Cellipse cx='11.1' cy='11.02' rx='.95' ry='.12' fill='%23fff' opacity='.4' filter='url(%23b)'/%3E%3Cg transform='translate(.07 .12)' opacity='.2' filter='url(%23s)'%3E%3Cpath d='M8.6 11.15L8.6 11.15L8.7 11.299L8.8 11.36L8.9 11.405L9 11.442L9.1 11.474L9.2 11.502L9.3 11.527L9.4 11.55L9.5 11.57L9.6 11.589L9.7 11.607L9.8 11.623L9.9 11.638L10 11.651L10.1 11.664L10.2 11.676L10.3 11.687L10.4 11.697L10.5 11.706L10.6 11.715L10.7 11.723L10.8 11.73L10.9 11.737L11 11.743L11.1 11.748L11.2 11.753L11.3 11.757L11.4 11.76L11.5 11.763L11.6 11.766L11.7 11.768L11.8 11.769L11.9 11.77L12 11.77L12.1 11.77L12.2 11.769L12.3 11.768L12.4 11.766L12.5 11.763L12.6 11.76L12.7 11.757L12.8 11.753L12.9 11.748L13 11.743L13.1 11.737L13.2 11.73L13.3 11.723L13.4 11.715L13.5 11.706L13.6 11.697L13.7 11.687L13.8 11.676L13.9 11.664L14 11.651L14.1 11.638L14.2 11.623L14.3 11.607L14.4 11.589L14.5 11.57L14.6 11.55L14.7 11.527L14.8 11.502L14.9 11.474L15 11.442L15.1 11.405L15.2 11.36L15.3 11.299L15.4 11.15L15.4 11.457L15.3 11.7L15.2 11.848L15.1 11.965L15 12.048L14.9 12.101L14.8 12.131L14.7 12.142L14.6 12.141L14.5 12.129L14.4 12.106L14.3 12.074L14.2 12.038L14.1 12.001L14 11.97L13.9 11.95L13.8 11.944L13.7 11.952L13.6 11.975L13.5 12.01L13.4 12.052L13.3 12.098L13.2 12.143L13.1 12.182L13 12.213L12.9 12.232L12.8 12.24L12.7 12.237L12.6 12.225L12.5 12.209L12.4 12.191L12.3 12.176L12.2 12.164L12.1 12.153L12 12.141L11.9 12.124L11.8 12.102L11.7 12.075L11.6 12.05L11.5 12.033L11.4 12.03L11.3 12.043L11.2 12.072L11.1 12.113L11 12.158L10.9 12.201L10.8 12.235L10.7 12.255L10.6 12.258L10.5 12.242L10.4 12.21L10.3 12.165L10.2 12.111L10.1 12.056L10 12.004L9.9 11.961L9.8 11.929L9.7 11.909L9.6 11.899L9.5 11.896L9.4 11.896L9.3 11.894L9.2 11.888L9.1 11.874L9 11.85L8.9 11.814L8.8 11.764L8.7 11.691L8.6 11.523Z'/%3E%3Cpath d='M8.9 11.405C8.972 12.213 9.096 12.558 9.066 13.434C9.066 13.641 9.003 13.731 9.003 13.909C9.003 14.123 9.597 14.123 9.597 13.909C9.597 13.731 9.534 13.641 9.534 13.434C9.564 12.558 9.728 12.213 9.8 11.623Q9.35 11.563 8.9 11.405Z'/%3E%3Cpath d='M10.025 11.655C10.109 12.861 10.309 13.491 10.357 15.422C10.357 15.664 10.284 15.768 10.284 15.976C10.284 16.226 10.977 16.226 10.977 15.976C10.977 15.768 10.903 15.664 10.903 15.422C10.855 13.491 10.991 12.861 11.075 11.747Q10.55 11.721 10.025 11.655Z'/%3E%3Cpath d='M11.5 11.763C11.556 12.144 11.668 12.309 11.668 12.51C11.668 12.699 11.58 12.78 11.58 12.942C11.58 13.137 12.12 13.137 12.12 12.942C12.12 12.78 12.032 12.699 12.032 12.51C12.032 12.309 12.144 12.144 12.2 11.769Q11.85 11.773 11.5 11.763Z'/%3E%3Cpath d='M12.625 11.759C12.717 13.355 12.981 14.27 13.101 17.285C13.101 17.551 13.02 17.664 13.02 17.892C13.02 18.165 13.779 18.165 13.779 17.892C13.779 17.664 13.699 17.551 13.699 17.285C13.579 14.27 13.683 13.355 13.775 11.679Q13.2 11.741 12.625 11.759Z'/%3E%3Cpath d='M14.1 11.638C14.172 12.41 14.356 12.86 14.416 14.155C14.416 14.363 14.353 14.452 14.353 14.63C14.353 14.844 14.947 14.844 14.947 14.63C14.947 14.452 14.884 14.363 14.884 14.155C14.824 12.86 14.928 12.41 15 11.442Q14.55 11.58 14.1 11.638Z'/%3E%3Cpath d='M14.82 11.496C14.868 11.971 14.988 12.256 15.024 12.937C15.024 13.126 14.91 13.207 14.91 13.369C14.91 13.564 15.45 13.564 15.45 13.369C15.45 13.207 15.336 13.126 15.336 12.937C15.3 12.256 15.372 11.971 15.42 11.15Q15.12 11.47 14.82 11.496Z'/%3E%3C/g%3E%3Cpath d='M8.6 11.15L8.6 11.15L8.7 11.299L8.8 11.36L8.9 11.405L9 11.442L9.1 11.474L9.2 11.502L9.3 11.527L9.4 11.55L9.5 11.57L9.6 11.589L9.7 11.607L9.8 11.623L9.9 11.638L10 11.651L10.1 11.664L10.2 11.676L10.3 11.687L10.4 11.697L10.5 11.706L10.6 11.715L10.7 11.723L10.8 11.73L10.9 11.737L11 11.743L11.1 11.748L11.2 11.753L11.3 11.757L11.4 11.76L11.5 11.763L11.6 11.766L11.7 11.768L11.8 11.769L11.9 11.77L12 11.77L12.1 11.77L12.2 11.769L12.3 11.768L12.4 11.766L12.5 11.763L12.6 11.76L12.7 11.757L12.8 11.753L12.9 11.748L13 11.743L13.1 11.737L13.2 11.73L13.3 11.723L13.4 11.715L13.5 11.706L13.6 11.697L13.7 11.687L13.8 11.676L13.9 11.664L14 11.651L14.1 11.638L14.2 11.623L14.3 11.607L14.4 11.589L14.5 11.57L14.6 11.55L14.7 11.527L14.8 11.502L14.9 11.474L15 11.442L15.1 11.405L15.2 11.36L15.3 11.299L15.4 11.15L15.4 11.457L15.3 11.7L15.2 11.848L15.1 11.965L15 12.048L14.9 12.101L14.8 12.131L14.7 12.142L14.6 12.141L14.5 12.129L14.4 12.106L14.3 12.074L14.2 12.038L14.1 12.001L14 11.97L13.9 11.95L13.8 11.944L13.7 11.952L13.6 11.975L13.5 12.01L13.4 12.052L13.3 12.098L13.2 12.143L13.1 12.182L13 12.213L12.9 12.232L12.8 12.24L12.7 12.237L12.6 12.225L12.5 12.209L12.4 12.191L12.3 12.176L12.2 12.164L12.1 12.153L12 12.141L11.9 12.124L11.8 12.102L11.7 12.075L11.6 12.05L11.5 12.033L11.4 12.03L11.3 12.043L11.2 12.072L11.1 12.113L11 12.158L10.9 12.201L10.8 12.235L10.7 12.255L10.6 12.258L10.5 12.242L10.4 12.21L10.3 12.165L10.2 12.111L10.1 12.056L10 12.004L9.9 11.961L9.8 11.929L9.7 11.909L9.6 11.899L9.5 11.896L9.4 11.896L9.3 11.894L9.2 11.888L9.1 11.874L9 11.85L8.9 11.814L8.8 11.764L8.7 11.691L8.6 11.523Z' fill='url(%23c)'/%3E%3Cpath d='M8.9 11.405C8.972 12.213 9.096 12.558 9.066 13.434C9.066 13.641 9.003 13.731 9.003 13.909C9.003 14.123 9.597 14.123 9.597 13.909C9.597 13.731 9.534 13.641 9.534 13.434C9.564 12.558 9.728 12.213 9.8 11.623Q9.35 11.563 8.9 11.405Z' fill='url(%23d)'/%3E%3Cpath d='M10.025 11.655C10.109 12.861 10.309 13.491 10.357 15.422C10.357 15.664 10.284 15.768 10.284 15.976C10.284 16.226 10.977 16.226 10.977 15.976C10.977 15.768 10.903 15.664 10.903 15.422C10.855 13.491 10.991 12.861 11.075 11.747Q10.55 11.721 10.025 11.655Z' fill='url(%23d)'/%3E%3Cpath d='M11.5 11.763C11.556 12.144 11.668 12.309 11.668 12.51C11.668 12.699 11.58 12.78 11.58 12.942C11.58 13.137 12.12 13.137 12.12 12.942C12.12 12.78 12.032 12.699 12.032 12.51C12.032 12.309 12.144 12.144 12.2 11.769Q11.85 11.773 11.5 11.763Z' fill='url(%23d)'/%3E%3Cpath d='M12.625 11.759C12.717 13.355 12.981 14.27 13.101 17.285C13.101 17.551 13.02 17.664 13.02 17.892C13.02 18.165 13.779 18.165 13.779 17.892C13.779 17.664 13.699 17.551 13.699 17.285C13.579 14.27 13.683 13.355 13.775 11.679Q13.2 11.741 12.625 11.759Z' fill='url(%23d)'/%3E%3Cpath d='M14.1 11.638C14.172 12.41 14.356 12.86 14.416 14.155C14.416 14.363 14.353 14.452 14.353 14.63C14.353 14.844 14.947 14.844 14.947 14.63C14.947 14.452 14.884 14.363 14.884 14.155C14.824 12.86 14.928 12.41 15 11.442Q14.55 11.58 14.1 11.638Z' fill='url(%23d)'/%3E%3Cpath d='M14.82 11.496C14.868 11.971 14.988 12.256 15.024 12.937C15.024 13.126 14.91 13.207 14.91 13.369C14.91 13.564 15.45 13.564 15.45 13.369C15.45 13.207 15.336 13.126 15.336 12.937C15.3 12.256 15.372 11.971 15.42 11.15Q15.12 11.47 14.82 11.496Z' fill='url(%23d)'/%3E%3Cellipse cx='9.196' cy='13.864' rx='0.083' ry='0.059' fill='%23fff' opacity='.55' filter='url(%23b)'/%3E%3Cellipse cx='10.509' cy='15.924' rx='0.097' ry='0.069' fill='%23fff' opacity='.55' filter='url(%23b)'/%3E%3Cellipse cx='11.755' cy='12.902' rx='0.076' ry='0.054' fill='%23fff' opacity='.55' filter='url(%23b)'/%3E%3Cellipse cx='13.267' cy='17.835' rx='0.106' ry='0.076' fill='%23fff' opacity='.55' filter='url(%23b)'/%3E%3Cellipse cx='14.546' cy='14.586' rx='0.083' ry='0.059' fill='%23fff' opacity='.55' filter='url(%23b)'/%3E%3Cellipse cx='15.085' cy='13.329' rx='0.076' ry='0.054' fill='%23fff' opacity='.55' filter='url(%23b)'/%3E%3Cpath d='M8.62 11.22A3.38 .6 0 0 0 15.38 11.22' fill='none' stroke='%23fff' stroke-width='.07' opacity='.45' filter='url(%23b)'/%3E%3Cpath d='M12 11.25C12 10.7 12.02 10.25 12.08 9.98C12.13 9.76 12.2 9.62 12.28 9.55' fill='none' stroke='url(%23w)' stroke-width='.2' stroke-linecap='round'/%3E%3Ccircle cx='12.28' cy='9.55' r='.13' fill='%23ff6a1f'/%3E%3Ccircle cx='12.28' cy='9.55' r='.06' fill='%23ffd08a'/%3E%3C/svg%3E");
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 1.2rem;
+    padding: 1.5rem 1rem;
+    background: var(--page-bg);
+    color: var(--page-ink);
+    font: 400 1rem/1.5 system-ui, sans-serif;
+    transition: background-color .4s, color .4s;
+  }
+  h1 { margin: 0; font: 400 clamp(1.5rem, 5vw, 2.2rem)/1.2 Georgia, serif; }
+  p { margin: 0; max-width: 34rem; text-align: center; opacity: .8; }
+  .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; }
+  .controls button {
+    min-height: 44px; padding: .5rem 1rem;
+    border: 1px solid currentColor; border-radius: 999px;
+    background: transparent; color: inherit; font: inherit; cursor: pointer;
+  }
+  .controls button[aria-pressed="true"] { background: var(--page-ink); color: var(--page-bg); }
+  :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+
+  /* A doboz: négyzet, minden méret ennek %-a */
+  .candle { position: relative; width: min(86vw, 26rem); aspect-ratio: 1; }
+
+  /* 1) A TEST – a pv.css-ből kiemelve */
+  .candle__body {
+    position: absolute;
+    inset: 0;
+    -webkit-mask: var(--m) center / contain no-repeat;
+    mask: var(--m) center / contain no-repeat;
+    --m: var(--sv-candle-body);
+    --a: none;
+    --w: var(--pv-candle-wax, color-mix(in srgb, #f7eddd 88%, var(--pv-primary)));
+    --d: var(--pv-candle-dish, color-mix(in srgb, var(--pv-primary) 55%, #2b1f18));
+    --sh: var(--pv-candle-shade, #2a1d14);
+    --g: var(--pv-candle-glow, #ffc75a);
+    --din: color-mix(in srgb, var(--d) 80%, var(--sh));
+    opacity: var(--pv-candle-o, 0.9);
+    background:
+      /* részletek: olvadt perem, csorgások, kanóc, árnyék a tálban */
+      var(--sv-candle-detail) center / contain no-repeat,
+      /* olvadt viasztó – a láng megvilágítja */
+      radial-gradient(ellipse 14.17% 2.58% at 50% 46.46%,
+        color-mix(in srgb, var(--g) 55%, #fff) 0%, color-mix(in srgb, var(--g) 30%, var(--w)) 45%,
+        var(--w) 72%, color-mix(in srgb, #fff 28%, var(--w)) 86%, color-mix(in srgb, var(--sh) 18%, var(--w)) 96%, transparent 100%),
+      /* a láng átszűrődő fénye a viasz felső részében */
+      radial-gradient(ellipse 18% 11% at 50% 48.5%,
+        color-mix(in srgb, var(--g) 50%, transparent), color-mix(in srgb, var(--g) 16%, transparent) 50%, transparent 100%),
+      /* a láng meleg fénye rávetül a gyertya felső harmadára */
+      linear-gradient(color-mix(in srgb, var(--g) 28%, transparent), transparent 36%) 50% 81.95% / 28.33% 46.92% no-repeat,
+      /* a henger alsó íve: a két sarokba a tál belseje kerül – így az alja
+         pontosan azon az íven ül, amelyiken a tál pereme fut */
+      radial-gradient(ellipse 50% 100% at 50% 0%, transparent 95.5%, var(--din) 100%) 50% 90.17% / 28.33% 2.5% no-repeat,
+      /* a henger: lefelé sötétedés + hengeres fény balról */
+      linear-gradient(transparent 20%, color-mix(in srgb, var(--sh) 20%, transparent) 96%) 50% 81.95% / 28.33% 46.92% no-repeat,
+      linear-gradient(90deg,
+        color-mix(in srgb, var(--sh) 40%, var(--w)) 0%, color-mix(in srgb, var(--sh) 12%, var(--w)) 14%,
+        color-mix(in srgb, #fff 30%, var(--w)) 24%, color-mix(in srgb, #fff 60%, var(--w)) 29%,
+        color-mix(in srgb, #fff 30%, var(--w)) 34%, var(--w) 48%, color-mix(in srgb, var(--sh) 9%, var(--w)) 66%,
+        color-mix(in srgb, var(--sh) 30%, var(--w)) 84%, color-mix(in srgb, var(--g) 18%, var(--w)) 92%,
+        color-mix(in srgb, var(--sh) 45%, var(--w)) 100%)
+        50% 81.95% / 28.33% 46.92% no-repeat,
+      /* az élen túlfolyó csepp */
+      linear-gradient(color-mix(in srgb, var(--sh) 18%, var(--w)), color-mix(in srgb, var(--sh) 18%, var(--w)))
+        66% 51% / 3% 14% no-repeat,
+      /* a tál pereme: világos gyűrű a belső és a külső ellipszis között */
+      radial-gradient(ellipse 23.33% 4.167% at 50% 87.5%, transparent 88.5%,
+        color-mix(in srgb, var(--d) 45%, color-mix(in srgb, #fff 70%, var(--g))) 91.5%, color-mix(in srgb, var(--d) 78%, #fff) 95%, var(--d) 97.5%, transparent 100%),
+      /* a tál belseje: egyszínű, a pereme alatt sötétebb */
+      radial-gradient(ellipse 21.25% 3.75% at 50% 87.5%, var(--din) 90%, color-mix(in srgb, var(--d) 55%, var(--sh)) 100%, transparent 100%),
+      /* a tál teste elöl – ellipszis, hogy pontosan a tál alsó ívét kövesse */
+      radial-gradient(ellipse 22.92% 4.375% at 50% 88.96%,
+        color-mix(in srgb, var(--d) 85%, var(--sh)) 0%, color-mix(in srgb, var(--d) 50%, var(--sh)) 97%, transparent 100%),
+      /* a tál lágy árnyéka a felületen */
+      radial-gradient(ellipse 27% 3% at 50% 93.5%,
+        color-mix(in srgb, var(--sh) 40%, transparent), color-mix(in srgb, var(--sh) 14%, transparent) 60%, transparent 100%);
+  }
+
+  /* 2) A LÁNG – a pv.css-ből kiemelve; itt mindig a hullámzó lángforma él */
+  .candle__flame {
+    inset: 0;
+    --pv-flame-img: var(--sv-flame-live);
+    animation: var(--pv-glow-a);
+    position: absolute;
+    z-index: 1;
+    aspect-ratio: 1;
+    pointer-events: none;
+    transform-origin: 50% 45%;
+    background:
+      var(--pv-flame-img, var(--sv-flame)) 50% 21.43% / 12% 30% no-repeat,
+      radial-gradient(circle at 50% 32%,
+        color-mix(in srgb, var(--pv-candle-glow, #ffc75a) 40%, transparent),
+        color-mix(in srgb, var(--pv-candle-glow, #ffc75a) 12%, transparent) 14%, transparent 36%);
+    opacity: var(--pv-flame-o, 0.9);
+    /* a láng töve áttetsző: a kanóc átsejlik rajta, ahogy az igazi lángban */
+    -webkit-mask: radial-gradient(ellipse 4% 5% at 50% 42.5%, rgb(0 0 0 / 0.35), #000 100%);
+    mask: radial-gradient(ellipse 4% 5% at 50% 42.5%, rgb(0 0 0 / 0.35), #000 100%);
+    --pv-glow-a: pv-flame-lick 2.9s ease-in-out infinite, pv-flame-sway 6.7s ease-in-out infinite,
+      pv-flame-light 4.3s ease-in-out infinite;
+  }
+
+  @keyframes pv-flame-lick {
+  0%, 100% { scale: 1 1; }   11% { scale: 0.97 1.05; } 23% { scale: 1.02 0.96; } 37% { scale: 0.98 1.07; }
+  52% { scale: 1.01 0.98; } 61% { scale: 0.96 1.1; }  74% { scale: 1.03 0.95; } 88% { scale: 0.99 1.03; }
+  }
+  @keyframes pv-flame-sway {
+  0%, 100% { rotate: 0deg; } 20% { rotate: 1.2deg; } 45% { rotate: -0.8deg; } 58% { rotate: 2.2deg; }
+  63% { rotate: -1.6deg; } 70% { rotate: 0.6deg; } 85% { rotate: -1deg; }
+  }
+  @keyframes pv-flame-light {
+  0%, 100% { opacity: var(--pv-flame-o, 0.9); } 30% { opacity: calc(var(--pv-flame-o, 0.9) * 0.86); }
+  55% { opacity: var(--pv-flame-o, 0.9); } 62% { opacity: calc(var(--pv-flame-o, 0.9) * 0.76); }
+  80% { opacity: calc(var(--pv-flame-o, 0.9) * 0.95); }
+  }
+
+  /* Csökkentett mozgás: a láng megáll, az ÁLLÓ lángkép marad */
+  @media (prefers-reduced-motion: reduce) {
+    .candle__flame { animation: none; --pv-flame-img: var(--sv-flame); }
+  }
+</style>
+</head>
+<body>
+  <h1>Élő gyertya</h1>
+  <div class="candle" role="img" aria-label="Égő gyertya kerámiatálban, lobogó lánggal">
+    <i class="candle__body"></i>
+    <span class="candle__flame"></span>
+  </div>
+  <p>Egyetlen CSS-elem, kép nélkül: SVG-maszk, rétegzett átmenetek és saját ütemben lobogó láng. A színek állíthatók – próbáld ki a palettákat.</p>
+  <div class="controls" role="group" aria-label="Megjelenés">
+    <button type="button" data-theme="light" aria-pressed="true">Világos</button>
+    <button type="button" data-theme="dark" aria-pressed="false">Sötét</button>
+    <button type="button" data-pal="szandi" aria-pressed="true">Krém és burgundi</button>
+    <button type="button" data-pal="honey" aria-pressed="false">Méz és terrakotta</button>
+    <button type="button" data-pal="ivory" aria-pressed="false">Elefántcsont és pala</button>
+  </div>
+<script>
+  /* Paletták: csak a tokenek cserélődnek, a rajz ugyanaz */
+  const PAL = {
+    szandi: { wax: "color-mix(in srgb, #F5DEB3 60%, #FFFBF3)", dish: "#5B3F3E", light: "#A7B58C", dark: "#1C2117" },
+    honey:  { wax: "#F2D49B", dish: "#A0522D", light: "#E9DCC6", dark: "#1F1813" },
+    ivory:  { wax: "#FAF6EC", dish: "#4A5561", light: "#C9D3DA", dark: "#14191E" },
+  };
+  const root = document.documentElement;
+  let theme = "light", pal = "szandi";
+  function apply() {
+    const p = PAL[pal];
+    root.dataset.theme = theme;
+    root.style.setProperty("--pv-candle-wax", p.wax);
+    root.style.setProperty("--pv-candle-dish", p.dish);
+    root.style.setProperty("--page-bg", p[theme]);
+    document.querySelectorAll("[data-theme]:not(html)").forEach((b) => b.setAttribute("aria-pressed", b.dataset.theme === theme));
+    document.querySelectorAll("[data-pal]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.pal === pal));
+  }
+  document.querySelector(".controls").addEventListener("click", (e) => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    if (b.dataset.theme) theme = b.dataset.theme; else pal = b.dataset.pal;
+    apply();
+  });
+</script>
+</body>
+</html>

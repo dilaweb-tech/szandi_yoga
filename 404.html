@@ -6,7 +6,7 @@
 
   <title>Az oldal nem található</title>
   <meta name="robots" content="noindex">
-  <meta name="theme-color" content="#F6EFE6">
+  <meta name="theme-color" content="#A7B58C">
 
   <!-- A hibaoldal bármelyik útvonalon megjelenhet (/nincs/ilyen/oldal), ezért a
        hivatkozások a gyökérhez igazodnak – enélkül a CSS és a site.json nem
@@ -19,14 +19,14 @@
        Szandi színén, rejtve áll (site.js → init, reveal). Ha a szkript nem fut
        le, 3 mp múlva magától megjelenik; JavaScript nélkül azonnal. -->
   <style>
-    html { background: #F6EFE6; }
+    html { background: #A7B58C; }
     html:not(.pv-ready) body { visibility: hidden; animation: pv-boot 0s 3s forwards; }
     @keyframes pv-boot { to { visibility: visible; } }
     @media (prefers-reduced-motion: no-preference) { html.pv-ready body { animation: pv-in 0.3s ease-out; } }
     @keyframes pv-in { from { opacity: 0; } }
   </style>
   <!-- a mentett sötét mód már az első képkockán: a kulcs a site.js MODE_KEY-e -->
-  <script>try { if (localStorage.getItem("szandi:mode") === "dark") document.documentElement.style.background = "#1E1814"; } catch {}</script>
+  <script>try { if (localStorage.getItem("szandi:mode") === "dark") document.documentElement.style.background = "#1C2117"; } catch {}</script>
   <noscript><style>html:not(.pv-ready) body { visibility: visible; animation: none; }</style></noscript>
   <link rel="stylesheet" href="pv.css">
 </head>

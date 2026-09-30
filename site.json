@@ -8,7 +8,7 @@
   },
   "content": {
     "company": "Mészáros Alexandra · Ashtanga jóga",
-    "tagline": "Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban. Minden héten ugyanaz a sorozat, a légzés ütemére – kezdőként is jöhetsz.",
+    "tagline": "Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban. Mellette irodai jóga cégeknek és privát óra – a légzés ütemére, kezdőként is.",
     "about": "Szandi vagyok, én tartom a keddi Ashtanga Half Led órát a Joy of Yoga Stúdióban.\n\nAz Ashtanga kötött sorozat: minden alkalommal ugyanazok a pózok jönnek, ugyanabban a sorrendben, és mindegyik a légzéshez kötődik. A Half Led órán az elsődleges sorozat első felét vezetem végig, egyenletes számolással, a végén záró pózok és pihenés következik. Nem kell figyelned, mi jön – elég, ha a számolást és a saját légzésedet követed.\n\n[Ide jön a saját történetem: mióta gyakorlok, hol tanultam, és miért éppen az Ashtanga.]",
     "address": "Joy of Yoga Stúdió, 6722 Szeged, Gutenberg utca 14.",
     "phone": "+36 30 501 2453",
@@ -16,21 +16,21 @@
     "logo": "",
     "images": [
       {
-        "spot": "Nyitókép · Ashtanga Half Led",
+        "spot": "Jógaóra · Ashtanga",
         "src": "lotusz.jpg",
         "focus": "center",
         "media": "",
         "alt": "Rózsaszín lótuszvirág harmatcseppekkel, zöld levelek között"
       },
       {
-        "spot": "Nyitókép · Ha most kezded",
+        "spot": "Jógaóra · Irodai jóga",
         "src": "gyertya-kezben.jpg",
         "focus": "center",
         "media": "",
         "alt": "Égő gyertya egy nyitott tenyéren, sötét háttér előtt"
       },
       {
-        "spot": "Nyitókép · Ami a stúdióban vár",
+        "spot": "Jógaóra · Privát óra",
         "src": "joga-parna-gyertya.jpg",
         "focus": "center",
         "media": "",
@@ -47,16 +47,16 @@
     "uploadedFiles": [],
     "services": [
       {
-        "name": "Ashtanga Half Led",
-        "text": "Kedd 17:00–18:30. Az elsődleges sorozat első fele vezetett ütemben, számolással; a végén záró pózok és pihenés."
+        "name": "Ashtanga · Joy of Yoga",
+        "text": "Kedd 17:00–18:30 a szegedi Joy of Yoga Stúdióban. Az elsődleges sorozat első fele vezetett ütemben, számolással; a végén záró pózok és pihenés. Kezdőként is jöhetsz – a nehezebb pózokhoz könnyebb változatot mutatok."
       },
       {
-        "name": "Ha most kezded",
-        "text": "Szólj előtte nekem vagy a stúdiónak: a nehezebb pózokhoz könnyebb változatot mutatok. A sorozat ismétlődik, pár alkalom után már tudod, mi jön."
+        "name": "Irodai jóga",
+        "text": "Jóga a munkahelyeden, cégeknek. Nyújtás és légzés az egész napos ülés ellen – átöltözés nélkül, akár a tárgyalóban is. Időpont, létszám és helyszín egyeztetés alapján."
       },
       {
-        "name": "Ami a stúdióban vár",
-        "text": "Matracot és eszközt helyben kapsz. A csoport 2–10 fős, a stúdió fél órával a kezdés előtt nyit."
+        "name": "Privát óra",
+        "text": "Egyéni vagy páros óra a saját tempódban. Kezdőként az alapokat rakjuk le, gyakorlóként a sorozatot mélyítjük el. Helyszín és időpont egyeztetés alapján."
       }
     ],
     "lists": {
@@ -176,11 +176,25 @@
           "tag": "",
           "time": "2 hónapig érvényes",
           "image": ""
+        },
+        {
+          "name": "Irodai jóga",
+          "price": "Egyedi ajánlat",
+          "tag": "",
+          "time": "cégeknek, létszám és helyszín szerint",
+          "image": ""
+        },
+        {
+          "name": "Privát óra",
+          "price": "Egyeztetés alapján",
+          "tag": "",
+          "time": "egyéni vagy páros óra",
+          "image": ""
         }
       ]
     },
     "hoursShow": false,
-    "cta2": "about",
+    "cta2": "services",
     "booking": {
       "enabled": false,
       "services": [],
@@ -192,23 +206,35 @@
     "texts": {
       "pv.cta": "Jelentkezem",
       "pv.contactTitle": "Gyere el egy keddi órára",
-      "pv.lblAddress": "A stúdió címe"
+      "pv.lblAddress": "A stúdió címe",
+      "sec.about": "Rólam",
+      "pv.aboutEyebrow": "Rólam",
+      "pv.aboutTitle": "Ki vagyok én?",
+      "sec.services": "Jógaórák",
+      "pv.servicesEyebrow": "Szolgáltatások",
+      "pv.servicesTitle": "Jógaórák",
+      "pv.servicesLead": "Stúdióban, az irodádban vagy négyszemközt – válaszd, ami a hetedbe illik.",
+      "pv.pricingEyebrow": "Belépők és bérletek",
+      "pv.pricingTitle": "Árak",
+      "sec.faq": "GYIK",
+      "pv.faqTitle": "Gyakori kérdések",
+      "sec.contact": "Kapcsolat"
     }
   },
   "design": {
     "mode": "light",
     "colors": {
       "dark": {
-        "primary": "#D2B89F",
-        "secondary": "#9C8470",
-        "bg": "#1E1814",
-        "text": "#F1E9DF"
+        "primary": "#A7B58C",
+        "secondary": "#6B8E23",
+        "bg": "#1C2117",
+        "text": "#F7EFEF"
       },
       "light": {
-        "primary": "#8A6A52",
-        "secondary": "#BFA58D",
-        "bg": "#F6EFE6",
-        "text": "#2B211B"
+        "primary": "#556B2F",
+        "secondary": "#6B8E23",
+        "bg": "#A7B58C",
+        "text": "#141414"
       }
     },
     "font": "dmsans",
@@ -239,8 +265,8 @@
     "media": "arch",
     "btn": "pill",
     "hover": "none",
-    "navBg": "blur",
-    "navShape": "float",
+    "navBg": "solid",
+    "navShape": "bar",
     "navAlign": "end",
     "navLink": "plain",
     "navPos": "hide",
