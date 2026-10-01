@@ -48,14 +48,17 @@
     "services": [
       {
         "name": "Ashtanga · Joy of Yoga",
+        "meta": "Kedd 17:00 · Stúdió",
         "text": "Kedd 17:00–18:30 a szegedi Joy of Yoga Stúdióban. Az elsődleges sorozat első fele vezetett ütemben, számolással; a végén záró pózok és pihenés. Kezdőként is jöhetsz – a nehezebb pózokhoz könnyebb változatot mutatok."
       },
       {
         "name": "Irodai jóga",
+        "meta": "Cégeknek · Helyszínen",
         "text": "Jóga a munkahelyeden, cégeknek. Nyújtás és légzés az egész napos ülés ellen – átöltözés nélkül, akár a tárgyalóban is. Időpont, létszám és helyszín egyeztetés alapján."
       },
       {
         "name": "Privát óra",
+        "meta": "Egyéni · Páros",
         "text": "Egyéni vagy páros óra a saját tempódban. Kezdőként az alapokat rakjuk le, gyakorlóként a sorozatot mélyítjük el. Helyszín és időpont egyeztetés alapján."
       }
     ],

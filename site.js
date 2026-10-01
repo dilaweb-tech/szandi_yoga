@@ -834,7 +834,7 @@ function szandiBreath() {
 /* SZANDI: görgetésre érkező elemek ott, ahol a CSS nézet-idővonala nem megy
    (iOS 26 előtti Safari, Firefox). Ugyanazok az elemek, mint a pv.css 8.11-ben
    és a SZANDI kiegészítésben; ahol a CSS megy, ott ez nem csinál semmit. A
-   hero kimarad: az betöltéskor már a helyén van. Gomb és gombszerű sor (GYIK,
+   hero és a Számokban kimarad: betöltéskor már a helyén van. Gomb és gombszerű sor (GYIK,
    órarend-kártya) sem úszik: görgetéskor nem csúszhat szét. */
 const RV_SEL = ".pv-head, .pv-item, .pv-contact__list li, .pv-prices li, .pv-about__media, .pv-about__copy, " +
   ".pv-map__frame, .pv-slider, .sz-count > span";
@@ -846,7 +846,7 @@ const rvIO = !CSS.supports("animation-timeline: view()") && "IntersectionObserve
 function szandiReveal() {
   if (!rvIO || DESIGN.reveal === "none") return;
   $$(RV_SEL).forEach((el) => {
-    if (el.closest(".pv-hero") || el.classList.contains("sz-rv")) return;
+    if (el.closest(".pv-hero, [data-sec='stats']") || el.classList.contains("sz-rv")) return;
     el.classList.add("sz-rv");
     rvIO.observe(el);
   });
@@ -1012,9 +1012,9 @@ function applyContent() {
     <li class="pv-item">
       <figure class="pv-item__media"><img data-img-slot="${i}" alt="" width="800" height="600" loading="lazy"></figure>
       <div class="pv-item__body">
+        ${it.meta ? `<p class="sz-meta">${esc(it.meta)}</p>` : ""}
         <h3>${esc(it.name)}</h3>
-        ${it.text ? `<p>${esc(it.text)}</p>` : ""}
-      </div>
+        ${it.text ? `<p>${esc(it.text)}</p>` : ""}      </div>
     </li>`).join("");
   /* A bemutatkozás képhelye a kártyák UTÁN következik – a kártyák száma a
      JSON-ból jön, ezért a sorszámot itt írjuk rá, nem a markupban rögzítjük. */

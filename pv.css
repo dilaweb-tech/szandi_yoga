@@ -4777,6 +4777,81 @@ iframe { border: 0; }
 .pv .pv-section[data-sec="services"] .pv-item__body { background: var(--sz-box-warm); }
 .pv .pv-section[data-sec="pricing"] .pv-prices { gap: 0; padding-block: 0.4rem; }
 
+/* --- szolgáltatások: boltíves kártyasor ------------------------------------
+   Egy kártya = egy kapu: fent a boltíves kép, lent a krém doboz, EGY
+   körvonallal. A kép alja nem egyenes vágás, hanem a légzés-vonal hulláma –
+   a fotó „vízszintként" simul a krémbe, a tusvonal végigfut a hullámon.
+   Mobilon egymás alatt, tágas lapon három egyforma oszlop, a cím FÖLÖTTÜK.
+   --sz-wave: a hullám mélysége; a kép ennyivel lóg a doboz tetejébe. */
+.pv .pv-section[data-sec="services"] {
+  --sz-wave: 1.8rem;
+  --sz-wave-fill: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0V70C250 100 450 20 700 45S1050 95 1200 55V0Z'/%3E%3C/svg%3E");
+  --sz-wave-line: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 100' preserveAspectRatio='none'%3E%3Cpath d='M0 70C250 100 450 20 700 45S1050 95 1200 55' fill='none' stroke='%23000' stroke-width='2' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+  --sz-media-ratio: 1;
+}
+.pv .pv-section[data-sec="services"] .pv-items { grid-template-columns: minmax(0, 1fr); gap: clamp(1.6rem, 4cqi, 2rem); }
+.pv .pv-section[data-sec="services"] .pv-item,
+.pv .pv-section[data-sec="services"] .pv-item:nth-child(even) { position: relative; flex-direction: column; align-items: stretch; gap: 0; }
+.pv .pv-section[data-sec="services"] .pv-item__media {
+  flex: none;
+  position: relative;
+  z-index: 1;
+  aspect-ratio: var(--sz-media-ratio);
+  border-bottom: 0;
+  /* alul szögletes: a lekerekítés a hullám szélén krém éket hagyna */
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  -webkit-mask: linear-gradient(#000 0 0) top / 100% calc(100% - var(--sz-wave) + 2px) no-repeat, var(--sz-wave-fill) bottom / 100% var(--sz-wave) no-repeat;
+  mask: linear-gradient(#000 0 0) top / 100% calc(100% - var(--sz-wave) + 2px) no-repeat, var(--sz-wave-fill) bottom / 100% var(--sz-wave) no-repeat;
+}
+/* a tusvonal a hullámon: a kép maszkja levágná, ezért a kártya rajzolja */
+.pv .pv-section[data-sec="services"] .pv-item::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 0 0 auto;
+  aspect-ratio: var(--sz-media-ratio);
+  background: var(--sz-tus);
+  -webkit-mask: var(--sz-wave-line) bottom / 100% var(--sz-wave) no-repeat;
+  mask: var(--sz-wave-line) bottom / 100% var(--sz-wave) no-repeat;
+  pointer-events: none;
+}
+.pv .pv-section[data-sec="services"] .pv-item__body {
+  flex: 1;
+  gap: 0.5rem;
+  margin-top: calc(-1 * var(--sz-wave));
+  padding-top: calc(var(--sz-wave) + 1rem);
+  border-top: 0;
+  border-radius: 0 0 calc(var(--pv-radius) * 1.1) calc(var(--pv-radius) * 1.1);
+}
+.pv .pv-section[data-sec="services"] .sz-meta {
+  font-size: calc(0.7rem * var(--pv-fs));
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sz-sub);
+}
+/* A lap aljára tűzött meditáló illusztráció (texture: art) itt NEM látszik át:
+   a szekció tömör hátteret kap – a sávos változat ugyanazt a színt, csak
+   fedőn (a hullámos szél is ezt a tokent olvassa). */
+.pv[data-texture="art"] .pv-section[data-sec="services"] {
+  --pv-band: color-mix(in srgb, var(--pv-primary) 12%, var(--pv-bg));
+  background-color: var(--pv-bg);
+}
+.pv[data-texture="art"]:not([data-band="none"]) .pv-section[data-sec="services"][data-stripe="1"] { background-color: var(--pv-band); }
+@container (min-width: 52rem) {
+  /* ponytail: fix 3 oszlop – 2 vagy 4 szolgáltatásnál auto-fit kell */
+  /* a fő óra (első kártya) középre kerül, picit nagyobban; a szélsők középre igazítva */
+  .pv .pv-section[data-sec="services"] .pv-items { grid-template-columns: minmax(0, 1fr) minmax(0, 1.18fr) minmax(0, 1fr); align-items: center; }
+  .pv .pv-section[data-sec="services"] .pv-item:first-child { order: 1; }
+  .pv .pv-section[data-sec="services"] .pv-item:nth-child(n + 3) { order: 2; }
+  .pv .pv-section[data-sec="services"] { --sz-media-ratio: 4 / 5; }
+  /* oldalt álló címmel a három oszlopnak kevés hely maradna */
+  .pv[data-sec-head] .pv-section[data-sec="services"] > .pv-wrap:has(> .pv-head) { grid-template-columns: minmax(0, 1fr); }
+  .pv[data-sec-head] .pv-section[data-sec="services"] > .pv-wrap > :is(.pv-head, .pv-items) { grid-column: 1; grid-row: auto; }
+  .pv[data-sec-head] .pv-section[data-sec="services"] > .pv-wrap > .pv-head { position: static; margin-bottom: 1.8rem; }
+}
+
 /* --- gombok és ikonok: burgundi nyugalomban, olívazöld rámutatásra -------- */
 .pv .pv-btn--primary,
 .pv .pv-nav__cta {
@@ -5158,6 +5233,9 @@ iframe { border: 0; }
   .sz-rv { transition: opacity 0.8s var(--ease), translate 0.8s var(--ease), scale 0.8s var(--ease); }
   .sz-rv:not(.is-in) { opacity: 0; translate: 0 2rem; scale: 0.96; }
 }
+/* a Számokban közvetlenül a nyitókép alatt áll: betöltéskor félig látszik,
+   ott a halványítás fakónak hat – teljes színnel áll, mint a hero */
+.pv .pv-section[data-sec="stats"] :is(.pv-head, .pv-item) { animation: none; }
 @keyframes sz-rv-up   { from { opacity: 0; translate: 0 2rem; scale: 0.96; } to { opacity: 1; translate: none; scale: none; } }
 @keyframes sz-rv-zoom { from { scale: 1.14; } to { scale: none; } }
 
