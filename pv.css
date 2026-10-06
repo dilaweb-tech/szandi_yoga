@@ -4650,7 +4650,7 @@ iframe { border: 0; }
   gap: 0;
   max-width: 34rem;
   padding: 0.3rem clamp(1rem, 4cqi, 1.8rem);
-  border: var(--sz-line) solid var(--sz-tus);
+  border: 0;
   border-radius: calc(var(--pv-radius) * 1.1);
   background: var(--sz-box);
   box-shadow: var(--sz-shadow);
@@ -4692,6 +4692,17 @@ iframe { border: 0; }
    nem csak a szám maga. A fókuszgyűrű marad a linken. */
 .pv .pv-section.pv-contact .pv-contact__list a::after { content: ""; position: absolute; inset: 0; }
 
+/* Nyitókép: a fotó fölötti fátyol 15 százalékponttal halványabb a sablonénál –
+   a lótusz erősebben látszik, a szöveg alatt a fátyol még bőven tart. */
+.pv[data-hero="banner"] .pv-hero::after {
+  background: linear-gradient(100deg, color-mix(in srgb, var(--pv-bg) 67%, transparent) 25%, color-mix(in srgb, var(--pv-bg) 45%, transparent));
+}
+@container (min-width: 46rem) {
+  .pv[data-hero="banner"] .pv-hero::after {
+    background: linear-gradient(100deg, color-mix(in srgb, var(--pv-bg) 85%, transparent) 8%, color-mix(in srgb, var(--pv-bg) 40%, transparent) 55%, transparent 95%);
+  }
+}
+
 /* A képes felső szekciók (nyitókép, számok, bemutatkozás, órák) szorosabban
    követik egymást: az álló boltíves képek maguk is levegőt adnak, a teljes
    térköz fölöttük szétesőnek hatott. Az alsó határ a hullámos szekcióhatár
@@ -4701,61 +4712,62 @@ iframe { border: 0; }
 }
 
 /* ==========================================================================
-   SZANDI – PALETTA (2026-09, Szandi színlistája alapján)
-   Minden szín egy nevesített szerep-token: új árnyalat = egy sor itt, a
-   szabályok nem változnak. A lap alapszínei (háttér, szöveg, olívazöld) a
-   site.json-ból jönnek; ezek a szerepek arra épülnek rá.
-   Kontraszt (világos mód, WCAG): szöveg a zsályán 8,4 · burgundi cím a zsályán
-   5,5 · részlet a zsályán 7,1 · taupe alfelirat a blush dobozon 6,4 · rózsa a
-   burgundi láblécen 4,5 · fekete a Ripe Olive menüpöttyön 4,8 · fehér az
-   olívazöld gombon 6,0. A fehér a Ripe Olive-on csak 3,8 lenne – ezért fekete.
+   SZANDI – PALETTA (2026-10, Szandi visszajelzése: „kevesebb szín, de a
+   színeknek több árnyalata”)
+   EGY szín, a zsálya-olíva, világostól a mély erdőzöldig – burgundi, blush,
+   krém, rózsa nincs. Minden szín egy nevesített szerep-token: új árnyalat =
+   egy sor itt. A lap alapszínei (háttér, szöveg, olívazöld) a site.json-ból
+   jönnek; ezek a szerepek arra épülnek rá.
+   Kontraszt (világos mód, WCAG): szöveg a lapon 12,9 · a zsálya sávon 8,9 ·
+   cím a lapon 9,1 · a sávon 6,3 · alfelirat a dobozon 5,1 · gombfelirat 10,0
+   · fehér az olívazöldön 6,0 · lábléc 8,6. Az alfelirat CSAK dobozon áll: a
+   sávon 3,2 lenne.
    ========================================================================== */
 .pv[data-mode] {
-  --sz-ink:       #141414;   /* szöveg világos felületen */
-  --sz-detail:    #242424;   /* részletek: felülcím, keret, halvány szöveg */
-  --sz-head:      #4A302F;   /* Deep Burgundy, egy fokkal mélyebben – fő feliratok */
-  --sz-sub:       #665446;   /* Warm Taupe, mélyebben – alfeliratok világos dobozon */
-  --sz-box:       #F7EFEF;   /* Soft White / Blush – szövegdoboz */
-  --sz-box-warm:  #F5DEB3;   /* Cream – meleg szövegdoboz (jógaórák) */
-  --sz-btn:       #5B3F3E;   /* gomb nyugalomban */
-  --sz-btn-ink:   #F7EFEF;
+  --sz-ink:       #1F2719;   /* szöveg világos felületen */
+  --sz-detail:    #3F4A35;   /* részletek: felülcím, halvány szöveg */
+  --sz-head:      #33421F;   /* mély olíva – fő feliratok */
+  --sz-sub:       #5E6E48;   /* középzöld – alfeliratok világos dobozon */
+  --sz-box:       #F5F6F0;   /* a legvilágosabb árnyalat – szövegdoboz */
+  --sz-box-warm:  #EEF1E6;   /* egy fokkal mélyebb – jógaórák, órarend */
+  --sz-btn:       #33421F;   /* gomb nyugalomban: mély olíva */
+  --sz-btn-ink:   #F5F6F0;
   --sz-hover:     #556B2F;   /* Olive Green – gomb/ikon rámutatásra */
   --sz-hover-ink: #FFFFFF;
-  --sz-menu:      #6B8E23;   /* Ripe Olive – menüpont kijelölése */
-  --sz-menu-ink:  #141414;
-  --sz-foot-bg:   #5B3F3E;   /* lábléc: burgundi alap … */
-  --sz-foot:      #D9A7A5;   /* … Dusty Rose felirattal */
-  --sz-band:      color-mix(in srgb, var(--sz-box) 22%, var(--pv-bg));
-  /* háttér-gyertya (8.9/b): krémes viasz, burgundi kerámiatál – a lap két
-     meleg színe, nem a sablon zöldből kevert alapja */
-  --pv-candle-wax:  color-mix(in srgb, #F5DEB3 60%, #FFFBF3);
-  --pv-candle-dish: #5B3F3E;
+  --sz-foot-bg:   #26301C;   /* lábléc: erdőzöld … */
+  --sz-foot:      #C7D0B6;   /* … halvány zsálya felirattal */
+  --sz-band:      #BFC9AD;   /* sávos szekció: a zsálya */
+  /* háttér-gyertya (8.9/b): a lap árnyalataiból */
+  --pv-candle-wax:  #F5F6F0;
+  --pv-candle-dish: #556B2F;
 
   /* a sablon származtatott tokenjei a palettára húzva */
   --pv-muted:  var(--sz-detail);
-  --pv-line:   color-mix(in srgb, var(--sz-detail) 28%, var(--pv-bg));
+  --pv-line:   color-mix(in srgb, var(--sz-head) 16%, var(--pv-bg));
   --pv-box-bg: var(--sz-box);
   --pv-band:   var(--sz-band);
 }
 /* Sötét mód: ugyanazok a szerepek, éjszakai olívára hangolva */
 .pv[data-mode="dark"] {
-  --sz-detail:    #DADDD2;
-  --sz-head:      #F0CDCA;
-  --sz-sub:       #DCCCC0;
-  --sz-box:       #262C20;
-  --sz-box-warm:  #2F2A21;
-  --sz-btn:       #D9A7A5;
-  --sz-btn-ink:   #141414;
+  --sz-detail:    #CDD4C0;
+  --sz-head:      #D9E0C9;
+  --sz-sub:       #B4BEA2;
+  --sz-box:       #232A1D;
+  --sz-box-warm:  #262E20;
+  --sz-btn:       #C4CDB3;
+  --sz-btn-ink:   #1A1F16;
   --sz-hover:     #A7B58C;
   --sz-hover-ink: #141414;
+  --sz-foot-bg:   #12160F;
   --sz-band:      color-mix(in srgb, #A7B58C 7%, var(--pv-bg));
+  --pv-candle-wax:  #D9E0C9;
 }
 
-/* Fókuszgyűrű: az olívazöld a zsályán kevés lenne (2,7) – a tinta látszik */
+/* Fókuszgyűrű: az olívazöld a zsálya sávon kevés lenne – a tinta látszik */
 .pv[data-mode] :focus-visible { outline-color: var(--pv-text); }
 
 /* --- feliratok ------------------------------------------------------------ */
-/* A folyamat-lépések a szőnyegen maradnak tintásak: ott a burgundi elveszne */
+/* A folyamat-lépések a szőnyegen maradnak tintásak: ott az olíva elveszne */
 .pv :is(h1, h2),
 .pv .pv-section:not(.pv-list--process) h3,
 .pv .pv-faq summary,
@@ -4770,7 +4782,7 @@ iframe { border: 0; }
 .pv .pv-section[data-sec="pricing"] .pv-prices {
   padding: clamp(1.1rem, 4cqi, 1.8rem);
   border-radius: calc(var(--pv-radius) * 1.1);
-  border: var(--sz-line) solid var(--sz-tus);
+  border: 0;
   background: var(--sz-box);
   box-shadow: var(--sz-shadow);
 }
@@ -4778,15 +4790,14 @@ iframe { border: 0; }
 .pv .pv-section[data-sec="pricing"] .pv-prices { gap: 0; padding-block: 0.4rem; }
 
 /* --- szolgáltatások: boltíves kártyasor ------------------------------------
-   Egy kártya = egy kapu: fent a boltíves kép, lent a krém doboz, EGY
-   körvonallal. A kép alja nem egyenes vágás, hanem a légzés-vonal hulláma –
-   a fotó „vízszintként" simul a krémbe, a tusvonal végigfut a hullámon.
+   Egy kártya = egy kapu: fent a boltíves kép, lent a világos doboz, körvonal
+   nélkül. A kép alja nem egyenes vágás, hanem a légzés-vonal hulláma – a fotó
+   „vízszintként" simul a dobozba.
    Mobilon egymás alatt, tágas lapon három egyforma oszlop, a cím FÖLÖTTÜK.
    --sz-wave: a hullám mélysége; a kép ennyivel lóg a doboz tetejébe. */
 .pv .pv-section[data-sec="services"] {
   --sz-wave: 1.8rem;
   --sz-wave-fill: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0V70C250 100 450 20 700 45S1050 95 1200 55V0Z'/%3E%3C/svg%3E");
-  --sz-wave-line: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 100' preserveAspectRatio='none'%3E%3Cpath d='M0 70C250 100 450 20 700 45S1050 95 1200 55' fill='none' stroke='%23000' stroke-width='2' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
   --sz-media-ratio: 1;
 }
 .pv .pv-section[data-sec="services"] .pv-items { grid-template-columns: minmax(0, 1fr); gap: clamp(1.6rem, 4cqi, 2rem); }
@@ -4798,23 +4809,11 @@ iframe { border: 0; }
   z-index: 1;
   aspect-ratio: var(--sz-media-ratio);
   border-bottom: 0;
-  /* alul szögletes: a lekerekítés a hullám szélén krém éket hagyna */
+  /* alul szögletes: a lekerekítés a hullám szélén világos éket hagyna */
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   -webkit-mask: linear-gradient(#000 0 0) top / 100% calc(100% - var(--sz-wave) + 2px) no-repeat, var(--sz-wave-fill) bottom / 100% var(--sz-wave) no-repeat;
   mask: linear-gradient(#000 0 0) top / 100% calc(100% - var(--sz-wave) + 2px) no-repeat, var(--sz-wave-fill) bottom / 100% var(--sz-wave) no-repeat;
-}
-/* a tusvonal a hullámon: a kép maszkja levágná, ezért a kártya rajzolja */
-.pv .pv-section[data-sec="services"] .pv-item::after {
-  content: "";
-  position: absolute;
-  z-index: 2;
-  inset: 0 0 auto;
-  aspect-ratio: var(--sz-media-ratio);
-  background: var(--sz-tus);
-  -webkit-mask: var(--sz-wave-line) bottom / 100% var(--sz-wave) no-repeat;
-  mask: var(--sz-wave-line) bottom / 100% var(--sz-wave) no-repeat;
-  pointer-events: none;
 }
 .pv .pv-section[data-sec="services"] .pv-item__body {
   flex: 1;
@@ -4831,14 +4830,6 @@ iframe { border: 0; }
   text-transform: uppercase;
   color: var(--sz-sub);
 }
-/* A lap aljára tűzött meditáló illusztráció (texture: art) itt NEM látszik át:
-   a szekció tömör hátteret kap – a sávos változat ugyanazt a színt, csak
-   fedőn (a hullámos szél is ezt a tokent olvassa). */
-.pv[data-texture="art"] .pv-section[data-sec="services"] {
-  --pv-band: color-mix(in srgb, var(--pv-primary) 12%, var(--pv-bg));
-  background-color: var(--pv-bg);
-}
-.pv[data-texture="art"]:not([data-band="none"]) .pv-section[data-sec="services"][data-stripe="1"] { background-color: var(--pv-band); }
 @container (min-width: 52rem) {
   /* ponytail: fix 3 oszlop – 2 vagy 4 szolgáltatásnál auto-fit kell */
   /* a fő óra (első kártya) középre kerül, picit nagyobban; a szélsők középre igazítva */
@@ -4852,7 +4843,7 @@ iframe { border: 0; }
   .pv[data-sec-head] .pv-section[data-sec="services"] > .pv-wrap > .pv-head { position: static; margin-bottom: 1.8rem; }
 }
 
-/* --- gombok és ikonok: burgundi nyugalomban, olívazöld rámutatásra -------- */
+/* --- gombok és ikonok: mély olíva nyugalomban, olívazöld rámutatásra ----- */
 .pv .pv-btn--primary,
 .pv .pv-nav__cta {
   background: var(--sz-btn);
@@ -4860,32 +4851,30 @@ iframe { border: 0; }
   box-shadow: 0 14px 30px -18px var(--sz-btn);
   transition: transform 0.2s var(--ease), background-color 0.2s var(--ease), color 0.2s var(--ease);
 }
-.pv .pv-btn--ghost { border-color: transparent; background: var(--sz-box); color: var(--sz-head); }
+.pv .pv-btn--ghost { background: var(--sz-box); color: var(--sz-head); }
 .pv :is(.pv-mode, .pv-burger) { background: transparent; }
 .pv :is(.pv-btn, .pv-nav__cta, .pv-mode, .pv-burger, .pv-top):is(:hover, :focus-visible) {
-  border-color: var(--sz-tus);
   background: var(--sz-hover);
   color: var(--sz-hover-ink);
   filter: none;
 }
 
-/* --- menü: burgundi sáv, a jógaszőnyeg krémszínű szegélyével -------------
-   A lábléc burgundija a lap tetején is: a két sáv közrefogja a zsályát. Az
-   alsó krémcsík a szőnyeg (sig: mat) szövött széle – ez az egyetlen dísz.
-   Nincs lebegő kapszula, üveg, pirula, körbekeretezett ikon. */
+/* --- menü: világos sáv, hajszálvonallal ------------------------------------
+   A lap legvilágosabb árnyalata, alatta egy halk vonal – a lábléc erdőzöldje
+   a lap alját zárja. Nincs lebegő kapszula, üveg, körbekeretezett ikon. */
 .pv[data-mode] {
-  --sz-bar:      #5B3F3E;   /* sáv: Deep Burgundy */
-  --sz-bar-ink:  #F7EFEF;   /* felirat: Blush (kontraszt 9,6) */
-  --sz-bar-edge: #F5DEB3;   /* szegély, kiemelés: Cream */
+  --sz-bar:      var(--sz-box);
+  --sz-bar-ink:  var(--sz-ink);
+  --sz-bar-edge: var(--pv-primary);   /* kiemelés: olívazöld (5,5 a sávon) */
 }
-.pv[data-mode="dark"] { --sz-bar: #2E2221; }
+.pv[data-mode="dark"] { --sz-bar: #20271B; --sz-bar-ink: var(--pv-text); }
 .pv[data-mode][data-nav-pos]:not([data-nav-bg="tint"]) .pv-header {
-  --pv-nav-muted: color-mix(in srgb, var(--sz-bar-ink) 82%, var(--sz-bar));
+  --pv-nav-muted: color-mix(in srgb, var(--sz-bar-ink) 78%, var(--sz-bar));
   --pv-nav-ink: var(--sz-bar-ink);
   --pv-nav-accent: var(--sz-bar-edge);
   padding-block: 0.7rem;
   background: var(--sz-bar);
-  border-bottom: 3px solid var(--sz-bar-edge);
+  border-bottom: 1px solid var(--pv-line);
   color: var(--sz-bar-ink);
 }
 .pv[data-mode] .pv-header.is-scrolled { box-shadow: 0 10px 24px -18px rgba(20, 20, 20, 0.6); }
@@ -4921,10 +4910,10 @@ iframe { border: 0; }
   font-weight: 600;
   transition: color 0.2s var(--ease);
 }
-/* ahol a látogató jár: krémszínű, vastag aláhúzás – a szőnyegszegély párja */
+/* ahol a látogató jár: olívazöld aláhúzás */
 .pv[data-mode] .pv-nav__top[aria-current] {
   color: var(--pv-nav-ink);
-  text-decoration: underline 3px var(--pv-nav-accent);
+  text-decoration: underline 2px var(--pv-nav-accent);
   text-underline-offset: 0.55em;
 }
 .pv[data-mode] .pv-nav__item:is(:hover, :has(:focus-visible)) .pv-nav__top { color: var(--sz-bar-edge); }
@@ -4932,15 +4921,8 @@ iframe { border: 0; }
 .pv[data-mode] .pv-header :is(.pv-mode, .pv-burger) { border-color: transparent; background: transparent; color: inherit; }
 .pv[data-mode] .pv-header :is(.pv-mode, .pv-burger):is(:hover, :focus-visible) { background: transparent; border-color: transparent; color: var(--sz-bar-edge); }
 .pv[data-mode] .pv-burger .icon, .pv[data-mode] .pv-burger svg { width: 1.5rem; height: 1.5rem; }
-/* fő gomb: krém a burgundin, szögletesebb, mint a lap pirulái – a sávhoz tartozik */
-.pv[data-mode] .pv-header .pv-nav__cta {
-  border-radius: 0.4rem;
-  background: var(--sz-bar-edge);
-  color: #3A2827;
-  font-weight: 700;
-  box-shadow: none;
-}
-.pv[data-mode] .pv-header .pv-nav__cta:is(:hover, :focus-visible) { background: var(--sz-bar-ink); color: #3A2827; }
+/* fő gomb: ugyanaz a mély olíva pirula, mint a lapon – árnyék nélkül */
+.pv[data-mode] .pv-header .pv-nav__cta { font-weight: 600; box-shadow: none; }
 @media (min-width: 44rem) {
   .pv[data-mode] .pv-header .pv-nav__cta { font-size: calc(0.95rem * var(--pv-fs)); padding: 0.6rem 1.15rem; }
 }
@@ -4949,7 +4931,7 @@ iframe { border: 0; }
   --pv-nav-ink: var(--sz-bar-ink);
   --pv-nav-accent: var(--sz-bar-edge);
   inset-inline: 0;
-  margin-top: 3px;               /* a krém szegély alatt kezdődik */
+  margin-top: 1px;               /* a hajszálvonal alatt kezdődik */
   padding: 0.5rem clamp(1.1rem, 5cqi, 3.5rem) 1.2rem;
   border: 0;
   border-radius: 0;
@@ -4965,10 +4947,10 @@ iframe { border: 0; }
   font-weight: 400;
 }
 
-/* --- lábléc: burgundi alap, Dusty Rose felirat --------------------------- */
+/* --- lábléc: erdőzöld alap, halvány zsálya felirat ----------------------- */
 .pv .pv-footer { border-top: 0; background: var(--sz-foot-bg); color: var(--sz-foot); }
-.pv .pv-footer__links a:is(:hover, :focus-visible) { color: #F7EFEF; text-decoration: underline; text-underline-offset: 0.2em; }
-.pv .pv-footer :focus-visible { outline-color: #F7EFEF; }
+.pv .pv-footer__links a:is(:hover, :focus-visible) { color: #F5F6F0; text-decoration: underline; text-underline-offset: 0.2em; }
+.pv .pv-footer :focus-visible { outline-color: #F5F6F0; }
 
 /* ==========================================================================
    SZANDI – BEMUTATKOZÁS: kollázs, órarend-kártya, számolás, légzés-vonal
@@ -4984,8 +4966,8 @@ iframe { border: 0; }
 .pv .sz-collage > .pv-about__media { flex: none; width: 80%; height: auto; align-self: center; margin-top: 1.5rem; }
 [data-layout="split"] .sz-collage { order: 1; }
 
-/* Órarend-kártya: a hét hét pöttye, a kedd kitöltve. Cream, mert „kisebb
-   rész” – a nagy szövegdoboz blush, így a kettő nem olvad egybe. */
+/* Órarend-kártya: a hét hét pöttye, a kedd kitöltve. Egy fokkal mélyebb árnyalat, mert „kisebb
+   rész” – a nagy szövegdoboz a legvilágosabb, így a kettő nem olvad egybe. */
 .pv .sz-week {
   position: relative;
   z-index: 1;
@@ -4996,7 +4978,7 @@ iframe { border: 0; }
   border-radius: calc(var(--pv-radius) * 0.9);
   background: var(--sz-box-warm);
   color: var(--pv-text);
-  border: var(--sz-line) solid var(--sz-tus);
+  border: 0;
   box-shadow: var(--sz-shadow);
   text-align: start;
 }
@@ -5009,7 +4991,7 @@ iframe { border: 0; }
   position: relative;
   width: 2rem;
   aspect-ratio: 1;
-  border: 1.5px solid var(--sz-tus);
+  border: 1px solid var(--pv-line);
   border-radius: 50%;
   font-size: calc(0.72rem * var(--pv-fs));
   font-weight: 500;
@@ -5126,7 +5108,8 @@ iframe { border: 0; }
    eddig letettünk az asztalra” – a gyertya az asztalon). Az a szekció a
    site.js-ből épül, ezért a szandiCandle() teszi át oda; ha ki van kapcsolva,
    a gyertya a Kapcsolat címénél marad (index.html).
-   Telefonon a cím jobb oldalán, tágas lapon a cím alatt (oldalcímes hasáb).
+   Telefonon a cím jobb oldalán; tágas lapon a lap jobb szélén, a margóban,
+   függőlegesen középen – így a cím nem nyúlik meg tőle.
    A kép dobozában bő levegő van a gyertya körül (a fény miatt), ezt a negatív
    margó veszi vissza. */
 .pv .pv-head:has(> .sz-candle) {
@@ -5147,8 +5130,18 @@ iframe { border: 0; }
   --g: var(--pv-candle-glow, #ffd98a);
 }
 @container (min-width: 52rem) {
-  .pv .pv-head:has(> .sz-candle) { grid-template-columns: minmax(0, 1fr); }
-  .sz-candle { grid-column: 1; grid-row: auto; width: 13rem; margin: -1.5rem 0 -2rem -2.4rem; }
+  /* a szekcióhoz igazodik (a ragadós cím nem tapad), a margón túli fény levágva */
+  .pv .pv-section:has(.sz-candle) { overflow-x: clip; }
+  .pv .pv-head:has(> .sz-candle) { grid-template-columns: minmax(0, 1fr); position: static; }
+  .sz-candle {
+    position: absolute;
+    top: 50%;
+    /* a jobb margó közepe: a szekció belső margója vagy a --pv-max-on túli rész */
+    right: calc(max(clamp(1.1rem, 5cqi, 3.5rem), (100% - var(--pv-max)) / 2) / 2);
+    width: clamp(7rem, 11cqi, 10rem);
+    margin: 0;
+    translate: 50% -50%;
+  }
 }
 /* meleg fény a láng körül – a test mögött, halkan pislákol */
 .sz-candle::before {
@@ -5240,16 +5233,12 @@ iframe { border: 0; }
 @keyframes sz-rv-zoom { from { scale: 1.14; } to { scale: none; } }
 
 /* ==========================================================================
-   SZANDI – TUSKONTÚR (a Blender-gyertya vonala az egész lapon)
-   A gyertya körvonalas rajz; a lap tárgyai (szövegdobozok, kapcsolat-panel,
-   órarend, GYIK, képek, gombok) ugyanazt a tusvonalat kapják – de csak a
-   vonalat: az árnyék marad lágy, nem képregényes. A számok (stats) sima
-   felületek maradnak, ott a keret zavaró. A tokeneket a saját szabályaik használják (fent).
+   SZANDI – KONTÚR NÉLKÜL (2026-10, Szandi visszajelzése)
+   A lap tárgyait (szövegdobozok, GYIK, képek, gombok) nem vonal rajzolja ki,
+   hanem az árnyalat és egy lágy árnyék – a sablon kereteit is levesszük.
    ========================================================================== */
 .pv {
-  --sz-tus: #231a19;
-  --sz-line: 2px;
-  --sz-shadow: 0 22px 44px -30px color-mix(in srgb, var(--sz-ink) 45%, transparent);
+  --sz-shadow: 0 22px 44px -30px color-mix(in srgb, var(--sz-ink) 40%, transparent);
+  --pv-fx-mid: none;   /* a sablon két halvány márkafoltja: sötét módban fénylő gömbnek látszott */
 }
-.pv[data-mode="dark"] { --sz-tus: #070806; }
-.pv :is(.pv-faq, .pv-item__media, .pv-about__media, .pv-btn, .pv-nav__cta, .pv-top) { border: var(--sz-line) solid var(--sz-tus); }
+.pv :is(.pv-faq, .pv-item__media, .pv-about__media, .pv-btn, .pv-nav__cta, .pv-top) { border: 0; }

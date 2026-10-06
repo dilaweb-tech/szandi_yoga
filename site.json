@@ -229,15 +229,15 @@
     "colors": {
       "dark": {
         "primary": "#A7B58C",
-        "secondary": "#6B8E23",
-        "bg": "#1C2117",
-        "text": "#F7EFEF"
+        "secondary": "#7C8C5E",
+        "bg": "#1A1F16",
+        "text": "#E9ECE1"
       },
       "light": {
         "primary": "#556B2F",
-        "secondary": "#6B8E23",
-        "bg": "#A7B58C",
-        "text": "#141414"
+        "secondary": "#7C8C5E",
+        "bg": "#E9ECE1",
+        "text": "#1F2719"
       }
     },
     "font": "dmsans",
@@ -255,7 +255,7 @@
     "imgRatio": 80,
     "typeset": "airy",
     "surface": "inset",
-    "texture": "art",
+    "texture": "none",
     "bgImage": "meditalo-alak.png",
     "bgDepth": "fixed",
     "bgArt": "candle",
@@ -263,7 +263,7 @@
     "bgSpot": "spread",
     "reveal": "fade",
     "band": "brand",
-    "divider": "wave",
+    "divider": "arc",
     "accent": "none",
     "sig": "mat",
     "media": "arch",

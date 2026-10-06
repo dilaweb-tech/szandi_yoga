@@ -5,6 +5,12 @@
       "name": "live-server",
       "url": "http://127.0.0.1:5502",
       "port": 5502
+    },
+    {
+      "name": "claude-ellenorzes",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "5599", "--bind", "127.0.0.1"],
+      "port": 5599
     }
   ]
 }

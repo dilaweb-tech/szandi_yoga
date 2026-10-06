@@ -138,7 +138,8 @@ ok(!/favicon\.png/.test(pages), "Valamelyik oldal a favicon.png-re hivatkozik; a
    Az alapértékekhez szándékosan nincs külön szabály (a CSS csak az eltéréseket
    írja le), ezért a site.js BASE-e is elfogadott érték. */
 const kebab = (s) => s.replace(/[A-Z]/g, (c) => "-" + c.toLowerCase());
-const baseBlock = js.split("const BASE = {")[1].split("\n};")[0];
+/* a kommentek kimaradnak: a „texture: "art" háttérképe" sor felülírta a valódi alapértéket */
+const baseBlock = js.split("const BASE = {")[1].split("\n};")[0].replace(/\/\*[\s\S]*?\*\//g, "");
 const BASE_VALS = Object.fromEntries(
   [...baseBlock.matchAll(/(\w+):\s*"([\w-]+)"/g)].map((m) => [m[1], m[2]]));
 
