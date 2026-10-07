@@ -11,6 +11,12 @@
       "runtimeExecutable": "python",
       "runtimeArgs": ["-m", "http.server", "5599", "--bind", "127.0.0.1"],
       "port": 5599
+    },
+    {
+      "name": "node-ellenorzes",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["-y", "http-server", "-p", "5598", "-a", "127.0.0.1", "-c-1", "-s"],
+      "port": 5598
     }
   ]
 }

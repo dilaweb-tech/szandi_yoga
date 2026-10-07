@@ -35,7 +35,7 @@ INK = lin('#161616')
 WAX = (lin('#E4CFBC'), lin('#F3E6D9'), lin('#FFFAF3'))      # árnyék, alap, fény
 DRIP = (lin('#E7D3C1'), lin('#F6EBDF'), lin('#FFFCF7'))
 POOL = lin('#F6DFB8')
-DISH = (lin('#D48C84'), lin('#E8A39B'), lin('#F4C1BA'))
+DISH = (lin('#6E7A55'), lin('#828E66'), lin('#A6AF8C'))   # olíva csészealj (2026-10, az oldal palettájához)
 FLAME = (lin('#F5C95B'), lin('#FFF3D1'))                    # külső sárga, belső mag
 LDIR = Vector((-.55, -.62, .56)).normalized()                # a „rajzolt” fény: balról, elölről, fentről
 

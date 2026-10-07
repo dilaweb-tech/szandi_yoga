@@ -8,7 +8,17 @@
   },
   "content": {
     "company": "Mészáros Alexandra · Ashtanga jóga",
-    "tagline": "Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban. Mellette irodai jóga cégeknek és privát óra – a légzés ütemére, kezdőként is.",
+    "tagline": "Vezetett Ashtanga óra keddenként 17:00-kor, kezdőként is. Mellette irodai jóga cégeknek és privát óra.",
+    "seoTitle": "Mészáros Alexandra · Ashtanga jóga Szegeden, a Joy of Yoga Stúdióban",
+    "seoDescription": "Keddenként 17:00-kor vezetett Ashtanga óra a szegedi Joy of Yoga Stúdióban, kezdőknek is. Mellette irodai jóga cégeknek és privát óra.",
+    "heroTitle": "Mozdulat a *légzés* ütemére",
+    "heroEyebrow": "Joy of Yoga Stúdió · Szeged",
+    "heroImage": "gyertya-kezben.jpg",
+    "wordmark": "Szandi",
+    "heroQuote": {
+      "text": "„Gyakorolj, és minden eljön.”",
+      "by": "Sri K. Pattabhi Jois"
+    },
     "about": "Szandi vagyok, én tartom a keddi Ashtanga Half Led órát a Joy of Yoga Stúdióban.\n\nAz Ashtanga kötött sorozat: minden alkalommal ugyanazok a pózok jönnek, ugyanabban a sorrendben, és mindegyik a légzéshez kötődik. A Half Led órán az elsődleges sorozat első felét vezetem végig, egyenletes számolással, a végén záró pózok és pihenés következik. Nem kell figyelned, mi jön – elég, ha a számolást és a saját légzésedet követed.\n\n[Ide jön a saját történetem: mióta gyakorlok, hol tanultam, és miért éppen az Ashtanga.]",
     "address": "Joy of Yoga Stúdió, 6722 Szeged, Gutenberg utca 14.",
     "phone": "+36 30 501 2453",
@@ -221,6 +231,8 @@
       "pv.pricingTitle": "Árak",
       "sec.faq": "GYIK",
       "pv.faqTitle": "Gyakori kérdések",
+      "pv.statsEyebrow": "Half Led óra",
+      "pv.statsTitle": "Egy óra, számokban",
       "sec.contact": "Kapcsolat"
     }
   },
@@ -255,7 +267,7 @@
     "imgRatio": 80,
     "typeset": "airy",
     "surface": "inset",
-    "texture": "none",
+    "texture": "grain",
     "bgImage": "meditalo-alak.png",
     "bgDepth": "fixed",
     "bgArt": "candle",

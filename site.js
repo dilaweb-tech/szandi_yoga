@@ -38,7 +38,7 @@ const FONTS = {
   archivo:     { s: '"Archivo", system-ui, sans-serif',             g: "Archivo:wght@400;500;600;700" },
   playfair:    { s: '"Playfair Display", Georgia, serif',          g: "Playfair+Display:wght@500;700" },
   fraunces:    { s: '"Fraunces", Georgia, serif',                   g: "Fraunces:wght@400;600;700" },
-  instrument:  { s: '"Instrument Serif", Georgia, serif',           g: "Instrument+Serif" },
+  instrument:  { s: '"Instrument Serif", Georgia, serif',           g: "Instrument+Serif:ital@0;1" },   /* valódi dőlt a *kiemeléshez* */
   lora:        { s: '"Lora", Georgia, serif',                      g: "Lora:wght@400;600;700" },
   cormorant:   { s: '"Cormorant Garamond", Georgia, serif',        g: "Cormorant+Garamond:wght@500;700" },
   merriweather:{ s: '"Merriweather", Georgia, serif',              g: "Merriweather:wght@400;700" },
@@ -1052,7 +1052,14 @@ function applyContent() {
     const el = $("#" + id);
     if (el) el.innerHTML = esc(val ?? "").replace(/\*([^*\n]+)\*/g, '<em class="pv-emph">$1</em>');
   };
-  setRich("pv-company", c.company);
+  /* Nyitókép (Szandi): saját főcím és felülcím, ha van – a cégnév a fejlécben él */
+  setRich("pv-company", c.heroTitle || c.company);
+  const quote = $("#sz-quote-box");
+  if (quote) {
+    setText("sz-quote", c.heroQuote?.text);
+    setText("sz-quote-by", c.heroQuote?.by);
+    quote.hidden = !c.heroQuote?.text;
+  }
   /* A visszhang (sig="echo") a főcím szellemképe – a CSS az attribútumból szedi
      ki a szöveget, ezért a jelölő nélküli változat kell ide. */
   const company = $("#pv-company");
@@ -1064,7 +1071,10 @@ function applyContent() {
   setRich("pv-tagline", c.tagline);
   setRich("pv-about", c.about);
   setText("pv-address", c.address);
-  setText("pv-address-top", c.address);
+  /* Szandi: a cím-sor útvonaltervezőt nyit – telefonon a térkép-appot */
+  const addr = $("#pv-address");
+  if (addr) addr.href = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(c.address || "");
+  setText("pv-address-top", c.heroEyebrow || c.address);
   setText("pv-map-address", c.address);
   setText("pv-year", new Date().getFullYear());
 
@@ -1108,8 +1118,11 @@ function applyContent() {
     paintImg(el, src || imgs[i].src, i, alt ?? imgs[i].alt ?? "");
   };
   const track = $("#pv-hero-slides");
-  track.innerHTML = imgs.map(() => `<img alt="" width="800" height="600">`).join("");
-  [...track.children].forEach((el, i) => paintSlot(el, i, "", imgs[i].alt || c.company || ""));
+  /* heroImage: egyetlen kiválasztott kép a nyitóképen, lapozó nélkül */
+  const heroIdx = imgs.findIndex((im) => im.src === c.heroImage);
+  const heroList = heroIdx < 0 ? imgs.map((_, i) => i) : [heroIdx];
+  track.innerHTML = heroList.map(() => `<img alt="" width="800" height="600">`).join("");
+  [...track.children].forEach((el, k) => paintSlot(el, heroList[k], "", imgs[heroList[k]].alt || c.company || ""));
   $$("[data-img-slot]").forEach((el) => {
     const n = Number(el.dataset.imgSlot);
     paintSlot(el, n % imgs.length, c.services?.[n]?.image || "");
@@ -1176,6 +1189,9 @@ function applyChrome() {
   }
   const year = $("#pv-year");
   if (year) year.textContent = new Date().getFullYear();
+  /* Szandi kézjegye: óriás, halványuló név a lábléc tetején (content.wordmark) */
+  const foot = $(".pv-footer");
+  if (foot && c.wordmark) foot.dataset.word = plain(c.wordmark);
 }
 
 /* Kereshetőség: a cím, a leírás és a cégadatok a JSON-ból. A JSON-LD-t a

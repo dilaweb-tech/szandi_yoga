@@ -4692,17 +4692,6 @@ iframe { border: 0; }
    nem csak a szám maga. A fókuszgyűrű marad a linken. */
 .pv .pv-section.pv-contact .pv-contact__list a::after { content: ""; position: absolute; inset: 0; }
 
-/* Nyitókép: a fotó fölötti fátyol 15 százalékponttal halványabb a sablonénál –
-   a lótusz erősebben látszik, a szöveg alatt a fátyol még bőven tart. */
-.pv[data-hero="banner"] .pv-hero::after {
-  background: linear-gradient(100deg, color-mix(in srgb, var(--pv-bg) 67%, transparent) 25%, color-mix(in srgb, var(--pv-bg) 45%, transparent));
-}
-@container (min-width: 46rem) {
-  .pv[data-hero="banner"] .pv-hero::after {
-    background: linear-gradient(100deg, color-mix(in srgb, var(--pv-bg) 85%, transparent) 8%, color-mix(in srgb, var(--pv-bg) 40%, transparent) 55%, transparent 95%);
-  }
-}
-
 /* A képes felső szekciók (nyitókép, számok, bemutatkozás, órák) szorosabban
    követik egymást: az álló boltíves képek maguk is levegőt adnak, a teljes
    térköz fölöttük szétesőnek hatott. Az alsó határ a hullámos szekcióhatár
@@ -5224,12 +5213,12 @@ iframe { border: 0; }
   }
   /* tartalék (site.js): ugyanaz a mozdulat, átmenettel */
   .sz-rv { transition: opacity 0.8s var(--ease), translate 0.8s var(--ease), scale 0.8s var(--ease); }
-  .sz-rv:not(.is-in) { opacity: 0; translate: 0 2rem; scale: 0.96; }
+  .sz-rv:not(.is-in) { opacity: 0.2; translate: 0 1rem; scale: 0.98; }
 }
 /* a Számokban közvetlenül a nyitókép alatt áll: betöltéskor félig látszik,
    ott a halványítás fakónak hat – teljes színnel áll, mint a hero */
 .pv .pv-section[data-sec="stats"] :is(.pv-head, .pv-item) { animation: none; }
-@keyframes sz-rv-up   { from { opacity: 0; translate: 0 2rem; scale: 0.96; } to { opacity: 1; translate: none; scale: none; } }
+@keyframes sz-rv-up   { from { opacity: 0.2; translate: 0 1rem; scale: 0.98; } to { opacity: 1; translate: none; scale: none; } }
 @keyframes sz-rv-zoom { from { scale: 1.14; } to { scale: none; } }
 
 /* ==========================================================================
@@ -5242,3 +5231,172 @@ iframe { border: 0; }
   --pv-fx-mid: none;   /* a sablon két halvány márkafoltja: sötét módban fénylő gömbnek látszott */
 }
 .pv :is(.pv-faq, .pv-item__media, .pv-about__media, .pv-btn, .pv-nav__cta, .pv-top) { border: 0; }
+
+/* ==========================================================================
+   SZANDI – NYITÓKÉP (2026-10): a fotó a teljes hero háttere, rajta a szöveg
+   Erdőzöld fátyol + világos felirat, mindkét módban – a fotó maga sötét.
+   Minden adat EGYSZER szerepel: a hely a felülcímben, az időpont és a kínálat
+   a bevezetőben, a név a fejlécben. Mezők a site.json-ban: heroTitle,
+   heroEyebrow, heroImage, heroQuote.
+   ========================================================================== */
+.pv[data-hero="banner"] .pv-hero {
+  --sz-on-photo: #F5F6F0;
+  --sz-veil: 18, 24, 13;          /* erdőzöld, rgb – a fátyol átlátszóságához */
+  --pv-text: var(--sz-on-photo);
+  --pv-muted: color-mix(in srgb, var(--sz-on-photo) 84%, transparent);
+  --sz-head: var(--sz-on-photo);
+  --sz-detail: color-mix(in srgb, var(--sz-on-photo) 86%, transparent);
+  color: var(--pv-text);
+}
+.pv[data-hero="banner"] .pv-hero::after {
+  background: linear-gradient(to top, rgba(var(--sz-veil), 0.86), rgba(var(--sz-veil), 0.6));
+}
+/* teljes képernyőnyi nyitókép, plafonnal – széles lapon se legyen üres sáv */
+.pv[data-hero="banner"] .pv-hero__inner { min-height: min(72svh, 38rem); }
+.pv[data-hero="banner"] .pv-hero__copy { max-width: 36rem; }
+.pv[data-hero="banner"] .pv-hero__copy h1 {
+  font-size: calc(clamp(2.4rem, 8cqi, 4.4rem) * var(--pv-fs));
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+}
+.pv[data-hero="banner"] .pv-hero h1 .pv-emph { color: #C9D3B4; }   /* világos zsálya */
+
+/* gombok a sötét fotón: világos pirula + áttetsző keretes */
+.pv[data-hero="banner"] .pv-hero .pv-btn--primary { background: var(--sz-on-photo); color: #26301C; box-shadow: none; }
+.pv[data-hero="banner"] .pv-hero .pv-btn--ghost {
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--sz-on-photo) 55%, transparent);
+  color: var(--sz-on-photo);
+}
+.pv[data-hero="banner"] .pv-hero .pv-btn:is(:hover, :focus-visible) { background: #556B2F; border-color: transparent; color: #FFFFFF; }
+
+/* idézet: halk zárósor a gombok alatt, hajszálvonallal leválasztva */
+.pv .sz-quote {
+  max-width: 26rem;
+  margin: 0.8rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+}
+.pv .sz-quote[hidden] { display: none; }
+.pv .sz-quote p {
+  margin: 0;
+  font-family: var(--pv-font-head);
+  font-style: italic;
+  font-size: calc(1.2rem * var(--pv-fs));
+  line-height: 1.25;
+}
+.pv .sz-quote cite {
+  display: block;
+  margin-top: 0.35rem;
+  font-style: normal;
+  font-size: calc(0.68rem * var(--pv-fs));
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+/* tágas lapon a fátyol balról jobbra oldódik: a szöveg sötéten ül, a gyertya fényben marad */
+@container (min-width: 46rem) {
+  .pv[data-hero="banner"] .pv-hero::after {
+    background: linear-gradient(100deg, rgba(var(--sz-veil), 0.9) 12%, rgba(var(--sz-veil), 0.5) 55%, rgba(var(--sz-veil), 0.15) 95%);
+  }
+}
+
+/* ==========================================================================
+   SZANDI – JÓGAÓRÁK: lapozható kártyasor telefonon, kiemelt fő óra
+   Telefonon a három kártya egymás alatt három képernyőnyi görgetés volt: itt
+   vízszintesen lapozható sor, a következő kártya széle kilátszik – ebből
+   tudja a látogató, hogy van tovább. Tágas lapon marad a három oszlop.
+   A fő óra (első kártya) mély olíva dobozt kap, mindkét módban a gomb párja.
+   ========================================================================== */
+.pv .pv-section[data-sec="services"] { --sz-gutter: clamp(1.1rem, 5cqi, 3.5rem); }   /* = .pv-section oldalsó térköze */
+.pv .pv-section[data-sec="services"] .pv-items {
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: 82%;
+  align-items: stretch;
+  gap: 0.9rem;
+  /* a sor a képernyő széléig fut, a kártyák mégis a tartalom vonalán állnak meg */
+  margin-inline: calc(-1 * var(--sz-gutter));
+  padding: 0.5rem var(--sz-gutter) 1.6rem;   /* alul az árnyéknak */
+  scroll-padding-inline: var(--sz-gutter);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.pv .pv-section[data-sec="services"] .pv-items::-webkit-scrollbar { display: none; }
+/* megjelenés lapozásra: a beúszó kártya oldalról élesedik, nem alulról jön */
+.pv .pv-section[data-sec="services"] .pv-item:nth-child(n) {
+  scroll-snap-align: start;
+  --pv-rv: sz-rv-side;
+  animation-timeline: view(inline);
+  animation-range: entry 10% cover 40%;
+}
+@keyframes sz-rv-side { from { opacity: 0.45; scale: 0.94; } to { opacity: 1; scale: none; } }
+
+/* a fő óra */
+.pv .pv-section[data-sec="services"] .pv-item:first-child .pv-item__body { background: var(--sz-btn); color: var(--sz-btn-ink); }
+.pv .pv-section[data-sec="services"] .pv-item:first-child :is(h3, p, .sz-meta) { color: inherit; }
+.pv .pv-section[data-sec="services"] .pv-item:first-child .sz-meta { opacity: 0.8; }
+
+@container (min-width: 52rem) {
+  .pv .pv-section[data-sec="services"] .pv-items {
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.18fr) minmax(0, 1fr);
+    align-items: center;
+    margin-inline: 0;
+    padding: 0;
+    overflow: visible;
+  }
+  .pv .pv-section[data-sec="services"] .pv-item:nth-child(n) { --pv-rv: sz-rv-up; animation-timeline: view(); animation-range: entry 4% cover 30%; }
+}
+
+/* ==========================================================================
+   SZANDI – FINOMÍTÁSOK (2026-10, a referenciák 5–6. pontja)
+   ========================================================================== */
+/* Megjelenés: a tartalom már a képernyő aljára érve kirajzolódik (12rem
+   görgetés alatt), nem hagy üres képernyőt a magas dobozok előtt. A kezdő
+   állapot sem üres – halvány, alig lejjebb ülő (sz-rv-up). A :nth-child(n)
+   a sablon lépcsőzetes kártya-szabályainak erejét éri utol. */
+.pv .pv-main :is(.pv-head, .pv-item, .pv-contact__list li, .pv-prices li, .pv-about__media, .pv-about__copy, .pv-map__frame, .pv-slider, .sz-count > span):nth-child(n) {
+  animation-range: entry 0% entry 12rem;
+}
+
+/* Papír-szemcse: a sablon 14%-a a fotókon koszosnak hatott – itt halkabb */
+.pv[data-texture="grain"] .pv-main::after { opacity: 0.08; }
+
+/* Kapcsolat: az érinthető sorok (útvonal, hívás, levél) végén nyíl jelzi, hogy kattinthatók */
+.pv .pv-section.pv-contact .pv-contact__list li { grid-template-columns: 2.75rem minmax(0, 1fr) auto; }
+.pv .pv-section.pv-contact .pv-contact__list li:has(a)::after {
+  content: "";
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  width: 1.1rem;
+  aspect-ratio: 1;
+  background: var(--sz-sub);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 5l7 7-7 7'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 5l7 7-7 7'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* A KÉZJEGY: óriás, lefelé halványuló név a lábléc tetején (content.wordmark).
+   A lap egyetlen hangos tipográfiai gesztusa – a nyitókép fölött ezért nincs. */
+.pv .pv-footer[data-word] { overflow: clip; padding-top: 0; }
+.pv .pv-footer[data-word]::before {
+  content: attr(data-word);
+  flex: 0 0 100%;
+  margin-bottom: 0.4rem;
+  font-family: var(--pv-font-head);
+  font-size: min(38cqi, 19rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-align: center;
+  white-space: nowrap;
+  color: transparent;
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--sz-foot) 30%, transparent), transparent 85%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  pointer-events: none;
+}

@@ -8,11 +8,11 @@
        a site.js írna ide, azt megosztáskor nem látja. Ezt a blokkot ezért a
        tools/plan-to-site.mjs süti be a site.json-ból – kézzel ne írd át. -->
   <!-- >>> META -->
-  <title>Mészáros Alexandra · Ashtanga jóga – Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban</title>
-  <meta name="description" content="Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban. Mellette irodai jóga cégeknek és privát óra – a légzés ütemére, kezdőként is.">
+  <title>Mészáros Alexandra · Ashtanga jóga Szegeden, a Joy of Yoga Stúdióban</title>
+  <meta name="description" content="Keddenként 17:00-kor vezetett Ashtanga óra a szegedi Joy of Yoga Stúdióban, kezdőknek is. Mellette irodai jóga cégeknek és privát óra.">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Mészáros Alexandra · Ashtanga jóga – Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban">
-  <meta property="og:description" content="Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban. Mellette irodai jóga cégeknek és privát óra – a légzés ütemére, kezdőként is.">
+  <meta property="og:title" content="Mészáros Alexandra · Ashtanga jóga Szegeden, a Joy of Yoga Stúdióban">
+  <meta property="og:description" content="Keddenként 17:00-kor vezetett Ashtanga óra a szegedi Joy of Yoga Stúdióban, kezdőknek is. Mellette irodai jóga cégeknek és privát óra.">
   <meta property="og:site_name" content="Mészáros Alexandra · Ashtanga jóga">
   <meta property="og:locale" content="hu_HU">
   <meta name="twitter:card" content="summary">
@@ -112,7 +112,7 @@
       <section class="pv-section is-first">
         <div class="pv-wrap">
           <h1>Mészáros Alexandra · Ashtanga jóga</h1>
-          <p class="pv-lead">Keddenként 17:00-kor Ashtanga óra a szegedi Joy of Yoga Stúdióban. Mellette irodai jóga cégeknek és privát óra – a légzés ütemére, kezdőként is.</p>
+          <p class="pv-lead">Vezetett Ashtanga óra keddenként 17:00-kor, kezdőként is. Mellette irodai jóga cégeknek és privát óra.</p>
           <ul class="pv-contact__list">
             <li><span class="pv-muted">Elhelyezkedés</span><strong>Joy of Yoga Stúdió, 6722 Szeged, Gutenberg utca 14.</strong></li>
             <li><span class="pv-muted">Telefon</span><a href="tel:+36305012453">+36 30 501 2453</a></li>
@@ -149,6 +149,8 @@
             <!-- A második gomb célját és feliratát is a site.js adja (content.cta2) -->
             <a href="#sec-services" class="pv-btn pv-btn--ghost" id="pv-cta2" data-cta-sec="services">Szolgáltatásaink</a>
           </div>
+          <!-- Szandi: halk záró idézet (heroQuote) – a site.js tölti, üresen rejtve -->
+          <blockquote class="sz-quote" id="sz-quote-box" hidden><p id="sz-quote"></p><cite id="sz-quote-by"></cite></blockquote>
         </div>
         <!-- Hero slide-ok: minden felvett kép egy slide, a sávot a site.js írja -->
         <figure class="pv-hero__media pv-slider">
@@ -297,7 +299,8 @@
         <ul class="pv-contact__list">
           <li>
             <span class="pv-muted" data-i18n="pv.lblAddress">Elhelyezkedés</span>
-            <strong id="pv-address">Cím</strong>
+            <!-- Szandi: a cím útvonaltervezőt nyit (href: site.js) -->
+            <a id="pv-address" href="#" target="_blank" rel="noopener">Cím</a>
           </li>
           <li>
             <span class="pv-muted" data-i18n="pv.lblPhone">Telefon</span>
