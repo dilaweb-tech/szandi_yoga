@@ -5360,8 +5360,9 @@ iframe { border: 0; }
 /* Megjelenés: a tartalom már a képernyő aljára érve kirajzolódik (12rem
    görgetés alatt), nem hagy üres képernyőt a magas dobozok előtt. A kezdő
    állapot sem üres – halvány, alig lejjebb ülő (sz-rv-up). A :nth-child(n)
-   a sablon lépcsőzetes kártya-szabályainak erejét éri utol. */
-.pv .pv-main :is(.pv-head, .pv-item, .pv-contact__list li, .pv-prices li, .pv-about__media, .pv-about__copy, .pv-map__frame, .pv-slider, .sz-count > span):nth-child(n) {
+   a sablon lépcsőzetes kártya-szabályainak erejét éri utol. A jógaszőnyeg
+   (folyamat-szekció) kimarad: ott a lépés a szőnyeg idővonalán érkezik. */
+.pv .pv-section:not(.pv-list--process) :is(.pv-head, .pv-item, .pv-contact__list li, .pv-prices li, .pv-about__media, .pv-about__copy, .pv-map__frame, .pv-slider, .sz-count > span):nth-child(n) {
   animation-range: entry 0% entry 12rem;
 }
 
