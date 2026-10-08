@@ -222,6 +222,7 @@ const I18N = {
     "pv.lblPhone": "Telefon",
     "pv.lblEmail": "E-mail",
     "pv.rights": "Minden jog fenntartva.",
+    "pv.credit": "Készítette:",
     "pv.privacy": "Adatkezelési tájékoztató",
     "pv.imprint": "Impresszum",
     "sec.services": "Szolgáltatások",
@@ -301,6 +302,7 @@ const I18N = {
     "pv.lblPhone": "Phone",
     "pv.lblEmail": "Email",
     "pv.rights": "All rights reserved.",
+    "pv.credit": "Website by",
     "pv.privacy": "Privacy notice",
     "pv.imprint": "Legal notice",
     "sec.services": "Services",
@@ -1054,6 +1056,20 @@ function applyContent() {
   };
   /* Nyitókép (Szandi): saját főcím és felülcím, ha van – a cégnév a fejlécben él */
   setRich("pv-company", c.heroTitle || c.company);
+  /* belégzés-nyitány: a cím szavai egyenként úsznak be (pv.css) – ehhez minden
+     szó saját dobozt kap, a kiemelés (<em>) egy szónak számít */
+  const h1 = $("#pv-company");
+  if (h1) {
+    let i = 0;
+    const parts = [...h1.childNodes].flatMap((n) => n.nodeType === 3 ? n.textContent.split(/(\s+)/).filter(Boolean) : [n]);
+    h1.replaceChildren(...parts.map((p) => {
+      if (typeof p === "string" && !p.trim()) return p;
+      const w = Object.assign(document.createElement("span"), { className: "sz-w" });
+      w.style.setProperty("--i", i++);
+      w.append(p);
+      return w;
+    }));
+  }
   const quote = $("#sz-quote-box");
   if (quote) {
     setText("sz-quote", c.heroQuote?.text);
@@ -1106,6 +1122,10 @@ function applyContent() {
     a.hidden = !String(val || "").trim();
   }
   mail.closest("li").hidden = !String(c.email || "").trim();
+  /* Szandi: Instagram a kapcsolat-kártyában is – sokan ott írnak, nem e-mailben */
+  const ig = igUrl(c);
+  if (ig && !$(".sz-insta")) mail.closest("ul").insertAdjacentHTML("beforeend",
+    `<li class="sz-insta"><span class="pv-muted">Instagram</span><a href="${esc(ig)}" target="_blank" rel="noopener">@${esc(ig.replace(/\/+$/, "").split("/").pop())}</a></li>`);
 
   /* Képek. A hero minden képet slide-ként mutat, a fix képhelyeken pedig
      körbeforognak: a j. hely a (j % darabszám). képet kapja. */
@@ -1189,10 +1209,13 @@ function applyChrome() {
   }
   const year = $("#pv-year");
   if (year) year.textContent = new Date().getFullYear();
-  /* Szandi kézjegye: óriás, halványuló név a lábléc tetején (content.wordmark) */
   const foot = $(".pv-footer");
-  if (foot && c.wordmark) foot.dataset.word = plain(c.wordmark);
+  const ig = igUrl(c);
+  if (foot && ig && !$(".sz-social", foot)) $(".pv-footer__links", foot)?.insertAdjacentHTML("beforebegin",
+    `<a class="sz-social" href="${esc(ig)}" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="0.6" fill="currentColor"/></svg></a>`);
 }
+/* Szandi: social linkek a site.json content.social-ból – csak https cím mehet ki */
+const igUrl = (c) => /^https:\/\//.test(c.social?.instagram || "") ? c.social.instagram : "";
 
 /* Kereshetőség: a cím, a leírás és a cégadatok a JSON-ból. A JSON-LD-t a
    Google a helyi találatokhoz (nyitvatartás, telefon, térkép) használja. */
@@ -1444,7 +1467,16 @@ function initEvents() {
   topBtn?.addEventListener("click", () => glide(0));
   syncTop();
 
-  $("#pv-mode-toggle")?.addEventListener("click", () => setMode(MODE === "dark" ? "light" : "dark"));
+  /* Esti mód: az új mód egy körben nyílik ki a kapcsolóból (View Transitions,
+     pv.css). Ahol nincs, vagy a látogató kevesebb mozgást kér: azonnali váltás. */
+  $("#pv-mode-toggle")?.addEventListener("click", (e) => {
+    const next = () => setMode(MODE === "dark" ? "light" : "dark");
+    if (!document.startViewTransition || matchMedia("(prefers-reduced-motion: reduce)").matches) return next();
+    const r = e.currentTarget.getBoundingClientRect(), root = document.documentElement.style;
+    root.setProperty("--sz-vt-x", r.left + r.width / 2 + "px");
+    root.setProperty("--sz-vt-y", r.top + r.height / 2 + "px");
+    document.startViewTransition(next);
+  });
 
   /* Mobil menü: a fejléc kapcsolója. Menüpontra kattintva magától bezárul. */
   const burger = $("#pv-burger");

@@ -262,6 +262,12 @@
           <p id="pv-about">Bemutatkozó szöveg</p>
           <!-- SZANDI: az óra saját hangja – így szól a vezetett számolás -->
           <p class="sz-count">
+            <!-- légzés-virág: hat áttetsző szirom, belégzésre kinyílik, kilégzésre összezár (pv.css) -->
+            <svg class="sz-bloom" viewBox="-50 -50 100 100" aria-hidden="true">
+              <circle class="sz-bloom__ring" r="47"></circle>
+              <circle r="16" style="--n:0"></circle><circle r="16" style="--n:1"></circle><circle r="16" style="--n:2"></circle>
+              <circle r="16" style="--n:3"></circle><circle r="16" style="--n:4"></circle><circle r="16" style="--n:5"></circle>
+            </svg>
             <span><b lang="sa-Latn">Ekam</b> belégzés</span>
             <span><b lang="sa-Latn">dve</b> kilégzés</span>
             <span><b lang="sa-Latn">trīṇi</b> belégzés</span>
@@ -331,6 +337,7 @@
       <a href="adatkezeles.html" data-i18n="pv.privacy">Adatkezelési tájékoztató</a>
       <a href="impresszum.html" data-i18n="pv.imprint">Impresszum</a>
     </nav>
+    <div class="pv-credit"><span data-i18n="pv.credit">Készítette:</span> <a href="https://dilaweb.hu" target="_blank" rel="noopener"><svg viewBox="0 0 44 32" aria-hidden="true" focusable="false"><rect x="4" y="4" width="36" height="24" rx="12" fill="none" stroke="currentColor" stroke-width="7"/><circle cx="22" cy="16" r="6.5" fill="currentColor"/></svg>dilaweb.hu</a></div>
   </footer>
 
   <!-- Vissza a lap tetejére (pv.css 8.14). A lap UTOLSÓ eleme, hogy a sticky

@@ -4588,6 +4588,19 @@ iframe { border: 0; }
   color: inherit;
 }
 .pv-footer__links a:hover, .pv-footer__links a:focus-visible { color: var(--pv-primary); }
+/* DilaWeb kézjegy: saját, középre zárt sor a lábléc alján – a jobb alsó sarok
+   a „lap tetejére” nyílé. Diszkrét (halvány, kicsi), de ujjal eltalálható (44px). */
+.pv-credit { flex: 1 0 100%; display: flex; justify-content: center; font-size: 0.9em; }
+.pv-credit a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  min-height: 44px;
+  color: inherit;
+  letter-spacing: 0.02em;
+}
+.pv-credit svg { width: 1.5em; height: auto; flex: none; }
+.pv-credit a:hover, .pv-credit a:focus-visible { color: var(--pv-primary); }
 
 
 /* ==========================================================================
@@ -4741,8 +4754,11 @@ iframe { border: 0; }
   --sz-detail:    #CDD4C0;
   --sz-head:      #D9E0C9;
   --sz-sub:       #B4BEA2;
-  --sz-box:       #232A1D;
-  --sz-box-warm:  #262E20;
+  /* a doboz érezhetően világosabb a lapnál ÉS a sávnál – sötétben az árnyék
+     alig látszik, a kiemelést az árnyalat viszi */
+  --sz-box:       #2C3525;
+  --sz-box-warm:  #303A28;
+  --sz-shadow:    0 22px 44px -26px #000;
   --sz-btn:       #C4CDB3;
   --sz-btn-ink:   #1A1F16;
   --sz-hover:     #A7B58C;
@@ -4938,7 +4954,7 @@ iframe { border: 0; }
 
 /* --- lábléc: erdőzöld alap, halvány zsálya felirat ----------------------- */
 .pv .pv-footer { border-top: 0; background: var(--sz-foot-bg); color: var(--sz-foot); }
-.pv .pv-footer__links a:is(:hover, :focus-visible) { color: #F5F6F0; text-decoration: underline; text-underline-offset: 0.2em; }
+.pv :is(.pv-footer__links a, .pv-credit a):is(:hover, :focus-visible) { color: #F5F6F0; text-decoration: underline; text-underline-offset: 0.2em; }
 .pv .pv-footer :focus-visible { outline-color: #F5F6F0; }
 
 /* ==========================================================================
@@ -5028,8 +5044,6 @@ iframe { border: 0; }
   letter-spacing: 0;
   color: var(--sz-head);
 }
-/* a harmadik szám már halkul: a sorozat megy tovább, nem itt ér véget */
-.pv .sz-count span:last-child { opacity: 0.55; }
 
 /* Légzés-vonal: egy belégzés, egy kilégzés hullámként a szekción át, a tartalom
    MÖGÖTT. A Rólam szekcióé a minta; a site.js (szandiBreath) még néhány
@@ -5097,8 +5111,7 @@ iframe { border: 0; }
    eddig letettünk az asztalra” – a gyertya az asztalon). Az a szekció a
    site.js-ből épül, ezért a szandiCandle() teszi át oda; ha ki van kapcsolva,
    a gyertya a Kapcsolat címénél marad (index.html).
-   Telefonon a cím jobb oldalán; tágas lapon a lap jobb szélén, a margóban,
-   függőlegesen középen – így a cím nem nyúlik meg tőle.
+   Minden szélességen a cím jobb oldalán, a saját fülkéjében.
    A kép dobozában bő levegő van a gyertya körül (a fény miatt), ezt a negatív
    margó veszi vissza. */
 .pv .pv-head:has(> .sz-candle) {
@@ -5117,20 +5130,31 @@ iframe { border: 0; }
   aspect-ratio: 1;
   margin: -1.8rem -0.5rem -1.4rem 0;
   --g: var(--pv-candle-glow, #ffd98a);
+  z-index: 1;
+  isolation: isolate;
+}
+/* FÜLKE: a gyertya nem lebeg a lapon, hanem egy boltíves falmélyedésben áll,
+   a kártyák felületén és vonalán. A láng fénye a boltív tetején gyűlik, a tál
+   alatt halk árnyék – így tárgy lesz, nem matrica. */
+.sz-candle::after {
+  content: "";
+  position: absolute;
+  inset: 13% 19% 5%;
+  z-index: -1;
+  border: 1px solid var(--pv-line);
+  border-radius: 999px 999px 0.75rem 0.75rem;
+  background:
+    radial-gradient(48% 5% at 50% 90%, color-mix(in srgb, #000 30%, transparent), transparent),
+    radial-gradient(90% 55% at 50% 30%, color-mix(in srgb, var(--g) 16%, transparent), transparent 70%),
+    color-mix(in srgb, var(--pv-text) 7%, transparent);
+  box-shadow: inset 0 0.5rem 1rem color-mix(in srgb, #000 16%, transparent);
 }
 @container (min-width: 52rem) {
-  /* a szekcióhoz igazodik (a ragadós cím nem tapad), a margón túli fény levágva */
-  .pv .pv-section:has(.sz-candle) { overflow-x: clip; }
-  .pv .pv-head:has(> .sz-candle) { grid-template-columns: minmax(0, 1fr); position: static; }
-  .sz-candle {
-    position: absolute;
-    top: 50%;
-    /* a jobb margó közepe: a szekció belső margója vagy a --pv-max-on túli rész */
-    right: calc(max(clamp(1.1rem, 5cqi, 3.5rem), (100% - var(--pv-max)) / 2) / 2);
-    width: clamp(7rem, 11cqi, 10rem);
-    margin: 0;
-    translate: 50% -50%;
+  /* a fülke a cím mellett marad (a margóba nem fér), ehhez a címhasáb szélesebb */
+  .pv[data-sec-head="side"] .pv-section[data-stripe="1"] > .pv-wrap:has(> .pv-head > .sz-candle) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 21rem);
   }
+  .sz-candle { width: clamp(8rem, 11cqi, 10rem); }
 }
 /* meleg fény a láng körül – a test mögött, halkan pislákol */
 .sz-candle::before {
@@ -5147,6 +5171,8 @@ iframe { border: 0; }
   inset: 0;
   background: url("images/gyertya.webp") center / contain no-repeat;
 }
+/* sötétben a viasz ne világítson fehéren: a lap félhomályát veszi fel */
+.pv[data-mode="dark"] .sz-candle__body { filter: brightness(0.86) saturate(0.85); }
 /* a láng ablaka (lang.json: left/top/width/height); forgáspont a láng töve */
 .sz-candle__flame {
   position: absolute;
@@ -5382,22 +5408,111 @@ iframe { border: 0; }
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 5l7 7-7 7'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
-/* A KÉZJEGY: óriás, lefelé halványuló név a lábléc tetején (content.wordmark).
-   A lap egyetlen hangos tipográfiai gesztusa – a nyitókép fölött ezért nincs. */
-.pv .pv-footer[data-word] { overflow: clip; padding-top: 0; }
-.pv .pv-footer[data-word]::before {
-  content: attr(data-word);
-  flex: 0 0 100%;
-  margin-bottom: 0.4rem;
-  font-family: var(--pv-font-head);
-  font-size: min(38cqi, 19rem);
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-  text-align: center;
-  white-space: nowrap;
-  color: transparent;
-  background: linear-gradient(to bottom, color-mix(in srgb, var(--sz-foot) 30%, transparent), transparent 85%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  pointer-events: none;
+/* ==========================================================================
+   SZANDI – LÉGZÉS-ANIMÁCIÓK (2026-10)
+   Egy ritmus az egész lapon: 4 mp be, 4 mp ki – ugyanaz, mint a légzés-vonalé
+   (sz-breathe, 8 mp). Csak transform/opacity/filter mozog; csökkentett
+   mozgásnál minden áll, és minden látszik.
+   ========================================================================== */
+
+/* 1. Lélegző számolás (Rólam): a kör a légzéssel tágul-szűkül, a szanszkrit
+   számok sorra kivilágosodnak – Ekam be, dve ki, trīṇi be, aztán egy néma
+   kilégzés: a sorozat megy tovább. 16 mp = két légzés, a vonallal egy ütemben. */
+.pv .pv-about__copy .sz-count { align-items: center; }
+/* légzés-virág: hat áttetsző szirom körben – ahol fedik egymást, mélyebb a
+   szín. Belégzésre a szirmok kifelé nyílnak és a virág negyed fordulatot tesz,
+   kilégzésre összezár. Ugyanaz a 8 mp-es ütem, mint a vonalé. */
+.pv .sz-bloom { flex: none; width: 4.2rem; height: 4.2rem; overflow: visible; animation: sz-bloom-turn 8s ease-in-out infinite; }
+.pv .sz-bloom circle:not(.sz-bloom__ring) {
+  fill: var(--pv-primary);
+  fill-opacity: 0.22;
+  stroke: color-mix(in srgb, var(--pv-primary) 55%, transparent);
+  stroke-width: 0.8;
+  transform-origin: 0 0;
+  transform: rotate(calc(var(--n) * 60deg)) translateX(4px) scale(0.5);
+  animation: sz-petal 8s ease-in-out infinite;
+}
+@keyframes sz-petal { 50% { transform: rotate(calc(var(--n) * 60deg)) translateX(21px) scale(1); } }
+/* halk, szaggatott keret: a teljes belégzés mérete – a virág ezt tölti ki */
+.pv .sz-bloom__ring { fill: none; stroke: color-mix(in srgb, var(--pv-primary) 45%, transparent); stroke-width: 0.9; stroke-dasharray: 1.5 4.5; stroke-linecap: round; }
+@keyframes sz-bloom-turn { 50% { rotate: 45deg; } }
+.pv .sz-count b { opacity: 0.4; animation: sz-count-beat 16s ease-in-out infinite; }
+.pv .sz-count span:nth-of-type(2) b { animation-delay: 4s; }
+.pv .sz-count span:nth-of-type(3) b { animation-delay: 8s; }
+@keyframes sz-count-beat {
+  0%, 31%, 100% { opacity: 0.4; }
+  6%, 25%       { opacity: 1; }
+}
+
+/* 2. Belégzés-nyitány (nyitókép): a cím szavai egyenként, elmosódásból úsznak
+   be, utána a bevezető és a gombok; a háttérfotó közben lassan kilélegzik
+   (enyhe kicsinyedés). Egyszer fut, a lap megjelenésekor (.pv-ready). */
+.pv-hero h1 .sz-w { display: inline-block; }
+@media (prefers-reduced-motion: no-preference) {
+  .pv-ready .pv-hero h1 .sz-w { animation: sz-word-in 1.1s var(--ease) calc(0.15s + var(--i) * 0.14s) both; }
+  .pv-ready .pv-hero__copy > :not(h1) { animation: sz-rise-in 0.9s var(--ease) both; }
+  .pv-ready .pv-hero__copy > .pv-lead { animation-delay: 0.75s; }
+  .pv-ready .pv-hero__copy > .pv-actions { animation-delay: 0.9s; }
+  .pv-ready .pv-hero__copy > .sz-quote { animation-delay: 1.1s; }
+  /* a keretet nagyítjuk, nem a képet: a kép nagyítása a lapozósávban túlcsordulást
+     csinálna, és előjönnének a lapozó nyilai */
+  .pv-ready .pv .pv-hero .pv-hero__media { animation: sz-exhale 14s cubic-bezier(0.2, 0.6, 0.2, 1) both; }
+}
+@keyframes sz-word-in { from { opacity: 0; filter: blur(10px); translate: 0 0.35em; } }
+@keyframes sz-rise-in { from { opacity: 0; translate: 0 0.8rem; } }
+@keyframes sz-exhale  { from { scale: 1.08; } }
+
+/* 3. Esti mód: az új mód körben nyílik ki a kapcsolóból (site.js adja a
+   középpontot). Sötétben a gyertyafény egy árnyalattal melegebb. */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+::view-transition-new(root) { animation: sz-mode-in 0.75s var(--ease, ease) both; }
+@keyframes sz-mode-in {
+  from { clip-path: circle(0 at var(--sz-vt-x, 100%) var(--sz-vt-y, 0)); }
+  to   { clip-path: circle(150vmax at var(--sz-vt-x, 100%) var(--sz-vt-y, 0)); }
+}
+.pv[data-mode="dark"] { --pv-candle-glow: #FFC46B; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pv :is(.sz-bloom, .sz-bloom circle, .sz-count b) { animation: none; }
+  .pv .sz-count b { opacity: 1; }
+  .pv .sz-bloom circle:not(.sz-bloom__ring) { transform: rotate(calc(var(--n) * 60deg)) translateX(14px) scale(0.8); }
+}
+
+/* ==========================================================================
+   SZANDI – OLVASHATÓ GYIK, EGYSOROS LÁBLÉC, INSTAGRAM (2026-10)
+   ========================================================================== */
+/* GYIK: a kérdés a folyószöveg betűjével. Az Instrument Serifnek nincs
+   félkövére – a 600-as súlyt a böngésző hamisította, sötét módban maszatos lett. */
+.pv .pv-faq summary {
+  font-family: var(--pv-font);
+  font-weight: 600;
+  font-size: calc(0.98rem * var(--pv-fs));
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+/* Kapcsolat: a 4. sor az Instagram */
+.pv .pv-section.pv-contact .pv-contact__list li:nth-child(4) { --szandi-ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.6'%3E%3Crect x='3' y='3' width='18' height='18' rx='5'/%3E%3Ccircle cx='12' cy='12' r='4.2'/%3E%3Ccircle cx='17.4' cy='6.6' r='0.8' fill='%23000'/%3E%3C/svg%3E"); }
+
+/* Lábléc: egy sor – balra a ©, középen az Instagram, jobbra a jogi linkek és a
+   készítő. Telefonon középre zárva tördel; a „Minden jog fenntartva" csak
+   tágas lapon fér ki. */
+.pv .pv-footer { align-items: center; justify-content: center; gap: 0.3rem 1.4rem; padding-block: 0.9rem; text-align: center; }
+.pv .pv-footer > [data-i18n="pv.rights"] { display: none; }
+.pv .pv-footer .pv-credit { flex: none; align-items: center; gap: 0.35em; font-size: 1em; }
+.pv .sz-social {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: inherit;
+  transition: color 0.2s var(--ease), background-color 0.2s var(--ease);
+}
+.pv .sz-social svg { width: 1.3rem; height: 1.3rem; }
+.pv .sz-social:is(:hover, :focus-visible) { color: #F5F6F0; background: color-mix(in srgb, var(--sz-foot) 16%, transparent); }
+@container (min-width: 52rem) {
+  .pv .pv-footer { flex-wrap: nowrap; justify-content: flex-start; padding-inline-end: 5rem; text-align: start; }   /* jobbra a „fel" gomb */
+  .pv .pv-footer .sz-social { margin-inline: auto; }   /* a két csoport közé, középre */
+  .pv .pv-footer > [data-i18n="pv.rights"] { display: inline; }
 }
