@@ -819,8 +819,9 @@ function renderLists(c) {
    szórt helyek és fázisok miatt nem hat ismétlésnek. A listás szekciókat a
    renderLists() minden körben újraírja, ezért a vonal minden kör után kerül be. */
 /* csak magas szekció jöhet szóba: a vonal + fent-lent 3.5rem kell (pv.css) –
-   a Számokban asztalon ehhez túl alacsony, átlógna a hullámos határon */
-const BREATH_AT = { services: [18, -1, -5], pricing: [45, 1, -2], faq: [62, -1, -3.5], contact: [40, 1, -6.5] };
+   a Számokban asztalon ehhez túl alacsony, átlógna a hullámos határon.
+   A GYIK-ban a magasság fix (rem): nyíló kérdésnél a szekció nő, %-ban a vonal ugrálna. */
+const BREATH_AT = { services: [18, -1, -5], pricing: [45, 1, -2], faq: ["19rem", -1, -3.5], contact: [40, 1, -6.5] };
 function szandiBreath() {
   const src = $(".sz-breath");
   if (!src) return;
@@ -828,7 +829,7 @@ function szandiBreath() {
     const sec = $(`[data-sec="${id}"]`);
     if (!sec || $(":scope > .sz-breath", sec)) continue;
     const line = src.cloneNode(true);
-    line.style.cssText = `--sz-y:${y}%;--sz-flip:${flip};animation-delay:${delay}s`;
+    line.style.cssText = `--sz-y:${typeof y === "number" ? y + "%" : y};--sz-flip:${flip};animation-delay:${delay}s`;
     sec.prepend(line);
   }
 }

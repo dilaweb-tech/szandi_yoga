@@ -7,16 +7,16 @@
     "note": "Mészáros Alexandra (Szandi) – Ashtanga oktató a Joy of Yoga Stúdióban, Szeged. Esti, nyugodt arculat, időpontfoglaló nélkül (a jelentkezés a stúdió rendszerében megy). Minden adat a joyofyoga.hu-ról; a [szögletes zárójeles] részt Alexandra tölti ki."
   },
   "content": {
-    "company": "Mészáros Alexandra · Ashtanga jóga",
-    "tagline": "Vezetett Ashtanga óra keddenként 17:00-kor, kezdőként is. Mellette irodai jóga cégeknek és privát óra.",
-    "seoTitle": "Mészáros Alexandra · Ashtanga jóga Szegeden, a Joy of Yoga Stúdióban",
+    "company": "Szandi Yoga",
+    "tagline": "Csoportos és egyéni jógaórák stúdióban vagy akár az irodádban. Bárhol is tartasz a gyakorlásban, segítek, hogy közelebb kerülj önmagadhoz és jobban érezd magad a testedben.",
+    "seoTitle": "Szandi Yoga · Ashtanga jóga Szegeden, a Joy of Yoga Stúdióban",
     "seoDescription": "Keddenként 17:00-kor vezetett Ashtanga óra a szegedi Joy of Yoga Stúdióban, kezdőknek is. Mellette irodai jóga cégeknek és privát óra.",
     "heroTitle": "Mozdulat a *légzés* ütemére",
     "heroEyebrow": "Joy of Yoga Stúdió · Szeged",
     "heroImage": "gyertya-kezben.jpg",
     "social": { "instagram": "https://www.instagram.com/szandi_yoga" },
     "heroQuote": {
-      "text": "„Gyakorolj, és minden eljön.”",
+      "text": "„Gyakorolj, a többi jön magától.”",
       "by": "Sri K. Pattabhi Jois"
     },
     "about": "Szandi vagyok, én tartom a keddi Ashtanga Half Led órát a Joy of Yoga Stúdióban.\n\nAz Ashtanga kötött sorozat: minden alkalommal ugyanazok a pózok jönnek, ugyanabban a sorrendben, és mindegyik a légzéshez kötődik. A Half Led órán az elsődleges sorozat első felét vezetem végig, egyenletes számolással, a végén záró pózok és pihenés következik. Nem kell figyelned, mi jön – elég, ha a számolást és a saját légzésedet követed.\n\n[Ide jön a saját történetem: mióta gyakorlok, hol tanultam, és miért éppen az Ashtanga.]",
@@ -255,7 +255,7 @@
     "font": "dmsans",
     "fontHead": "instrument",
     "align": "left",
-    "radius": 24,
+    "radius": 0,
     "layout": "split",
     "hero": "banner",
     "secHead": "side",
@@ -279,7 +279,7 @@
     "accent": "none",
     "sig": "mat",
     "media": "arch",
-    "btn": "pill",
+    "btn": "sharp",
     "hover": "none",
     "navBg": "solid",
     "navShape": "bar",

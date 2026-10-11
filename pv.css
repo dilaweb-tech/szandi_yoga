@@ -4767,6 +4767,13 @@ iframe { border: 0; }
   --sz-band:      color-mix(in srgb, #A7B58C 7%, var(--pv-bg));
   --pv-candle-wax:  #D9E0C9;
 }
+/* Forma: szögletes alap (radius 0 a site.json-ban), a gomb és a szövegdoboz
+   „levél” – két szemközti sarok ívelt, kettő éles. A sugár egy token. */
+.pv[data-mode] { --sz-leaf: 1.1rem; }
+.pv[data-mode] :is(.pv-btn, .pv-nav__cta) { border-radius: calc(var(--sz-leaf) * 0.7) 0; }
+.pv[data-mode] :is(.sz-week, .pv-about__copy, .pv-contact__list li, .pv-section[data-sec="pricing"] .pv-prices) {
+  border-radius: var(--sz-leaf) 0;
+}
 
 /* Fókuszgyűrű: az olívazöld a zsálya sávon kevés lenne – a tinta látszik */
 .pv[data-mode] :focus-visible { outline-color: var(--pv-text); }
