@@ -4900,6 +4900,9 @@ iframe { border: 0; }
 }
 /* név fölül, szakma alatta kisebben – nem csonkul „Mészáros…”-ra */
 .pv[data-mode] .pv-brand span { white-space: normal; line-height: 1.05; }
+/* a szűk sorköz + overflow:hidden levágta az alsó szárakat (g, y, j): a padding
+   helyet ad nekik, a negatív margó visszaveszi, így a fejléc magassága nem nő */
+.pv[data-mode] .pv-brand span { padding-bottom: 0.2em; margin-bottom: -0.2em; }
 .pv[data-mode] .pv-brand small {
   display: none;                 /* telefonon csak a név: a gombok mellett nincs hely */
   white-space: nowrap;
@@ -5250,7 +5253,85 @@ iframe { border: 0; }
 }
 /* a Számokban közvetlenül a nyitókép alatt áll: betöltéskor félig látszik,
    ott a halványítás fakónak hat – teljes színnel áll, mint a hero */
-.pv .pv-section[data-sec="stats"] :is(.pv-head, .pv-item) { animation: none; }
+.pv .pv-section[data-sec="stats"] .pv-head { animation: none; }
+/* A három kártya viszont beúszik: a bal balról, a jobb jobbról, a középső
+   alulról – telefonon egymás alatt is ugyanígy. Csak a mozdulat cserélődik, az
+   ütem a közös 8.11-es szabályé. Az oldalról érkező kártya ne tolja ki a lapot. */
+.pv .pv-section[data-sec="stats"] { overflow-x: clip; }
+.pv .pv-section[data-sec="stats"] .pv-item:nth-child(1) { --pv-rv: sz-rv-from-l; }
+.pv .pv-section[data-sec="stats"] .pv-item:nth-child(2) { --pv-rv: sz-rv-from-b; }
+.pv .pv-section[data-sec="stats"] .pv-item:nth-child(3) { --pv-rv: sz-rv-from-r; }
+@media (prefers-reduced-motion: no-preference) {
+  /* tartalék (site.js) ugyanerről az oldalról */
+  .pv .pv-section[data-sec="stats"] .pv-item.sz-rv:not(.is-in) { opacity: 0; scale: none; }
+  .pv .pv-section[data-sec="stats"] .pv-item.sz-rv:not(.is-in):nth-child(1) { translate: -3rem 0; }
+  .pv .pv-section[data-sec="stats"] .pv-item.sz-rv:not(.is-in):nth-child(2) { translate: 0 3rem; }
+  .pv .pv-section[data-sec="stats"] .pv-item.sz-rv:not(.is-in):nth-child(3) { translate: 3rem 0; }
+}
+@keyframes sz-rv-from-l { from { opacity: 0; translate: -3rem 0; } to { opacity: 1; translate: none; } }
+@keyframes sz-rv-from-b { from { opacity: 0; translate: 0 3rem; }  to { opacity: 1; translate: none; } }
+@keyframes sz-rv-from-r { from { opacity: 0; translate: 3rem 0; }  to { opacity: 1; translate: none; } }
+
+/* „JÓ HELYEN JÁRSZ, HA…” (2026-10, Szandi visszajelzése): a számsor helyett
+   három kártya – kinek szól az óra. Minden szélességen egy tengelyen áll:
+   fölül a gyertya, alatta a két oldalt vonalas cím, alatta a kártyák. Az
+   oldalcímes rács (8.12/b) itt nem kell – a ráccsal azonos súlyú szelektor. */
+.pv[data-sec-head] .pv-section[data-sec="stats"] > .pv-wrap:has(> .pv-head) { display: block; }
+.pv .pv-section[data-sec="stats"] .pv-head {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: clamp(1.4rem, 4cqi, 2.2rem);
+}
+.pv .pv-section[data-sec="stats"] .sz-candle { order: -1; margin: -1.6rem 0 -1.2rem; }
+/* üres felülcím ne hagyjon lyukat – a cím viszi a vonalat */
+.pv .pv-section[data-sec="stats"] .pv-eyebrow:has(> span:last-child:empty) { display: none; }
+.pv .pv-section[data-sec="stats"] .pv-head h2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  width: 100%;
+  font-size: calc(clamp(1.55rem, 6cqi, 3rem) * var(--pv-fs));   /* 360px-en is egy sor */
+}
+.pv .pv-section[data-sec="stats"] .pv-head h2::before,
+.pv .pv-section[data-sec="stats"] .pv-head h2::after {
+  content: "";
+  flex: 0 1 3rem;
+  height: 1px;
+  background: var(--pv-primary);
+  opacity: 0.7;
+}
+/* kártyák: telefonon egymás alatt, szélesebben hárman egymás mellett */
+.pv .pv-section[data-sec="stats"] .pv-items { grid-template-columns: 1fr; gap: 1rem; }
+.pv .pv-section[data-sec="stats"] .pv-item {
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  padding: clamp(1.4rem, 4cqi, 2rem) clamp(1rem, 3cqi, 1.6rem);
+  border-radius: calc(var(--pv-radius) * 1.1);
+  background: var(--sz-box);
+  box-shadow: var(--sz-shadow);
+}
+.pv .pv-section[data-sec="stats"] .pv-item__body { display: flex; flex-direction: column; gap: 0.6rem; align-items: center; }
+.pv .pv-section[data-sec="stats"] .pv-item h3 {
+  font-size: calc(clamp(1.7rem, 3.6cqi, 2.6rem) * var(--pv-fs));
+  line-height: 1.1;
+  text-wrap: balance;
+}
+/* a második sor („Csoportos · privát”) sortöréssel jön a site.json-ból */
+.pv .pv-section[data-sec="stats"] .pv-item p {
+  white-space: pre-line;
+  font-weight: 400;
+  font-size: calc(0.9rem * var(--pv-fs));
+  color: var(--pv-muted);
+}
+@container (min-width: 40rem) {
+  .pv .pv-section[data-sec="stats"] .pv-items { grid-template-columns: repeat(3, 1fr); }
+}
 @keyframes sz-rv-up   { from { opacity: 0.2; translate: 0 1rem; scale: 0.98; } to { opacity: 1; translate: none; scale: none; } }
 @keyframes sz-rv-zoom { from { scale: 1.14; } to { scale: none; } }
 
@@ -5373,6 +5454,36 @@ iframe { border: 0; }
 .pv .pv-section[data-sec="services"] .pv-item:first-child .pv-item__body { background: var(--sz-btn); color: var(--sz-btn-ink); }
 .pv .pv-section[data-sec="services"] .pv-item:first-child :is(h3, p, .sz-meta) { color: inherit; }
 .pv .pv-section[data-sec="services"] .pv-item:first-child .sz-meta { opacity: 0.8; }
+
+/* Ár és gomb a kártya alján (2026-10, Szandi visszajelzése). Az ár egy halk,
+   behúzott „cédula” a doboz saját színéből (currentColor), így a mély olíva fő
+   kártyán és a világos dobozon is ugyanaz a forma. A gomb a kapcsolatra visz;
+   az alj egy vonalba kerül, akármilyen hosszú a leírás. */
+.pv .pv-section[data-sec="services"] .sz-price {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-top: auto;
+  padding: 0.7rem 0.9rem;
+  border-radius: calc(var(--pv-radius) * 0.6);
+  background: color-mix(in srgb, currentColor 8%, transparent);
+}
+.pv .pv-section[data-sec="services"] .sz-price b {
+  font-family: var(--pv-font-head);
+  font-weight: 400;
+  font-size: calc(1.3rem * var(--pv-fs));
+  line-height: 1.15;
+  text-wrap: balance;
+}
+.pv .pv-section[data-sec="services"] .sz-price small { font-size: calc(0.8rem * var(--pv-fs)); opacity: 0.8; }
+.pv .pv-section[data-sec="services"] .sz-svc-cta { align-self: flex-start; margin-top: 0.5rem; }
+.pv .pv-section[data-sec="services"] .pv-item__body > p:not(.sz-meta, .sz-price) + .sz-svc-cta { margin-top: auto; }
+/* a mély olíva fő kártyán a gomb fordított: világos gomb, olíva felirat */
+.pv .pv-section[data-sec="services"] .pv-item:first-child .sz-svc-cta:not(:hover, :focus-visible) {
+  background: var(--sz-btn-ink);
+  color: var(--sz-btn);
+  box-shadow: none;
+}
 
 @container (min-width: 52rem) {
   .pv .pv-section[data-sec="services"] .pv-items {
