@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Biztonság (CSP): csak saját fájl fut. A hash a lenti sötétmód-szkripté – ha az változik, a hash is (node test-site.mjs szól). -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-6dhTzqS436Sz9QbFfpu2gwHQSUZRrDKg48dPoD7VOzc='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self'; frame-src https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
 
   <title>Az oldal nem található</title>
   <meta name="robots" content="noindex">

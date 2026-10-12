@@ -444,4 +444,18 @@ if (planJs && planHtml) {
     "A tervező fő gombja nem jelzi a foglalás elindítását.");
 }
 
+/* Biztonság (CSP): minden lapon ott a szabály, és minden beágyazott szkript
+   hash-e benne van – különben a szkript csendben nem fut le, vagy a szabály
+   hiányzik egy lapról. */
+const { createHash } = await import("node:crypto");
+for (const [name, html] of Object.entries({ index, foglalas, impresszum, adatkezeles, hiba })) {
+  const csp = html.match(/http-equiv="Content-Security-Policy" content="([^"]+)"/)?.[1] || "";
+  const scriptSrc = csp.match(/script-src([^;]*)/)?.[1] || "";
+  ok(scriptSrc.includes("'self'") && !scriptSrc.includes("unsafe"), `${name}: hiányzik vagy laza a CSP.`);
+  for (const [, body] of html.matchAll(/<script>([\s\S]*?)<\/script>/g)) {
+    const h = createHash("sha256").update(body).digest("base64");
+    ok(csp.includes(`'sha256-${h}'`), `${name}: a beágyazott szkript hash-e nincs a CSP-ben (sha256-${h}).`);
+  }
+}
+
 console.log(`OK – ${checks} ellenőrzés lefutott.`);
