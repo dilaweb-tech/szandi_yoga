@@ -58,6 +58,7 @@
     "services": [
       {
         "name": "Csoportos óra",
+        "image": "ora-ikon-csoportos.png",
         "meta": "Kezdőknek és haladóknak",
         "text": "Személyesen, Szeged szívében, a Joy of Yoga Stúdióban tartok Ashtanga I. órákat. A vezetett órára bárki jöhet: előtte néhány egyszerű kérdéssel felmérem, hogy vagy, és ehhez igazítom a gyakorlásodat. Így kezdőként és haladóként is megtalálod a szintednek megfelelő kihívást.",
         "price": "3 800 Ft / fő",
@@ -65,6 +66,7 @@
       },
       {
         "name": "Privát óra",
+        "image": "ora-ikon-privat.png",
         "meta": "Egyéni · Páros",
         "text": "Egyéni vagy páros óra a saját tempódban. Kezdőként az alapokat rakjuk le, gyakorlóként a sorozatot mélyítjük el. Helyszín és időpont egyeztetés alapján.",
         "price": "5 000 – 10 000 Ft / alkalom",
@@ -72,6 +74,7 @@
       },
       {
         "name": "Irodai jóga",
+        "image": "ora-ikon-irodai.png",
         "meta": "Cégeknek, csapatoknak",
         "text": "Jóga a munkahelyeden, cégeknek. Nyújtás és légzés az egész napos ülés ellen – átöltözés nélkül, akár a tárgyalóban is. Időpont, létszám és helyszín egyeztetés alapján.",
         "cta": "Árajánlat kérése"

@@ -4008,13 +4008,14 @@ iframe { border: 0; }
    A kézjegy a Menet szekcióra kerül: a lépések egy kiterített jógaszőnyegen
    ülnek. Az igazítóvonal pöttyei a lépések sorszámai – a jel a sorrendet
    hordozza, nem dísz. Görgetésre a szőnyeg kigördül: a feltekert henger
-   végiggurul rajta, a végén ellapul és elfogy – a szőnyeg teljesen kiterült,
-   alóla előbukkan a dombornyomás. A lépések közben egymás után érkeznek.
+   végiggurul rajta, közben forog és vékonyodik (ahogy fogy róla a szőnyeg),
+   a végén ellapul és elfogy – a szőnyeg teljesen kiterült, alóla előbukkan a
+   dombornyomás. A lap nem nyúlik: a henger mögött tárul fel, a mintája áll. A lépések közben egymás után érkeznek.
    Telefonon függőleges (egy hasáb), tágas lapon vízszintes (@container).
    Minden díszítés ál-elem és háttér: a lépések markupja változatlan, a
    felolvasó ugyanazt a listát hallja. A színek a lap tokenjeiből keverednek,
-   így világos és sötét módban, bármely palettán ugyanúgy működik. Mozgás csak
-   scale / translate / opacity; mozgás vagy támogatás nélkül a szőnyeg eleve
+   így világos és sötét módban, bármely palettán ugyanúgy működik. Mozgás:
+   translate / scale / opacity / clip-path, plusz a henger átmérője és fordulata; mozgás vagy támogatás nélkül a szőnyeg eleve
    kiterítve áll, henger nélkül – sosem marad üresen. */
 .pv[data-sig="mat"] .pv-list--process .pv-items {
   --pv-mat:       color-mix(in srgb, var(--pv-primary) 22%, var(--pv-bg));
@@ -4027,7 +4028,6 @@ iframe { border: 0; }
   --pv-mat-shine: color-mix(in srgb, var(--pv-mat-lite) 55%, #fff);
   --pv-mat-grain: color-mix(in srgb, var(--pv-text) 6%, transparent);
   --pv-mat-roll: 2.1rem;
-  --pv-mat-r2: var(--pv-mat-roll) var(--pv-mat-roll);
   --pv-mat-pad: clamp(1.1rem, 4cqi, 1.8rem);
   --pv-mat-dot: 2.5rem;
   --pv-mat-mark-w: 2.2rem;
@@ -4093,9 +4093,18 @@ iframe { border: 0; }
    A test: élárnyék – szórt fény – keskeny csúcsfény – mag-árnyék – visszavert
    fény a vastagságon át, rajta a szőnyeg rácsmintája; a két végén spirálos
    korong. Kicsit szélesebb a szőnyegnél, mint a valódi.
+   Az átmérő (--pv-mat-d) és a fordulat (--pv-mat-turn) ITT él, nem a
+   szőnyegen: a kigördülés ezeket animálja, a rájuk épülő rétegeknek ezért itt
+   kell kiértékelődniük. A korongon egy sötét csomó kering – ebből látszik,
+   hogy a henger gurul, nem csúszik.
    Nyugalomban NINCS ott: a kiterített szőnyegnek nincs feltekert vége – csak
    a kigördülés alatt látszik (lent, a keyframes-ben). */
 .pv[data-sig="mat"] .pv-list--process .pv-items::after {
+  --pv-mat-d: var(--pv-mat-roll);
+  --pv-mat-d2: var(--pv-mat-d) var(--pv-mat-d);
+  --pv-mat-a: calc(var(--pv-mat-turn) * 1turn);
+  --pv-mat-knot: radial-gradient(circle calc(var(--pv-mat-d) * 0.08) at calc(50% + 30% * cos(var(--pv-mat-a))) calc(50% + 30% * sin(var(--pv-mat-a))),
+    var(--pv-mat-core) 60%, transparent);
   content: "";
   position: absolute;
   inset: 0 -0.3rem;
@@ -4104,21 +4113,21 @@ iframe { border: 0; }
   opacity: 0;
   transform-origin: bottom;
   background-image:
-    var(--pv-mat-glint), var(--pv-mat-swirl), var(--pv-mat-cap),
-    var(--pv-mat-glint), var(--pv-mat-swirl), var(--pv-mat-cap),
+    var(--pv-mat-glint), var(--pv-mat-knot), var(--pv-mat-swirl), var(--pv-mat-cap),
+    var(--pv-mat-glint), var(--pv-mat-knot), var(--pv-mat-swirl), var(--pv-mat-cap),
     repeating-linear-gradient(45deg, var(--pv-mat-grain) 0 1px, transparent 1px 6px),
     linear-gradient(var(--pv-mat-dir), var(--pv-mat-dark), var(--pv-mat) 14%, var(--pv-mat-lite) 30%,
       var(--pv-mat-shine) 36%, var(--pv-mat-lite) 42%, var(--pv-mat) 60%, var(--pv-mat-dark) 80%,
       var(--pv-mat-core) 92%, var(--pv-mat-dark));
   background-repeat: no-repeat;
   background-position:
-    left bottom, left bottom, left bottom,
-    right bottom, right bottom, right bottom,
+    left bottom, left bottom, left bottom, left bottom,
+    right bottom, right bottom, right bottom, right bottom,
     center bottom, center bottom;
   background-size:
-    var(--pv-mat-r2), var(--pv-mat-r2), var(--pv-mat-r2),
-    var(--pv-mat-r2), var(--pv-mat-r2), var(--pv-mat-r2),
-    calc(100% - var(--pv-mat-roll)) var(--pv-mat-roll), calc(100% - var(--pv-mat-roll)) var(--pv-mat-roll);
+    var(--pv-mat-d2), var(--pv-mat-d2), var(--pv-mat-d2), var(--pv-mat-d2),
+    var(--pv-mat-d2), var(--pv-mat-d2), var(--pv-mat-d2), var(--pv-mat-d2),
+    calc(100% - var(--pv-mat-d)) var(--pv-mat-d), calc(100% - var(--pv-mat-d)) var(--pv-mat-d);
   filter: drop-shadow(0 0.5rem 0.45rem color-mix(in srgb, var(--pv-text) 30%, transparent));
 }
 
@@ -4188,13 +4197,13 @@ iframe { border: 0; }
     inset: -0.3rem 0;
     transform-origin: right;
     background-position:
-      right top, right top, right top,
-      right bottom, right bottom, right bottom,
+      right top, right top, right top, right top,
+      right bottom, right bottom, right bottom, right bottom,
       right center, right center;
     background-size:
-      var(--pv-mat-r2), var(--pv-mat-r2), var(--pv-mat-r2),
-      var(--pv-mat-r2), var(--pv-mat-r2), var(--pv-mat-r2),
-      var(--pv-mat-roll) calc(100% - var(--pv-mat-roll)), var(--pv-mat-roll) calc(100% - var(--pv-mat-roll));
+      var(--pv-mat-d2), var(--pv-mat-d2), var(--pv-mat-d2), var(--pv-mat-d2),
+      var(--pv-mat-d2), var(--pv-mat-d2), var(--pv-mat-d2), var(--pv-mat-d2),
+      var(--pv-mat-d) calc(100% - var(--pv-mat-d)), var(--pv-mat-d) calc(100% - var(--pv-mat-d));
   }
   .pv[data-sig="mat"] .pv-list--process .pv-item {
     grid-template-columns: minmax(0, 1fr);
@@ -4238,9 +4247,9 @@ iframe { border: 0; }
       animation-range: var(--pv-mat-run);
     }
     .pv[data-sig="mat"] .pv-list--process .pv-items::after {
-      animation-name: var(--pv-mat-move), var(--pv-mat-fade);
-      animation-timeline: --pv-mat, --pv-mat;
-      animation-range: var(--pv-mat-run), var(--pv-mat-out);
+      animation-name: var(--pv-mat-move), pv-mat-roll, var(--pv-mat-fade);
+      animation-timeline: --pv-mat, --pv-mat, --pv-mat;
+      animation-range: var(--pv-mat-run), var(--pv-mat-run), var(--pv-mat-out);
     }
     /* Felirat CSAK ott, ahol már van szőnyeg: a lépés akkor érkezik, amikor az
        ALJA is fél remmel a henger vonala (a képernyő 60%-a) fölé ért – a
@@ -4275,8 +4284,32 @@ iframe { border: 0; }
     }
   }
 }
-@keyframes pv-mat-grow-y { from { scale: 1 0; } }
-@keyframes pv-mat-grow-x { from { scale: 0 1; } }
+/* A lap NEM nyúlik (a rács, a vonal, a lótusz a helyén áll): a henger mögött
+   tárul fel. A vágás széle mindig a henger alá esik; a többi oldalon tágabb,
+   hogy a padlóárnyék megmaradjon. A futó él 0-ig megy (negatív végérték
+   elhúzná a henger elé) – a vég alatti árnyék csak az utolsó pillanatban jön. */
+@keyframes pv-mat-grow-y {
+  from { clip-path: inset(-3rem -3rem calc(100% - var(--pv-mat-roll) * 0.5) -3rem); }
+  99%  { clip-path: inset(-3rem -3rem 0 -3rem); }
+  to   { clip-path: inset(-3rem); }
+}
+@keyframes pv-mat-grow-x {
+  from { clip-path: inset(-3rem calc(100% - var(--pv-mat-roll) * 0.5) -3rem -3rem); }
+  99%  { clip-path: inset(-3rem 0 -3rem -3rem); }
+  to   { clip-path: inset(-3rem); }
+}
+/* Ahogy fogy róla a szőnyeg, a henger vékonyodik (az átmérő a maradék hossz
+   gyökével arányos) és egyre gyorsabban forog (fordulat = út / kerület).
+   A lépcsők ezt a két görbét közelítik. */
+@property --pv-mat-d { syntax: "<length>"; inherits: false; initial-value: 0px; }
+@property --pv-mat-turn { syntax: "<number>"; inherits: false; initial-value: 0; }
+@keyframes pv-mat-roll {
+  0%   { --pv-mat-d: calc(var(--pv-mat-roll) * 1.4);  --pv-mat-turn: 0; }
+  25%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1.24); --pv-mat-turn: 1.2; }
+  50%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1.05); --pv-mat-turn: 2.7; }
+  75%  { --pv-mat-d: calc(var(--pv-mat-roll) * 0.82); --pv-mat-turn: 4.4; }
+  100% { --pv-mat-d: calc(var(--pv-mat-roll) * 0.5);  --pv-mat-turn: 7; }
+}
 /* a henger a fejvégtől indul: a doboz teljes útja mínusz a saját vastagsága */
 @keyframes pv-mat-move-y { from { translate: 0 calc(-100% + var(--pv-mat-roll)); } }
 @keyframes pv-mat-move-x { from { translate: calc(-100% + var(--pv-mat-roll)) 0; } }
@@ -5285,7 +5318,7 @@ iframe { border: 0; }
   text-align: center;
   margin-bottom: clamp(1.4rem, 4cqi, 2.2rem);
 }
-.pv .pv-section[data-sec="stats"] .sz-candle { order: -1; margin: -1.6rem 0 -1.2rem; }
+.pv .pv-section[data-sec="stats"] .sz-candle { order: -1; margin: -2.6rem 0 -0.2rem;   /* fölötte kevesebb levegő, alatta a fülke talpa nem ér a címre */ }
 /* üres felülcím ne hagyjon lyukat – a cím viszi a vonalat */
 .pv .pv-section[data-sec="stats"] .pv-eyebrow:has(> span:last-child:empty) { display: none; }
 .pv .pv-section[data-sec="stats"] .pv-head h2 {
@@ -5634,3 +5667,18 @@ iframe { border: 0; }
   .pv .pv-footer .sz-social { margin-inline: auto; }   /* a két csoport közé, középre */
   .pv .pv-footer > [data-i18n="pv.rights"] { display: inline; }
 }
+
+/* ==========================================================================
+   SZANDI – JÓGAÓRA-IKONOK (2026-10, Szandi Canva-terve)
+   A fotók helyén olíva folt + vonalikon (images/ikon-*.png, átlátszó háttér).
+   Az ikon nem vágható: egészében ül a világos dobozban, a boltív helyett a
+   kártya saját sarkával; a hullám alatta marad, így a fő óra olíva doboza
+   ugyanúgy simul bele.
+   ========================================================================== */
+.pv .pv-section[data-sec="services"] .pv-item__media {
+  aspect-ratio: 5 / 4;
+  padding: 1.2rem 1.2rem calc(var(--sz-wave) + 0.4rem);
+  background: var(--sz-box-warm);
+  border-radius: calc(var(--pv-radius) * 1.1) calc(var(--pv-radius) * 1.1) 0 0;
+}
+.pv .pv-section[data-sec="services"] .pv-item__media img { object-fit: contain; background: none; }
