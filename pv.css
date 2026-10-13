@@ -2707,6 +2707,15 @@ iframe { border: 0; }
    szekcióhatára. */
 .pv[data-divider="torn"] { --pv-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 100' preserveAspectRatio='none'%3E%3Cpath fill='white' d='M0,100 L0,52 L38,60 L71,47 L112,58 L150,44 L196,55 L231,49 L268,62 L310,46 L352,57 L389,43 L433,55 L470,50 L515,63 L552,48 L598,58 L640,45 L676,56 L719,50 L758,61 L797,46 L842,57 L880,44 L921,55 L963,49 L1002,62 L1044,47 L1083,58 L1121,45 L1162,56 L1200,50 L1200,100 Z'/%3E%3C/svg%3E"); }
 
+/* Mélység: a világos oldal a sáv ELÉ kerül, és árnyékot vet rá. Az árnyék a
+   sávon kívüli tartomány elmosott, a sáv felé tolt foltja – idomonként ugyanaz a
+   path, páros-páratlan kitöltéssel kivonva egy nagy téglalapból. */
+.pv[data-divider="arc"] { --pv-shade: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cfilter id='b' filterUnits='userSpaceOnUse' x='-400' y='-500' width='2000' height='800'%3E%3CfeGaussianBlur stdDeviation='3 10'/%3E%3C/filter%3E%3Cpath filter='url(%23b)' fill-opacity='.26' fill-rule='evenodd' transform='translate(0 7)' d='M-300,-300H1500V100H-300Z M0,100 C320,8 880,8 1200,100 Z'/%3E%3C/svg%3E"); }
+.pv[data-divider="wave"] { --pv-shade: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cfilter id='b' filterUnits='userSpaceOnUse' x='-400' y='-500' width='2000' height='800'%3E%3CfeGaussianBlur stdDeviation='3 10'/%3E%3C/filter%3E%3Cpath filter='url(%23b)' fill-opacity='.26' fill-rule='evenodd' transform='translate(0 7)' d='M-300,-300H1500V100H-300Z M0,64 C180,112 320,16 600,52 C880,88 1020,8 1200,58 L1200,100 L0,100 Z'/%3E%3C/svg%3E"); }
+.pv[data-divider="slant"] { --pv-shade: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cfilter id='b' filterUnits='userSpaceOnUse' x='-400' y='-500' width='2000' height='800'%3E%3CfeGaussianBlur stdDeviation='3 10'/%3E%3C/filter%3E%3Cpath filter='url(%23b)' fill-opacity='.26' fill-rule='evenodd' transform='translate(0 7)' d='M-300,-300H1500V100H-300Z M0,100 L1200,14 L1200,100 Z'/%3E%3C/svg%3E"); }
+.pv[data-divider="zigzag"] { --pv-shade: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cfilter id='b' filterUnits='userSpaceOnUse' x='-400' y='-500' width='2000' height='800'%3E%3CfeGaussianBlur stdDeviation='3 10'/%3E%3C/filter%3E%3Cpath filter='url(%23b)' fill-opacity='.26' fill-rule='evenodd' transform='translate(0 7)' d='M-300,-300H1500V100H-300Z M0,100 L0,58 L75,22 L150,58 L225,22 L300,58 L375,22 L450,58 L525,22 L600,58 L675,22 L750,58 L825,22 L900,58 L975,22 L1050,58 L1125,22 L1200,58 L1200,100 Z'/%3E%3C/svg%3E"); }
+.pv[data-divider="torn"] { --pv-shade: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cfilter id='b' filterUnits='userSpaceOnUse' x='-400' y='-500' width='2000' height='800'%3E%3CfeGaussianBlur stdDeviation='3 10'/%3E%3C/filter%3E%3Cpath filter='url(%23b)' fill-opacity='.26' fill-rule='evenodd' transform='translate(0 7)' d='M-300,-300H1500V100H-300Z M0,100 L0,52 L38,60 L71,47 L112,58 L150,44 L196,55 L231,49 L268,62 L310,46 L352,57 L389,43 L433,55 L470,50 L515,63 L552,48 L598,58 L640,45 L676,56 L719,50 L758,61 L797,46 L842,57 L880,44 L921,55 L963,49 L1002,62 L1044,47 L1083,58 L1121,45 L1162,56 L1200,50 L1200,100 Z'/%3E%3C/svg%3E"); }
+
 /* Az idom a sáv SZÍNÉT viszi tovább a szomszéd szekció belső margójára: fölé
    az ál-elem eredeti állásában, alá függőlegesen tükrözve. Új idom felvételéhez
    egy --pv-shape sor kell fent, és a kulcsa ebbe az :is() listába. */
@@ -2716,16 +2725,19 @@ iframe { border: 0; }
   position: absolute;
   left: 0;
   right: 0;
-  height: clamp(1.6rem, 4cqi, 3.2rem);
+  /* az idom (H) alatt 0.6 H a szekcióba lóg, hogy az árnyék a lapszélen se
+     vágódjon el a szekció tetején; ott tömör a maszk, a szín ugyanaz */
+  --pv-div-h: clamp(1.6rem, 4cqi, 3.2rem);
+  height: calc(var(--pv-div-h) * 1.6);
   /* az idom a SÁV színét viszi tovább – a fordított blokknál is, ezért a
      lap gyökerén érvényes tokent olvassuk, nem a szekcióra írt felülírást */
-  background: var(--pv-band);
-  -webkit-mask: var(--pv-shape) center / 100% 100% no-repeat;
-  mask: var(--pv-shape) center / 100% 100% no-repeat;
+  background: var(--pv-shade) top / 100% 100% no-repeat, var(--pv-band);
+  -webkit-mask: var(--pv-shape) top / 100% var(--pv-div-h) no-repeat, linear-gradient(#000 0 0) bottom / 100% calc(var(--pv-div-h) * 0.6 + 1px) no-repeat;
+  mask: var(--pv-shape) top / 100% var(--pv-div-h) no-repeat, linear-gradient(#000 0 0) bottom / 100% calc(var(--pv-div-h) * 0.6 + 1px) no-repeat;
   pointer-events: none;
 }
-.pv-section[data-stripe="1"]::before { bottom: 100%; }
-.pv-section[data-stripe="1"]::after  { top: 100%; scale: 1 -1; }
+.pv-section[data-stripe="1"]::before { bottom: calc(100% - var(--pv-div-h) * 0.6); }
+.pv-section[data-stripe="1"]::after  { top: calc(100% - var(--pv-div-h) * 0.6); scale: 1 -1; }
 
 /* --- 8.11 görgetésre induló megjelenés --------------------------------------
    Natív nézet-idővonal (`animation-timeline: view()`), nincs mögötte
@@ -4034,8 +4046,6 @@ iframe { border: 0; }
   /* a vonal szaggatása és a henger árnyalása ugyanabba az irányba fut:
      függőleges szőnyegen lefelé, vízszintesen jobbra */
   --pv-mat-dir: to bottom;
-  --pv-mat-grow: pv-mat-grow-y;
-  --pv-mat-move: pv-mat-move-y;
   /* A henger vége három rétegből: domború korong (a széle mélyül), rajta a
      feltekert rétegek spirálja, fölötte egy fénycsillanás. A spirál és a
      csillanás átlátszó fekete/fehér tinta – bármely szőnyegszínen ül. */
@@ -4171,8 +4181,6 @@ iframe { border: 0; }
 @container (min-width: 46rem) {
   .pv[data-sig="mat"] .pv-list--process .pv-items {
     --pv-mat-dir: to right;
-    --pv-mat-grow: pv-mat-grow-x;
-    --pv-mat-move: pv-mat-move-x;
     grid-template-columns: none;
     grid-auto-flow: column;
     grid-auto-columns: minmax(0, 1fr);
@@ -4232,7 +4240,16 @@ iframe { border: 0; }
          a felirat egy címsornyival elcsúszna egymástól */
       --pv-mat-run: cover 40dvh cover calc(100% - 60dvh);
       --pv-mat-out: cover calc(100% - 60dvh - 5rem) cover calc(100% - 60dvh);
-      animation: var(--pv-mat-grow) auto linear both;
+      /* EGY haladás-érték (p) hajt mindent, ami helyzet: a feltárás vágása és a
+         henger eltolása ugyanabból számolódik, ugyanabban a képkockában – két
+         külön animációként (vágás: fő szál, eltolás: kompozitor) gyors
+         görgetésnél elcsúsztak, és a felirat kilógott a henger elé.
+         --pv-mat-rest: a még feltekert hossz; a vágás éle = a henger eleje. */
+      --pv-mat-rest: calc((1 - var(--pv-mat-p)) * (100% - var(--pv-mat-roll)));
+      /* a végén a vágás kinyílik, hogy a szőnyeg padlóárnyéka is látsszon */
+      --pv-mat-free: calc(3rem * clamp(0, (var(--pv-mat-p) - 0.995) * 200, 1));
+      clip-path: inset(-3rem -3rem calc(var(--pv-mat-rest) - var(--pv-mat-free)) -3rem);
+      animation: pv-mat-unroll auto linear both;
       animation-timeline: --pv-mat;
       animation-range: var(--pv-mat-run);
     }
@@ -4244,9 +4261,11 @@ iframe { border: 0; }
       animation-fill-mode: both;
     }
     .pv[data-sig="mat"] .pv-list--process .pv-items::after {
-      animation-name: var(--pv-mat-move), pv-mat-roll, pv-mat-fade;
-      animation-timeline: --pv-mat, --pv-mat, --pv-mat;
-      animation-range: var(--pv-mat-run), var(--pv-mat-run), var(--pv-mat-out);
+      /* a henger a fejvégtől indul: a doboz teljes útja mínusz a vastagsága */
+      translate: 0 calc(-1 * var(--pv-mat-rest));
+      animation-name: pv-mat-roll, pv-mat-fade;
+      animation-timeline: --pv-mat, --pv-mat;
+      animation-range: var(--pv-mat-run), var(--pv-mat-out);
     }
     /* Felirat CSAK ott, ahol már van szőnyeg: a lépés akkor érkezik, amikor az
        ALJA is fél remmel a henger vonala (a képernyő 60%-a) fölé ért – a
@@ -4268,27 +4287,19 @@ iframe { border: 0; }
       .pv[data-sig="mat"] .pv-list--process .pv-items {
         --pv-mat-run: contain 0% contain 75%;
         --pv-mat-out: contain 66% contain 75%;
+        clip-path: inset(-3rem calc(var(--pv-mat-rest) - var(--pv-mat-free)) -3rem -3rem);
       }
+      .pv[data-sig="mat"] .pv-list--process .pv-items::after { translate: calc(-1 * var(--pv-mat-rest)) 0; }
       .pv[data-sig="mat"] .pv-list--process :is(.pv-item, .pv-item::before) { animation: none; }
     }
   }
 }
 /* A szőnyeg NEM nyúlik (a rács, a vonal, a lótusz, a feliratok a helyükön
-   állnak): az egész lista a henger ELEJE mögött tárul fel – ami a henger alatt
-   van, azt a henger takarja. A vágás éle pontosan a henger elejével halad (a
-   henger dobozával azonos út); a többi oldalon tágabb, hogy a padlóárnyék
-   megmaradjon. A futó él 0-ig megy (negatív végérték elhúzná a henger elé) –
-   a vég alatti árnyék csak az utolsó pillanatban jön, amikor a henger már elfogyott. */
-@keyframes pv-mat-grow-y {
-  from  { clip-path: inset(-3rem -3rem calc(100% - var(--pv-mat-roll)) -3rem); }
-  99.5% { clip-path: inset(-3rem -3rem 0 -3rem); }
-  to    { clip-path: inset(-3rem); }
-}
-@keyframes pv-mat-grow-x {
-  from  { clip-path: inset(-3rem calc(100% - var(--pv-mat-roll)) -3rem -3rem); }
-  99.5% { clip-path: inset(-3rem 0 -3rem -3rem); }
-  to    { clip-path: inset(-3rem); }
-}
+   állnak): az egész lista a henger ELEJE mögött tárul fel – ami a henger
+   alatt van, azt a henger takarja. A haladás öröklődik, hogy a henger (::after)
+   ugyanazt a p-t lássa. Mozgás nélkül p = 1: a szőnyeg kiterítve áll. */
+@property --pv-mat-p { syntax: "<number>"; inherits: true; initial-value: 1; }
+@keyframes pv-mat-unroll { from { --pv-mat-p: 0; } to { --pv-mat-p: 1; } }
 /* Ahogy fogy róla a szőnyeg, a henger vékonyodik – az átmérő a maradék hossz
    gyökével arányos: d = √(0,2² + (1,4² − 0,2²)·(1 − p)) · roll – és egyre
    gyorsabban forog (fordulat = ∫ út / kerület, 8 fordulatra normálva).
@@ -4308,9 +4319,6 @@ iframe { border: 0; }
   90%  { --pv-mat-d: calc(var(--pv-mat-roll) * 0.482); --pv-mat-turn: 5.85; }
   100% { --pv-mat-d: calc(var(--pv-mat-roll) * 0.2);   --pv-mat-turn: 8; }
 }
-/* a henger a fejvégtől indul: a doboz teljes útja mínusz a saját vastagsága */
-@keyframes pv-mat-move-y { from { translate: 0 calc(-100% + var(--pv-mat-roll)); } }
-@keyframes pv-mat-move-x { from { translate: calc(-100% + var(--pv-mat-roll)) 0; } }
 /* az utolsó szakaszban, már vékonyan, elfogy (nyugalomban eleve nincs ott) */
 @keyframes pv-mat-fade { from { opacity: 1; } to { opacity: 0; } }
 @keyframes pv-mat-step { from { opacity: 0; translate: 0 0.6rem; } }
