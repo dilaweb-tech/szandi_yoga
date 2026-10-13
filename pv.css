@@ -4036,7 +4036,6 @@ iframe { border: 0; }
   --pv-mat-dir: to bottom;
   --pv-mat-grow: pv-mat-grow-y;
   --pv-mat-move: pv-mat-move-y;
-  --pv-mat-fade: pv-mat-fade-y;
   /* A henger vége három rétegből: domború korong (a széle mélyül), rajta a
      feltekert rétegek spirálja, fölötte egy fénycsillanás. A spirál és a
      csillanás átlátszó fekete/fehér tinta – bármely szőnyegszínen ül. */
@@ -4066,7 +4065,6 @@ iframe { border: 0; }
   inset: 0;
   z-index: -1;
   border-radius: calc(var(--pv-radius) * 0.5);
-  transform-origin: top;
   background-color: var(--pv-mat);
   background-image:
     repeating-linear-gradient(var(--pv-mat-dir), var(--pv-mat-mark) 0 7px, transparent 7px 14px),
@@ -4175,7 +4173,6 @@ iframe { border: 0; }
     --pv-mat-dir: to right;
     --pv-mat-grow: pv-mat-grow-x;
     --pv-mat-move: pv-mat-move-x;
-    --pv-mat-fade: pv-mat-fade-x;
     grid-template-columns: none;
     grid-auto-flow: column;
     grid-auto-columns: minmax(0, 1fr);
@@ -4183,7 +4180,6 @@ iframe { border: 0; }
     padding: var(--pv-mat-pad) calc(var(--pv-mat-pad) + var(--pv-mat-mark-w) + var(--pv-mat-roll) * 0.5 + 0.8rem) var(--pv-mat-pad) var(--pv-mat-pad);
   }
   .pv[data-sig="mat"] .pv-list--process .pv-items::before {
-    transform-origin: left;
     background-position:
       var(--pv-mat-pad) calc(var(--pv-mat-pad) + var(--pv-mat-dot) / 2 - 0.5px),
       right calc(var(--pv-mat-roll) * 0.25 + 0.4rem) center,
@@ -4222,8 +4218,12 @@ iframe { border: 0; }
    ennyi görgetés alatt ennyit nő). Így ott gördül, ahova a látogató néz, nem a
    képernyő alatt. A lépések a SAJÁT dobozukon mérve ugyanott érkeznek, tehát
    pont akkor, amikor a henger elhalad mellettük.
-   Tágas lapon a szőnyeg alacsony: később indul, a lépések balról jobbra jönnek.
-   A henger külön animációval lapul el és fogy el a szőnyeg végén. */
+   Tágas lapon a szőnyeg alacsony: akkor gördül, amikor már egészében látszik,
+   és a képernyő közepe fölött ér a végére – hosszú úton, nem egy rántással.
+   A lépéseket ott maga a feltárás hozza: a szőnyeg a felirataival EGYÜTT a
+   henger eleje mögött tűnik elő, így szöveg sosem lóg ki a szőnyegről.
+   A henger a kigördülés utolsó szakaszában vékonyodik el és fogy el – mire a
+   szőnyeg teljesen kiterült, nincs ott. */
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
     .pv[data-sig="mat"] .pv-list--process .pv-items {
@@ -4231,9 +4231,11 @@ iframe { border: 0; }
          viszont a ténylegesen látható képernyőhöz igazodik – vh-val a henger és
          a felirat egy címsornyival elcsúszna egymástól */
       --pv-mat-run: cover 40dvh cover calc(100% - 60dvh);
-      --pv-mat-out: cover calc(100% - 60dvh) cover calc(100% - 48dvh);
+      --pv-mat-out: cover calc(100% - 60dvh - 5rem) cover calc(100% - 60dvh);
+      animation: var(--pv-mat-grow) auto linear both;
+      animation-timeline: --pv-mat;
+      animation-range: var(--pv-mat-run);
     }
-    .pv[data-sig="mat"] .pv-list--process .pv-items::before,
     .pv[data-sig="mat"] .pv-list--process .pv-items::after,
     .pv[data-sig="mat"] .pv-list--process .pv-item,
     .pv[data-sig="mat"] .pv-list--process .pv-item::before {
@@ -4241,13 +4243,8 @@ iframe { border: 0; }
       animation-timing-function: linear;
       animation-fill-mode: both;
     }
-    .pv[data-sig="mat"] .pv-list--process .pv-items::before {
-      animation-name: var(--pv-mat-grow);
-      animation-timeline: --pv-mat;
-      animation-range: var(--pv-mat-run);
-    }
     .pv[data-sig="mat"] .pv-list--process .pv-items::after {
-      animation-name: var(--pv-mat-move), pv-mat-roll, var(--pv-mat-fade);
+      animation-name: var(--pv-mat-move), pv-mat-roll, pv-mat-fade;
       animation-timeline: --pv-mat, --pv-mat, --pv-mat;
       animation-range: var(--pv-mat-run), var(--pv-mat-run), var(--pv-mat-out);
     }
@@ -4269,53 +4266,53 @@ iframe { border: 0; }
     }
     @container (min-width: 46rem) {
       .pv[data-sig="mat"] .pv-list--process .pv-items {
-        --pv-mat-run: cover 30% cover 56%;
-        --pv-mat-out: cover 56% cover 64%;
+        --pv-mat-run: contain 0% contain 75%;
+        --pv-mat-out: contain 66% contain 75%;
       }
-      .pv[data-sig="mat"] .pv-list--process :is(.pv-item, .pv-item::before) { animation-timeline: --pv-mat; }
-      .pv[data-sig="mat"] .pv-list--process .pv-item { animation-range: cover 33% cover 41%; }
-      .pv[data-sig="mat"] .pv-list--process .pv-item::before { animation-range: cover 31% cover 38%; }
-      .pv[data-sig="mat"] .pv-list--process .pv-item:nth-child(2) { animation-range: cover 39% cover 47%; }
-      .pv[data-sig="mat"] .pv-list--process .pv-item:nth-child(2)::before { animation-range: cover 37% cover 44%; }
-      .pv[data-sig="mat"] .pv-list--process .pv-item:nth-child(3) { animation-range: cover 45% cover 53%; }
-      .pv[data-sig="mat"] .pv-list--process .pv-item:nth-child(3)::before { animation-range: cover 43% cover 50%; }
-      .pv[data-sig="mat"] .pv-list--process .pv-item:nth-child(n + 4) { animation-range: cover 50% cover 57%; }
-      .pv[data-sig="mat"] .pv-list--process .pv-item:nth-child(n + 4)::before { animation-range: cover 48% cover 55%; }
+      .pv[data-sig="mat"] .pv-list--process :is(.pv-item, .pv-item::before) { animation: none; }
     }
   }
 }
-/* A lap NEM nyúlik (a rács, a vonal, a lótusz a helyén áll): a henger mögött
-   tárul fel. A vágás széle mindig a henger alá esik; a többi oldalon tágabb,
-   hogy a padlóárnyék megmaradjon. A futó él 0-ig megy (negatív végérték
-   elhúzná a henger elé) – a vég alatti árnyék csak az utolsó pillanatban jön. */
+/* A szőnyeg NEM nyúlik (a rács, a vonal, a lótusz, a feliratok a helyükön
+   állnak): az egész lista a henger ELEJE mögött tárul fel – ami a henger alatt
+   van, azt a henger takarja. A vágás éle pontosan a henger elejével halad (a
+   henger dobozával azonos út); a többi oldalon tágabb, hogy a padlóárnyék
+   megmaradjon. A futó él 0-ig megy (negatív végérték elhúzná a henger elé) –
+   a vég alatti árnyék csak az utolsó pillanatban jön, amikor a henger már elfogyott. */
 @keyframes pv-mat-grow-y {
-  from { clip-path: inset(-3rem -3rem calc(100% - var(--pv-mat-roll) * 0.5) -3rem); }
-  99%  { clip-path: inset(-3rem -3rem 0 -3rem); }
-  to   { clip-path: inset(-3rem); }
+  from  { clip-path: inset(-3rem -3rem calc(100% - var(--pv-mat-roll)) -3rem); }
+  99.5% { clip-path: inset(-3rem -3rem 0 -3rem); }
+  to    { clip-path: inset(-3rem); }
 }
 @keyframes pv-mat-grow-x {
-  from { clip-path: inset(-3rem calc(100% - var(--pv-mat-roll) * 0.5) -3rem -3rem); }
-  99%  { clip-path: inset(-3rem 0 -3rem -3rem); }
-  to   { clip-path: inset(-3rem); }
+  from  { clip-path: inset(-3rem calc(100% - var(--pv-mat-roll)) -3rem -3rem); }
+  99.5% { clip-path: inset(-3rem 0 -3rem -3rem); }
+  to    { clip-path: inset(-3rem); }
 }
-/* Ahogy fogy róla a szőnyeg, a henger vékonyodik (az átmérő a maradék hossz
-   gyökével arányos) és egyre gyorsabban forog (fordulat = út / kerület).
-   A lépcsők ezt a két görbét közelítik. */
+/* Ahogy fogy róla a szőnyeg, a henger vékonyodik – az átmérő a maradék hossz
+   gyökével arányos: d = √(0,2² + (1,4² − 0,2²)·(1 − p)) · roll – és egyre
+   gyorsabban forog (fordulat = ∫ út / kerület, 8 fordulatra normálva).
+   Tíz fázis: a görbe sima, nem érződnek a töréspontok. */
 @property --pv-mat-d { syntax: "<length>"; inherits: false; initial-value: 0px; }
 @property --pv-mat-turn { syntax: "<number>"; inherits: false; initial-value: 0; }
 @keyframes pv-mat-roll {
-  0%   { --pv-mat-d: calc(var(--pv-mat-roll) * 1.4);  --pv-mat-turn: 0; }
-  25%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1.24); --pv-mat-turn: 1.2; }
-  50%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1.05); --pv-mat-turn: 2.7; }
-  75%  { --pv-mat-d: calc(var(--pv-mat-roll) * 0.82); --pv-mat-turn: 4.4; }
-  100% { --pv-mat-d: calc(var(--pv-mat-roll) * 0.5);  --pv-mat-turn: 7; }
+  0%   { --pv-mat-d: calc(var(--pv-mat-roll) * 1.4);   --pv-mat-turn: 0; }
+  10%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1.33);  --pv-mat-turn: 0.44; }
+  20%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1.255); --pv-mat-turn: 0.92; }
+  30%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1.176); --pv-mat-turn: 1.41; }
+  40%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1.092); --pv-mat-turn: 1.95; }
+  50%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1);     --pv-mat-turn: 2.53; }
+  60%  { --pv-mat-d: calc(var(--pv-mat-roll) * 0.899); --pv-mat-turn: 3.17; }
+  70%  { --pv-mat-d: calc(var(--pv-mat-roll) * 0.785); --pv-mat-turn: 3.9; }
+  80%  { --pv-mat-d: calc(var(--pv-mat-roll) * 0.651); --pv-mat-turn: 4.75; }
+  90%  { --pv-mat-d: calc(var(--pv-mat-roll) * 0.482); --pv-mat-turn: 5.85; }
+  100% { --pv-mat-d: calc(var(--pv-mat-roll) * 0.2);   --pv-mat-turn: 8; }
 }
 /* a henger a fejvégtől indul: a doboz teljes útja mínusz a saját vastagsága */
 @keyframes pv-mat-move-y { from { translate: 0 calc(-100% + var(--pv-mat-roll)); } }
 @keyframes pv-mat-move-x { from { translate: calc(-100% + var(--pv-mat-roll)) 0; } }
-/* a szőnyeg végén a szőnyegre lapul és elfogy (nyugalomban eleve nincs ott) */
-@keyframes pv-mat-fade-y { from { opacity: 1; } to { opacity: 0; scale: 1 0.3; } }
-@keyframes pv-mat-fade-x { from { opacity: 1; } to { opacity: 0; scale: 0.3 1; } }
+/* az utolsó szakaszban, már vékonyan, elfogy (nyugalomban eleve nincs ott) */
+@keyframes pv-mat-fade { from { opacity: 1; } to { opacity: 0; } }
 @keyframes pv-mat-step { from { opacity: 0; translate: 0 0.6rem; } }
 @keyframes pv-mat-dot  { from { opacity: 0; scale: 0.4; } }
 
