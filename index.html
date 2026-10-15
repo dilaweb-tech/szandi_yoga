@@ -17,7 +17,7 @@
   <meta property="og:locale" content="hu_HU">
   <meta name="twitter:card" content="summary">
   <!-- <<< META -->
-  <meta name="theme-color" content="#E9ECE1">
+  <meta name="theme-color" content="#F1F2EB">
   <!-- DEMÓ (GitHub Pages): ne kerüljön keresőbe, amíg helykitöltő szöveg és üres impresszum van benne. Élesítéskor TÖRÖLD. -->
   <meta name="robots" content="noindex">
 
@@ -31,7 +31,7 @@
        Szandi színén, rejtve áll (site.js → init, reveal). Ha a szkript nem fut
        le, 3 mp múlva magától megjelenik; JavaScript nélkül azonnal. -->
   <style>
-    html { background: #E9ECE1; }
+    html { background: #F1F2EB; }
     html:not(.pv-ready) body { visibility: hidden; animation: pv-boot 0s 3s forwards; }
     @keyframes pv-boot { to { visibility: visible; } }
     @media (prefers-reduced-motion: no-preference) { html.pv-ready body { animation: pv-in 0.3s ease-out; } }
@@ -112,11 +112,11 @@
       <section class="pv-section is-first">
         <div class="pv-wrap">
           <h1>Szandi Yoga</h1>
-          <p class="pv-lead">Csoportos és egyéni jógaórák stúdióban vagy akár az irodádban. Bárhol is tartasz a gyakorlásban, segítek, hogy közelebb kerülj önmagadhoz és jobban érezd magad a testedben.</p>
+          <p class="pv-lead">Csoportos és egyéni jógaórák stúdióban vagy akár az irodádban. Bárhol is tartasz a gyakorlásban, segítek, hogy jobban érezd magad a testedben és közelebb kerülj önmagadhoz.</p>
           <ul class="pv-contact__list">
             <li><span class="pv-muted">Elhelyezkedés</span><strong>Joy of Yoga Stúdió, 6722 Szeged, Gutenberg utca 14.</strong></li>
-            <li><span class="pv-muted">Telefon</span><a href="tel:+36305012453">+36 30 501 2453</a></li>
-            <li><span class="pv-muted">E-mail</span><a href="mailto:info@joyofyoga.hu">info@joyofyoga.hu</a></li>
+            <li><span class="pv-muted">Telefon</span><a href="tel:+36704425718">+36 70 442 5718</a></li>
+            <li><span class="pv-muted">E-mail</span><a href="mailto:meszaros.szandi13@gmail.com">meszaros.szandi13@gmail.com</a></li>
           </ul>
           <p class="pv-muted">Az oldal teljes tartalmához engedélyezd a JavaScriptet a böngésződben.</p>
         </div>
@@ -188,10 +188,13 @@
       <div class="pv-wrap">
         <header class="pv-head">
           <p class="pv-eyebrow"><span class="pv-dot" aria-hidden="true"></span><span data-i18n="pv.pricingEyebrow">Áraink</span></p>
-          <h2 data-i18n="pv.pricingTitle">Árjegyzék</h2>
+          <!-- SZANDI: saját főcím és bevezető (a menü továbbra is a pv.pricingTitle-t mutatja) -->
+          <h2 data-i18n="sz.pricingHead">Árjegyzék</h2>
+          <p class="pv-muted" data-i18n="sz.pricingLead"></p>
         </header>
         <!-- Kategória-szűrő: csak akkor kerül ide sor, ha a tételeken van
-             kategória (site.js → chipRow) -->
+             kategória (site.js → chipRow). Szandinál itt az Egyszeri/Bérlettel
+             kapcsoló áll (site.js → szandiPlans). -->
         <div id="pv-price-chips"></div>
         <ul class="pv-prices" id="pv-prices"></ul>
         <!-- Egy gomb az árlista alatt: aki az árat elfogadta, ott foglaljon,
@@ -242,19 +245,10 @@
         <path d="M0 50C100 50 200 8 300 8S500 92 600 92 800 8 900 8s200 42 300 42" />
       </svg>
       <div class="pv-wrap pv-about__inner">
-        <!-- SZANDI: kollázs = boltíves fotó + ráfekvő órarend-kártya -->
+        <!-- SZANDI: kollázs = boltíves fotó, mögötte a halvány lótusz-árny (pv.css) -->
         <div class="sz-collage">
           <!-- a képhely sorszámát a site.js adja: a szolgáltatás-kártyák után jön -->
           <figure class="pv-about__media"><img id="pv-about-img" data-img-slot="4" alt="" width="800" height="600" loading="lazy"></figure>
-          <aside class="sz-week" aria-label="Mikor tartok órát">
-            <!-- a napsor csak kép: ugyanezt a szöveg alatta kimondja -->
-            <ol class="sz-week__days" aria-hidden="true">
-              <li>H</li><li class="is-on">K<small>17:00</small></li><li>Sz</li><li>Cs</li><li>P</li><li>Sz</li><li>V</li>
-            </ol>
-            <p class="sz-week__when"><b>Kedd 17:00–18:30</b> Ashtanga Half Led, Joy of Yoga Stúdió</p>
-            <p class="sz-week__rest">A hét többi napján irodai és privát óra, egyeztetés szerint.</p>
-            <a href="#sec-contact" class="pv-btn pv-btn--primary" data-cta-main data-cta-sec="contact" data-i18n="pv.cta">Jelentkezem</a>
-          </aside>
         </div>
         <div class="pv-about__copy">
           <p class="pv-eyebrow"><span class="pv-dot" aria-hidden="true"></span><span data-i18n="pv.aboutEyebrow">Rólunk</span></p>
@@ -262,12 +256,6 @@
           <p id="pv-about">Bemutatkozó szöveg</p>
           <!-- SZANDI: az óra saját hangja – így szól a vezetett számolás -->
           <p class="sz-count">
-            <!-- légzés-virág: hat áttetsző szirom, belégzésre kinyílik, kilégzésre összezár (pv.css) -->
-            <svg class="sz-bloom" viewBox="-50 -50 100 100" aria-hidden="true">
-              <circle class="sz-bloom__ring" r="47"></circle>
-              <circle r="16" style="--n:0"></circle><circle r="16" style="--n:1"></circle><circle r="16" style="--n:2"></circle>
-              <circle r="16" style="--n:3"></circle><circle r="16" style="--n:4"></circle><circle r="16" style="--n:5"></circle>
-            </svg>
             <span><b lang="sa-Latn">Ekam</b> belégzés</span>
             <span><b lang="sa-Latn">dve</b> kilégzés</span>
             <span><b lang="sa-Latn">trīṇi</b> belégzés</span>
@@ -299,22 +287,44 @@
         <header class="pv-head">
           <p class="pv-eyebrow"><span class="pv-dot" aria-hidden="true"></span><span data-i18n="pv.contactEyebrow">Kapcsolat</span></p>
           <h2 data-i18n="pv.contactTitle">Keress minket bizalommal</h2>
-          <!-- SZANDI: Blenderben renderelt gyertya a meghívás mellett (pv.css, BLENDER-GYERTYA) -->
-          <span class="sz-candle" aria-hidden="true"><span class="sz-candle__body"></span><span class="sz-candle__flame"></span></span>
-        </header>
-        <ul class="pv-contact__list">
-          <li>
-            <span class="pv-muted" data-i18n="pv.lblAddress">Elhelyezkedés</span>
+          <!-- SZANDI: lélegző lótusz – hét szirom egy tőből, a „Jó helyen jársz, ha…”
+               címe fölé költözik (site.js → szandiLotus, pv.css LÓTUSZ). --a: a nyitott szög. -->
+          <svg class="sz-lotus" viewBox="-50 -50 100 58" aria-hidden="true" focusable="false">
+            <ellipse cx="0" cy="3" rx="36" ry="3.2"></ellipse>
+            <path style="--a:-66deg" d="M0 0C-9-8-10-22 0-32C10-22 9-8 0 0Z"></path>
+            <path style="--a:66deg" d="M0 0C-9-8-10-22 0-32C10-22 9-8 0 0Z"></path>
+            <path style="--a:-40deg" d="M0 0C-11-10-12-27 0-39C12-27 11-10 0 0Z"></path>
+            <path style="--a:40deg" d="M0 0C-11-10-12-27 0-39C12-27 11-10 0 0Z"></path>
+            <path style="--a:-18deg" d="M0 0C-12-11-13-30 0-43C13-30 12-11 0 0Z"></path>
+            <path style="--a:18deg" d="M0 0C-12-11-13-30 0-43C13-30 12-11 0 0Z"></path>
+            <path style="--a:0deg" d="M0 0C-13-12-13-32 0-46C13-32 13-12 0 0Z"></path>
+          </svg>
+          <!-- SZANDI: órarend és a stúdió címe a cím alatt (pv.css, ÓRAREND + CÍM) -->
+          <aside class="sz-week" aria-label="Mikor tartok órát">
+            <!-- a napsor csak kép: ugyanezt a szöveg alatta kimondja -->
+            <ol class="sz-week__days" aria-hidden="true">
+              <li>H</li><li class="is-on">K<small>17:00</small></li><li>Sz</li><li>Cs</li><li>P</li><li>Sz</li><li>V</li>
+            </ol>
+            <p class="sz-week__when"><b>Kedd 17:00–18:30</b> Ashtanga Half Led, Joy of Yoga Stúdió</p>
+            <p class="sz-week__rest">A hét többi napján irodai és privát óra, egyeztetés szerint.</p>
+            <!-- a stúdió saját foglalójába visz: ott van regisztráció és lemondás -->
+            <a href="https://joyofyoga.hu/idopontfoglalas/" class="pv-btn pv-btn--primary" target="_blank" rel="noopener" data-goal="booking-start" data-i18n="pv.cta">Jelentkezem</a>
+          </aside>
+          <p class="sz-addr">
+            <span data-i18n="pv.lblAddress">Elhelyezkedés</span>
             <!-- Szandi: a cím útvonaltervezőt nyit (href: site.js) -->
             <a id="pv-address" href="#" target="_blank" rel="noopener">Cím</a>
+          </p>
+        </header>
+        <!-- sorrend (Szandi): e-mail, telefon, Instagram (az utóbbit a site.js teszi hozzá) -->
+        <ul class="pv-contact__list">
+          <li>
+            <span class="pv-muted" data-i18n="pv.lblEmail">E-mail</span>
+            <a id="pv-email" href="#" data-goal="mail">E-mail cím</a>
           </li>
           <li>
             <span class="pv-muted" data-i18n="pv.lblPhone">Telefon</span>
             <a id="pv-phone" href="#" data-goal="call">Telefonszám</a>
-          </li>
-          <li>
-            <span class="pv-muted" data-i18n="pv.lblEmail">E-mail</span>
-            <a id="pv-email" href="#" data-goal="mail">E-mail cím</a>
           </li>
         </ul>
         <!-- Nyitvatartás: a mai nap kiemelve. Csak akkor kerül ki, ha a tervben

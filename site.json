@@ -8,7 +8,7 @@
   },
   "content": {
     "company": "Szandi Yoga",
-    "tagline": "Csoportos és egyéni jógaórák stúdióban vagy akár az irodádban. Bárhol is tartasz a gyakorlásban, segítek, hogy közelebb kerülj önmagadhoz és jobban érezd magad a testedben.",
+    "tagline": "Csoportos és egyéni jógaórák stúdióban vagy akár az irodádban. Bárhol is tartasz a gyakorlásban, segítek, hogy jobban érezd magad a testedben és közelebb kerülj önmagadhoz.",
     "seoTitle": "Szandi Yoga · Ashtanga jóga Szegeden, a Joy of Yoga Stúdióban",
     "seoDescription": "Keddenként 17:00-kor vezetett Ashtanga óra a szegedi Joy of Yoga Stúdióban, kezdőknek is. Mellette irodai jóga cégeknek és privát óra.",
     "heroTitle": "Mozdulat a *légzés* ütemére",
@@ -21,8 +21,8 @@
     },
     "about": "Szandi vagyok, én tartom a keddi Ashtanga Half Led órát a Joy of Yoga Stúdióban.\n\nAz Ashtanga kötött sorozat: minden alkalommal ugyanazok a pózok jönnek, ugyanabban a sorrendben, és mindegyik a légzéshez kötődik. A Half Led órán az elsődleges sorozat első felét vezetem végig, egyenletes számolással, a végén záró pózok és pihenés következik. Nem kell figyelned, mi jön – elég, ha a számolást és a saját légzésedet követed.\n\n[Ide jön a saját történetem: mióta gyakorlok, hol tanultam, és miért éppen az Ashtanga.]",
     "address": "Joy of Yoga Stúdió, 6722 Szeged, Gutenberg utca 14.",
-    "phone": "+36 30 501 2453",
-    "email": "info@joyofyoga.hu",
+    "phone": "+36 70 442 5718",
+    "email": "meszaros.szandi13@gmail.com",
     "logo": "",
     "images": [
       {
@@ -57,13 +57,13 @@
     "uploadedFiles": [],
     "services": [
       {
-        "name": "Ashtanga · Joy of Yoga",
-        "meta": "Kedd 17:00 · Stúdió",
-        "text": "Kedd 17:00–18:30 a szegedi Joy of Yoga Stúdióban. Az elsődleges sorozat első fele vezetett ütemben, számolással; a végén záró pózok és pihenés. Kezdőként is jöhetsz – a nehezebb pózokhoz könnyebb változatot mutatok."
+        "name": "Csoportos óra",
+        "meta": "Kezdőknek és haladóknak",
+        "text": "Személyesen, Szeged szívében, a Joy of Yoga Stúdióban tartok Ashtanga I. órákat. A vezetett csoportos órán bárki részt vehet: az óra előtt néhány egyszerű kérdéssel felmérem, hol tartasz, és ehhez igazítom a gyakorlásodat. Így kezdőként és haladóként is megtalálod a szintednek megfelelő kihívást."
       },
       {
         "name": "Irodai jóga",
-        "meta": "Cégeknek · Helyszínen",
+        "meta": "Cégeknek, csapatoknak",
         "text": "Jóga a munkahelyeden, cégeknek. Nyújtás és légzés az egész napos ülés ellen – átöltözés nélkül, akár a tárgyalóban is. Időpont, létszám és helyszín egyeztetés alapján."
       },
       {
@@ -117,20 +117,20 @@
       "rating": [],
       "stats": [
         {
-          "name": "90 perc",
-          "text": "egy óra hossza",
-          "tag": "",
+          "name": "Belevágnál",
+          "text": "a jógázásba, de nem tudod, hogyan.",
+          "tag": "Csoportos · privát",
           "image": ""
         },
         {
-          "name": "1–20 fő",
-          "text": "egy csoportban",
-          "tag": "",
+          "name": "Mélyítenéd",
+          "text": "a gyakorlásodat és a tudásodat.",
+          "tag": "Csoportos · privát",
           "image": ""
         },
         {
-          "name": "1 sorozat",
-          "text": "minden héten ugyanaz",
+          "name": "A munkahelyen",
+          "text": "jógáznál a csapatoddal.",
           "tag": "",
           "image": ""
         }
@@ -161,6 +161,36 @@
     "pricing": {
       "enabled": true,
       "cards": false,
+      "_plans": "SZANDI: árcsomag-kártyák (Szandi „Vizuál” mintája). Ha van plans, az árak szekció ezeket mutatja az items lista helyett. alt = a „Bérlettel” kapcsolóra látszó ár; badge = kiemelt kártya.",
+      "toggle": { "once": "Egyszeri", "pass": "Bérlettel" },
+      "plans": [
+        {
+          "name": "Privát óra",
+          "sub": "Egyéni vagy páros óra",
+          "price": "5–10 000 Ft",
+          "unit": "/ alkalom",
+          "btn": { "label": "Időpontot kérek", "href": "#sec-contact", "style": "ghost" },
+          "features": ["A saját tempódban", "Alapozás vagy a sorozat mélyítése", "Helyszín és időpont egyeztetéssel", "Ár az időtartam és a célok szerint"]
+        },
+        {
+          "name": "Csoportos óra",
+          "sub": "Kezdőknek és haladóknak",
+          "badge": "Kedd 17:00",
+          "price": "3 800 Ft",
+          "unit": "/ fő",
+          "alt": { "price": "3 444 Ft", "unit": "/ alkalom" },
+          "btn": { "label": "Órarend és foglalás", "href": "#sec-contact", "style": "light" },
+          "features": ["Vezetett Ashtanga, Half Led", "Joy of Yoga Stúdió, Szeged", "Szintfelmérés az óra előtt", "Matrac és eszköz a stúdióban", "Bérlet: 3, 6 vagy 9 alkalom"]
+        },
+        {
+          "name": "Irodai jóga",
+          "sub": "Cégeknek, csapatoknak",
+          "price": "Egyedi",
+          "unit": "/ ajánlat szerint",
+          "btn": { "label": "Árajánlatot kérek", "href": "#sec-contact", "style": "dark" },
+          "features": ["A munkahelyeden, akár a tárgyalóban", "Átöltözés nélkül", "Nyújtás és légzés az ülés ellen", "Időpont és létszám egyeztetéssel"]
+        }
+      ],
       "items": [
         {
           "name": "Egyszeri belépő",
@@ -223,16 +253,18 @@
       "sec.about": "Rólam",
       "pv.aboutEyebrow": "Rólam",
       "pv.aboutTitle": "Ki vagyok én?",
-      "sec.services": "Jógaórák",
+      "sec.services": "Szolgáltatások",
       "pv.servicesEyebrow": "Szolgáltatások",
       "pv.servicesTitle": "Jógaórák",
       "pv.servicesLead": "Stúdióban, az irodádban vagy négyszemközt – válaszd, ami a hetedbe illik.",
-      "pv.pricingEyebrow": "Belépők és bérletek",
+      "pv.pricingEyebrow": "Árak",
       "pv.pricingTitle": "Árak",
+      "sz.pricingHead": "Jóga, ahogy neked jó",
+      "sz.pricingLead": "Csoportban, négyszemközt vagy a munkahelyeden. Az első órára bérlet nélkül is jöhetsz.",
       "sec.faq": "GYIK",
       "pv.faqTitle": "Gyakori kérdések",
-      "pv.statsEyebrow": "Half Led óra",
-      "pv.statsTitle": "Egy óra, számokban",
+      "pv.statsEyebrow": "",
+      "pv.statsTitle": "Jó helyen jársz, ha…",
       "sec.contact": "Kapcsolat"
     }
   },
@@ -246,10 +278,10 @@
         "text": "#E9ECE1"
       },
       "light": {
-        "primary": "#556B2F",
-        "secondary": "#7C8C5E",
-        "bg": "#E9ECE1",
-        "text": "#1F2719"
+        "primary": "#5F6C47",
+        "secondary": "#9BA685",
+        "bg": "#F1F2EB",
+        "text": "#33401F"
       }
     },
     "font": "dmsans",
@@ -309,14 +341,14 @@
       "sub": []
     },
     {
-      "id": "about",
+      "id": "services",
       "on": true,
       "nav": true,
       "plate": false,
       "sub": []
     },
     {
-      "id": "services",
+      "id": "about",
       "on": true,
       "nav": true,
       "plate": false,

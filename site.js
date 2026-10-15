@@ -138,7 +138,8 @@ const LIST_SECS = {
   rating:  { media: false, body: true, stars: true },
   /* Bizalmi blokkok (pv.css 8.13): ugyanaz a három mező, más megjelenítés.
      `marquee`: a lista kétszer megy ki, az ismétlés adja a varrat nélküli kört. */
-  stats:   { media: false, body: true  },
+  /* Szandi: a „Jó helyen jársz, ha…” kártyák – a címke (tag) apró sorként a szöveg alatt */
+  stats:   { media: false, body: true, tagLine: true },
   reviews: { media: true,  body: true, avatar: true },
   process: { media: false, body: true  },
   logos:   { media: true,  body: false, marquee: true },
@@ -207,6 +208,8 @@ const I18N = {
     "pv.item4text": "Néhány mondat arról, mit kap az ügyfél, és miért éri meg.",
     "pv.pricingEyebrow": "Áraink",
     "pv.pricingTitle": "Árjegyzék",
+    "sz.pricingHead": "Árak",
+    "sz.pricingLead": "",
     "pv.bookingEyebrow": "Időpontfoglalás",
     "pv.bookingTitle": "Foglaljon időpontot",
     "pv.refEyebrow": "Munkáink",
@@ -287,6 +290,8 @@ const I18N = {
     "pv.item4text": "A few sentences about what the client gets and why it is worth it.",
     "pv.pricingEyebrow": "Our prices",
     "pv.pricingTitle": "Price list",
+    "sz.pricingHead": "Prices",
+    "sz.pricingLead": "",
     "pv.bookingEyebrow": "Online booking",
     "pv.bookingTitle": "Book an appointment",
     "pv.refEyebrow": "Our work",
@@ -762,7 +767,7 @@ function renderLists(c) {
     const stars = (it) => cfg.stars
       ? `<span class="pv-stars" style="--v:${starPct(it.name)}" aria-hidden="true"></span>` : "";
     const body = (it) => cfg.body
-      ? `<div class="pv-item__body">${stars(it)}<h3>${esc(it.name)}</h3>${it.text ? `<p>${esc(it.text)}</p>` : ""}</div>` : "";
+      ? `<div class="pv-item__body">${stars(it)}<h3>${esc(it.name)}</h3>${it.text ? `<p>${esc(it.text)}</p>` : ""}${cfg.tagLine && it.tag ? `<p class="sz-tagline">${esc(it.tag)}</p>` : ""}</div>` : "";
     /* Galéria: a név felirat is, nem csak alt – a képre írva mondja el, mi
        látszik rajta. Ahol felirat van, ott az alt üres: ne hangozzon el kétszer. */
     const cap = (it) => (cfg.cap && String(it.name || "").trim()
@@ -855,13 +860,40 @@ function szandiReveal() {
   });
 }
 
-/* SZANDI: a Blender-gyertya a „Számokban” címe mellé kerül – közvetlenül a
+/* SZANDI: a lélegző lótusz a „Jó helyen jársz, ha…” címe fölé kerül – közvetlenül a
    nyitókép alatt, ahol mindenki látja. Azt a szekciót a renderLists() minden
    körben újraírja, ezért minden kör után áttesszük. Ha a szekció nincs a
-   lapon, a gyertya a Kapcsolat címénél marad (index.html). */
-function szandiCandle(on) {
-  const candle = $(".sz-candle"), head = on && $('[data-sec="stats"] .pv-head');
-  if (candle && head && candle.parentNode !== head) head.append(candle);
+   lapon, a lótusz a Kapcsolat címénél marad (index.html). */
+function szandiLotus(on) {
+  const lotus = $(".sz-lotus"), head = on && $('[data-sec="stats"] .pv-head');
+  if (lotus && head && lotus.parentNode !== head) head.append(lotus);
+}
+
+/* SZANDI: árcsomag-kártyák (site.json pricing.plans) a tétellista helyett –
+   Szandi „Vizuál” mintája. A szűrő helyén az Egyszeri/Bérlettel kapcsoló áll:
+   két rádiógomb, a váltást a pv.css (:has) intézi, JS-állapot nincs. */
+function szandiPlans(p, list, chips) {
+  if (!p?.plans?.length) return;
+  const tg = p.toggle, hasAlt = tg && p.plans.some((x) => x.alt);
+  if (chips) chips.innerHTML = hasAlt ? `
+    <div class="sz-bill">
+      <div class="sz-bill__switch" role="radiogroup" aria-label="Csoportos óra ára">
+        <label><input type="radio" name="sz-bill" value="once" checked><span>${esc(tg.once)}</span></label>
+        <label><input type="radio" name="sz-bill" value="pass" id="sz-bill-pass"><span>${esc(tg.pass)}</span></label>
+      </div>
+      ${tg.badge ? `<span class="sz-bill__badge">${esc(tg.badge)}</span>` : ""}
+    </div>` : "";
+  const price = (x, cls = "") => `<p class="sz-plan__price${cls}"><b>${esc(x.price)}</b> <span>${esc(x.unit || "")}</span></p>`;
+  list.className = "sz-plans";
+  list.innerHTML = p.plans.map((x) => `
+    <li class="sz-plan"${x.badge ? " data-hi" : ""}>
+      ${x.badge ? `<span class="sz-plan__badge">${esc(x.badge)}</span>` : ""}
+      <h3>${esc(x.name)}</h3>
+      <p class="sz-plan__sub">${esc(x.sub || "")}</p>
+      ${price(x)}${x.alt && hasAlt ? price(x.alt, " sz-plan__price--pass") : ""}
+      ${x.btn ? `<a class="sz-plan__btn" data-style="${esc(x.btn.style || "ghost")}" href="${esc(x.btn.href || "#sec-contact")}">${esc(x.btn.label)}</a>` : ""}
+      <ul class="sz-plan__list">${(x.features || []).map((f) => `<li>${esc(f)}</li>`).join("")}</ul>
+    </li>`).join("");
 }
 
 function applyContent() {
@@ -873,7 +905,7 @@ function applyContent() {
   const bookingOn = !!c.booking?.enabled;
   renderLists(c);                              /* előbb legyen meg a szekció, aztán rendezzük */
   szandiBreath();
-  szandiCandle(sections.some((s) => s.id === "stats" && s.on));
+  szandiLotus(sections.some((s) => s.id === "stats" && s.on));
   szandiReveal();
   /* betűméret-kivételek szekciónként – a generált listásakra is */
   $$("[data-sec]").forEach((el) => setFs(el, DESIGN.fontScaleBy?.[el.dataset.sec]));
@@ -922,6 +954,7 @@ function applyContent() {
       <b>${esc(it.price)}</b>
     </li>`).join("");
   if (priceCards) $$("#pv-prices img").forEach((img, i) => paintImg(img, prices[i].image, i, ""));
+  szandiPlans(c.pricing, priceList, chips);
 
   buildNav(sections, c);
 
@@ -1101,7 +1134,8 @@ function applyContent() {
   /* a fejléc hívás-gombja ugyanarra a számra – szám nélkül nincs mit hívni */
   const call = $("#pv-call");
   if (call) { call.href = phone.href; call.hidden = !String(c.phone || "").trim(); }
-  mail.textContent = c.email || "";
+  /* hosszú cím telefonon: a @ előtt törjön, ne a szó közepén */
+  mail.innerHTML = esc(c.email || "").replace("@", "<wbr>@");
   mail.href = "mailto:" + (c.email || "");
   /* Felső infósáv (navTop, pv.css 8.2/d): a hero jelvénye, a cím és az
      elérhetőség – ugyanazok az adatok, külön mező nélkül. */
