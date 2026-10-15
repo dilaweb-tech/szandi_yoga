@@ -3,7 +3,9 @@
 # magától: ez a munkafolyamat csak kézzel indul, és megmondod, melyik oldalt.
 #
 # EGYSZERI BEÁLLÍTÁS (Settings → Secrets and variables → Actions):
-#   SSH_HOST, SSH_USER, SSH_KEY, SSH_PORT (nem kötelező), SSH_KNOWN_HOSTS (ajánlott)
+#   SSH_HOST, SSH_USER, SSH_KEY, SSH_KNOWN_HOSTS, SSH_PORT (nem kötelező)
+#   SSH_KNOWN_HOSTS: `ssh-keyscan -p PORT HOST` kimenete – nélküle nem indul,
+#   mert kulcs-ellenőrzés nélkül egy hamis szerver is megkaphatná a deployt.
 #
 # A könyvtárat futtatáskor adod meg – így egy elgépelt titok nem visz ki
 # véletlenül semmit rossz helyre.
@@ -19,6 +21,10 @@ on:
         description: "Melyik ágról"
         required: true
         default: main
+
+# A munkafolyamat csak olvas a repóból – egy feltört lépés se írhasson bele.
+permissions:
+  contents: read
 
 concurrency:
   group: deploy-termek
@@ -46,12 +52,8 @@ jobs:
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           printf '%s\n' "$SSH_KEY" > ~/.ssh/id_deploy
           chmod 600 ~/.ssh/id_deploy
-          if [ -n "${KNOWN:-}" ]; then
-            printf '%s\n' "$KNOWN" > ~/.ssh/known_hosts
-          else
-            echo "SSH_KNOWN_HOSTS nincs beállítva – kulcs-ellenőrzés nélkül csatlakozunk."
-            ssh-keyscan -p "${SSH_PORT:-22}" "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
-          fi
+          [ -n "${KNOWN:-}" ] || { echo "Hiányzik az SSH_KNOWN_HOSTS titok – lásd a fájl fejlécét."; exit 1; }
+          printf '%s\n' "$KNOWN" > ~/.ssh/known_hosts
 
       - name: Élesítés (git pull az ügyfél könyvtárában)
         env:
@@ -62,5 +64,8 @@ jobs:
           BRANCH: ${{ inputs.branch }}
         run: |
           set -euo pipefail
-          ssh -i ~/.ssh/id_deploy -p "${SSH_PORT:-22}" "$SSH_USER@$SSH_HOST" \
+          # A két bemenet a távoli shellbe kerül: csak útvonal- és ágnév-karakter mehet.
+          [[ "$DIR" =~ ^/[A-Za-z0-9._/-]+$ && "$DIR" != *..* ]] || { echo "Érvénytelen könyvtár: $DIR"; exit 1; }
+          [[ "$BRANCH" =~ ^[A-Za-z0-9._/-]+$ ]] || { echo "Érvénytelen ág: $BRANCH"; exit 1; }
+          ssh -o StrictHostKeyChecking=yes -i ~/.ssh/id_deploy -p "${SSH_PORT:-22}" "$SSH_USER@$SSH_HOST" \
             "set -e; cd '$DIR'; git fetch --quiet origin '$BRANCH'; git merge --ff-only 'origin/$BRANCH'; git log --oneline -1"

@@ -17,6 +17,15 @@
     </IfModule>
 
     RewriteEngine On
+
+    # Csak HTTPS. A proxy mögötti tárhely a sima HTTPS-változót nem látja,
+    # ezért az X-Forwarded-Proto is számít – különben végtelen átirányítás.
+    # A .well-known kivétel: a Let's Encrypt első ellenőrzése még HTTP-n jön.
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+    RewriteCond %{REQUEST_URI} !^/\.well-known/
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
     RewriteRule (^|/)\.(?!well-known) - [R=404,L]
 
     # ENGEDÉLYLISTA: csak a látogatónak szánt fájltípusok mennek ki, minden
@@ -55,6 +64,21 @@
     Header set Cache-Control "max-age=3600"
   </FilesMatch>
 </IfModule>
+
+# Biztonsági fejlécek. A tartalom-szabályt (CSP) a HTML-ek <meta>-ja adja,
+# az a GitHub Pages-en is él; itt csak az kerül mellé, amit meta-ból nem lehet:
+# keretbe ágyazás tiltása (clickjacking). A két CSP egyszerre érvényes.
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  Header always set Content-Security-Policy "frame-ancestors 'none'"
+  Header always set X-Frame-Options "DENY"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+  Header always unset X-Powered-By
+</IfModule>
+ServerSignature Off
 
 # Saját hibaoldal. A 404.html a `<base href="/">` miatt gyökérhez igazodva
 # tölti a CSS-t és a site.json-t, tehát mély, nem létező úton is helyesen

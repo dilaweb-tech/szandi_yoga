@@ -33,18 +33,18 @@
         "alt": "Rózsaszín lótuszvirág harmatcseppekkel, zöld levelek között"
       },
       {
-        "spot": "Jógaóra · Irodai jóga",
-        "src": "gyertya-kezben.jpg",
-        "focus": "center",
-        "media": "",
-        "alt": "Égő gyertya egy nyitott tenyéren, sötét háttér előtt"
-      },
-      {
         "spot": "Jógaóra · Privát óra",
         "src": "joga-parna-gyertya.jpg",
         "focus": "center",
         "media": "",
         "alt": "Két jógapárna és három gyertya a stúdió fapadlóján"
+      },
+      {
+        "spot": "Jógaóra · Irodai jóga",
+        "src": "gyertya-kezben.jpg",
+        "focus": "center",
+        "media": "",
+        "alt": "Égő gyertya egy nyitott tenyéren, sötét háttér előtt"
       },
       {
         "spot": "Nyitókép · Bemutatkozás",
@@ -58,18 +58,21 @@
     "services": [
       {
         "name": "Csoportos óra",
+        "image": "ora-ikon-csoportos.png",
         "meta": "Kezdőknek és haladóknak",
         "text": "Személyesen, Szeged szívében, a Joy of Yoga Stúdióban tartok Ashtanga I. órákat. A vezetett csoportos órán bárki részt vehet: az óra előtt néhány egyszerű kérdéssel felmérem, hol tartasz, és ehhez igazítom a gyakorlásodat. Így kezdőként és haladóként is megtalálod a szintednek megfelelő kihívást."
       },
       {
-        "name": "Irodai jóga",
-        "meta": "Cégeknek, csapatoknak",
-        "text": "Jóga a munkahelyeden, cégeknek. Nyújtás és légzés az egész napos ülés ellen – átöltözés nélkül, akár a tárgyalóban is. Időpont, létszám és helyszín egyeztetés alapján."
-      },
-      {
         "name": "Privát óra",
+        "image": "ora-ikon-privat.png",
         "meta": "Egyéni · Páros",
         "text": "Egyéni vagy páros óra a saját tempódban. Kezdőként az alapokat rakjuk le, gyakorlóként a sorozatot mélyítjük el. Helyszín és időpont egyeztetés alapján."
+      },
+      {
+        "name": "Irodai jóga",
+        "image": "ora-ikon-irodai.png",
+        "meta": "Cégeknek, csapatoknak",
+        "text": "Jóga a munkahelyeden, cégeknek. Nyújtás és légzés az egész napos ülés ellen – átöltözés nélkül, akár a tárgyalóban is. Időpont, létszám és helyszín egyeztetés alapján."
       }
     ],
     "lists": {
