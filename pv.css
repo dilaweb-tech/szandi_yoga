@@ -4801,10 +4801,51 @@ iframe { border: 0; }
 .pv .sz-addr span { font-size: calc(0.7rem * var(--pv-fs)); letter-spacing: 0.08em; text-transform: uppercase; color: var(--sz-detail); }
 .pv .sz-addr a { font-weight: 500; line-height: 1.4; color: var(--sz-head); text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); text-underline-offset: 0.2em; }
 .pv .sz-addr a::after { content: ""; position: absolute; inset: 0; }
+/* Kapcsolat-fej (Szandi, 2026-10-16): a felülcím és a cím kiszabadul a jobb
+   hasábból, és a szekció tetején, középen áll – fölötte a nyomdai ornamens
+   (ugyanaz a forma, mint a tervező `ornament` jegyénél). A .pv-head
+   `display: contents`, így a gyerekei a burok rácsába kerülnek. */
+.pv .pv-section.pv-contact > .pv-wrap > .pv-head { display: contents; }
+.pv .pv-section.pv-contact .pv-head > :is(.pv-eyebrow, h2) { justify-self: center; text-align: center; }
+.pv .pv-section.pv-contact .pv-head > .pv-eyebrow {
+  display: grid;
+  justify-items: center;
+  gap: 0.9rem;
+  margin: 0;
+  font-size: calc(1.05rem * var(--pv-fs));
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  color: var(--sz-head);
+}
+.pv .pv-section.pv-contact .pv-head > .pv-eyebrow::before {
+  content: "";
+  width: 6.5rem;
+  height: 1.2rem;
+  background: currentColor;
+  opacity: 0.55;
+  --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 22'%3E%3Cg fill='%23000'%3E%3Cpath d='M60 3c4 5 9 6 9 8s-5 3-9 8c-4-5-9-6-9-8s5-3 9-8z'/%3E%3Cpath d='M46 10.2c-8 0-13-4-19-4-5 0-8 2-8 4s3 4 8 4c6 0 11-4 19-4zm-19 5.6c-3 0-5-.7-5-1.6s2-1.6 5-1.6 6 1 9 1.6c-3 .6-6 1.6-9 1.6z'/%3E%3Cpath d='M74 10.2c8 0 13-4 19-4 5 0 8 2 8 4s-3 4-8 4c-6 0-11-4-19-4zm19 5.6c3 0 5-.7 5-1.6s-2-1.6-5-1.6-6 1-9 1.6c3 .6 6 1.6 9 1.6z'/%3E%3C/g%3E%3C/svg%3E");
+  -webkit-mask: var(--m) center / contain no-repeat;
+  mask: var(--m) center / contain no-repeat;
+}
+.pv .pv-section.pv-contact .pv-head > .pv-eyebrow .pv-dot { display: none; }
+.pv .pv-section.pv-contact .pv-head > h2 {
+  max-width: 34rem;
+  margin: 0.4rem 0 clamp(0.6rem, 2cqi, 1.4rem);
+  font-size: calc(clamp(1.5rem, 5cqi, 2.2rem) * var(--pv-fs));
+  line-height: 1.15;
+  text-wrap: balance;
+}
+.pv .pv-section.pv-contact .pv-head > .sz-week { margin-top: 0; }
 @container (min-width: 52rem) {
-  .pv[data-sec-head="side"] .pv-section[data-stripe="1"] > .pv-wrap:has(> .pv-head > .sz-week) {
+  .pv[data-sec-head] .pv-section.pv-contact[data-stripe] > .pv-wrap:has(> .pv-head) {
     grid-template-columns: minmax(0, 1fr) minmax(0, 21rem);
+    align-items: start;
   }
+  .pv[data-sec-head] .pv-section.pv-contact[data-stripe] > .pv-wrap:has(> .pv-head) > .pv-head > .pv-eyebrow { grid-column: 1 / -1; grid-row: 1; }
+  .pv[data-sec-head] .pv-section.pv-contact[data-stripe] > .pv-wrap:has(> .pv-head) > .pv-head > h2 { grid-column: 1 / -1; grid-row: 2; }
+  .pv[data-sec-head] .pv-section.pv-contact[data-stripe] > .pv-wrap:has(> .pv-head) > .pv-head > .sz-week { grid-column: 2; grid-row: 3; }
+  .pv[data-sec-head] .pv-section.pv-contact[data-stripe] > .pv-wrap:has(> .pv-head) > .pv-head > .sz-addr { grid-column: 2; grid-row: 4; }
+  .pv[data-sec-head] .pv-section.pv-contact[data-stripe] > .pv-wrap:has(> .pv-head) > .pv-contact__list { grid-column: 1; grid-row: 3 / span 2; }
 }
 
 /* Az egész sor kattintható (telefon, e-mail): hüvelykujjal is eltalálható,
@@ -5052,6 +5093,16 @@ iframe { border: 0; }
 @media (min-width: 44rem) {
   .pv[data-mode] .pv-header .pv-nav__cta { font-size: calc(0.95rem * var(--pv-fs)); padding: 0.6rem 1.15rem; }
 }
+/* Hamburger tabletig (iPad álló, 820px): a sablon 44rem-es sávja itt a név +
+   négy menüpont + gomb mellett összenyomódott. A linksor csak 64rem-től. */
+@container (min-width: 44rem) {
+  .pv[data-mode] .pv-nav:not(.is-open) { display: none; }
+  .pv[data-mode] .pv-burger:not([hidden]) { display: grid; }
+}
+@container (min-width: 64rem) {
+  .pv[data-mode] .pv-nav:not(.is-open) { display: flex; }
+  .pv[data-mode] .pv-burger:not([hidden]) { display: none; }
+}
 /* telefonos panel: a sáv folytatása, nagy, szedett menüpontokkal */
 .pv[data-mode] .pv-nav.is-open {
   --pv-nav-ink: var(--sz-bar-ink);
@@ -5151,7 +5202,7 @@ iframe { border: 0; }
   color: var(--sz-accent);
   white-space: nowrap;
 }
-.pv .sz-week__when { margin-top: 0.9rem; font-size: calc(0.85rem * var(--pv-fs)); line-height: 1.45; }
+.pv .sz-week__when { margin-top: 0.9rem; font-size: calc(0.8rem * var(--pv-fs)); line-height: 1.45; color: var(--sz-detail); }
 .pv .sz-week__when b {
   display: block;
   font-family: var(--pv-font-head);
@@ -5277,6 +5328,11 @@ iframe { border: 0; }
   }
   .pv .sz-lotus { width: clamp(7rem, 10cqi, 8.5rem); }
 }
+/* a hero-cím kiemelt szava („légzés") a lótusz bordóját kapja */
+.pv .pv-hero__copy h1 .pv-emph,
+.pv .sz-quote p { color: var(--sz-accent); }
+.pv .sz-quote p { font-style: italic; }
+.pv .sz-quote cite { color: var(--sz-head); }
 .pv .sz-lotus path {
   fill: currentColor;
   fill-opacity: 0.16;
@@ -5484,30 +5540,13 @@ iframe { border: 0; }
 }
 
 /* ==========================================================================
-   SZANDI – ÁRCSOMAGOK (2026-10-15, Szandi „Vizuál” mintája, 1:1)
-   Középre zárt fej (felülcím, vastag főcím, bevezető), alatta Egyszeri/Bérlettel
-   kapcsoló bordó címkével, majd három zsálya kártya: név, alcím, nagy ár,
-   teljes szélességű gomb, pipás lista. A középső (badge-es) a Primary zsályát
-   kapja, kiemelkedik és tömör árnyékot vet. Adat: site.json pricing.plans,
-   markup: site.js → szandiPlans. A sarok a lap „levél” tokenje (--sz-leaf).
-   Telefonon egy oszlop, a kiemelt kártya elöl; tágas lapon három oszlop.
-   Kontraszt: tinta a Surface-en 5,8 · részlet 4,9 · mély erdő a Primary-n 5,5.
+   SZANDI – JÓGAÓRÁK ÉS ÁRAK (2026-10-15, összevonva 2026-10-16, Szandi mintája)
+   Középre zárt fej, alatta három óra-kártya: ikon, név, alcím, pipás lista,
+   gomb; a „Részletek +” megfordítja a kártyát (hátul a részletes leírás).
+   A Szolgáltatások szekció ki van kapcsolva – ez a kettő együtt. Adat:
+   site.json pricing.plans, markup: site.js → szandiPlans. Telefonon egy
+   oszlop, a kiemelt (középső) kártya elöl; tágas lapon három oszlop.
    ========================================================================== */
-.pv .pv-section[data-sec="pricing"] {
-  --sz-card: var(--sz-band);
-  --sz-card-ink: var(--sz-ink);
-  --sz-card-sub: var(--sz-detail);
-  --sz-card-hi: var(--sz-sage);
-  --sz-card-hi-ink: #26301C;
-  --sz-plan-r: calc(var(--sz-leaf) * 0.6);
-  --sz-sw-on: var(--sz-box);       /* a kapcsoló kiválasztott fele */
-}
-.pv[data-mode="dark"] .pv-section[data-sec="pricing"] {
-  --sz-card: var(--sz-box);
-  --sz-card-ink: var(--sz-head);
-  --sz-card-hi: #46523A;
-  --sz-card-hi-ink: #F1F2EB;
-}
 
 /* --- fej: középre, egy hasábban (az oldalt álló cím itt nem él) --- */
 .pv .pv-section[data-sec="pricing"] > .pv-wrap { display: block; }
@@ -5534,43 +5573,12 @@ iframe { border: 0; }
 }
 .pv .pv-section[data-sec="pricing"] .pv-head p:last-child { max-width: 32rem; color: var(--sz-detail); }
 
-/* --- Egyszeri / Bérlettel kapcsoló + bordó címke --- */
-.pv .sz-bill { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.6rem 0.9rem; margin-top: 1.4rem; }
-.pv .sz-bill__switch {
-  display: inline-flex;
-  padding: 0.25rem;
-  border-radius: var(--sz-plan-r) 0;
-  background: var(--sz-card);
-}
-.pv .sz-bill__switch label { position: relative; cursor: pointer; }
-.pv .sz-bill__switch input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
-.pv .sz-bill__switch span {
-  display: grid;
-  place-items: center;
-  min-height: 2.75rem;
-  padding: 0 1.3rem;
-  border-radius: calc(var(--sz-plan-r) * 0.8) 0;
-  font-size: calc(0.88rem * var(--pv-fs));
-  font-weight: 500;
-  color: var(--sz-card-sub);
-  transition: background-color 0.25s var(--ease), color 0.25s var(--ease);
-}
-.pv .sz-bill__switch input:checked + span { background: var(--sz-sw-on); color: var(--sz-card-ink); box-shadow: 0 1px 3px color-mix(in srgb, var(--sz-ink) 18%, transparent); }
-.pv[data-mode="dark"] .sz-bill__switch input:checked + span { background: var(--sz-card-hi); }
-.pv .sz-bill__switch input:focus-visible + span { outline: 2px solid var(--pv-text); outline-offset: 2px; }
-.pv .sz-bill__badge,
-.pv .sz-plan__badge {
-  padding: 0.35rem 0.8rem;
-  border-radius: calc(var(--sz-leaf) * 0.5) 0;
-  background: #650909;             /* bordó mindkét módban: fehér felirat 12:1 */
-  color: #FFFFFF;
-  font-size: calc(0.72rem * var(--pv-fs));
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-/* --- kártyák --- */
+/* --- óra-kártyák (2026-10-16, Szandi színterve) ---
+   Két szélső: Turtle Skin kártya, Glade folt, Picket Fence írás. A középső
+   (data-hi): Picket Fence kártya, Turtle Skin folt és írás, bordó gomb.
+   A paletta mindkét módban ugyanaz – a kártya maga a kontraszt. */
 .pv .sz-plans {
+  --sz-pf: #F1F2EB;  --sz-bg2: #B8BFA8;  --sz-gl: #9BA685;  --sz-ts: #33401F;  --sz-bd: #650909;
   display: grid;
   gap: 1.1rem;
   max-width: 64rem;
@@ -5579,110 +5587,198 @@ iframe { border: 0; }
   list-style: none;
 }
 .pv .sz-plan {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  padding: clamp(1.5rem, 4cqi, 2rem) clamp(1.3rem, 3.6cqi, 1.9rem);
-  border-radius: var(--sz-leaf) 0;
-  background: var(--sz-card);
-  color: var(--sz-card-ink);
+  --c-bg: var(--sz-ts);
+  --c-ink: var(--sz-pf);
+  --c-sub: var(--sz-bg2);
+  --c-line: color-mix(in srgb, var(--sz-bg2) 40%, transparent);
+  --c-blob: var(--sz-gl);
+  --c-chk-bg: var(--sz-gl);
+  --c-chk: var(--sz-ts);
+  --c-shadow: color-mix(in srgb, var(--sz-ts) 20%, transparent);
+  display: grid;                   /* a két oldal egymáson: a magasabb adja a kártyát */
+  perspective: 1400px;
   text-align: start;
-  container-type: inline-size;     /* az ár a kártya szélességéhez méreteződik */
 }
 .pv .sz-plan[data-hi] {
   order: -1;
-  background: var(--sz-card-hi);
-  color: var(--sz-card-hi-ink);
-  box-shadow: 0.45rem 0.45rem 0 color-mix(in srgb, var(--sz-ink) 12%, transparent);
+  --c-bg: var(--sz-pf);
+  --c-ink: var(--sz-ts);
+  --c-sub: color-mix(in srgb, var(--sz-ts) 78%, transparent);
+  --c-line: var(--sz-bg2);
+  --c-blob: var(--sz-ts);
+  --c-chk-bg: var(--sz-bg2);
+  --c-shadow: color-mix(in srgb, var(--sz-ts) 35%, transparent);
 }
-.pv .sz-plan__badge { position: absolute; top: 1.1rem; right: 1.1rem; }
-.pv .sz-plan h3 {
+.pv .sz-plan__face {
+  grid-area: 1 / 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.4rem, 4cqi, 1.9rem) clamp(1.3rem, 3.6cqi, 1.7rem);
+  border-radius: 1rem;
+  background: var(--c-bg);
+  color: var(--c-ink);
+  box-shadow: 0 1.2rem 2.4rem -1rem var(--c-shadow);
+  backface-visibility: hidden;
+  transition: transform 0.7s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+.pv .sz-plan__back { transform: rotateY(180deg); }
+.pv .sz-plan[data-flip] > .sz-plan__face { transform: rotateY(-180deg); }
+.pv .sz-plan[data-flip] > .sz-plan__back { transform: none; }
+/* Fordulás (Szandi mintája, 2026-10-16): a kártya egy tárgy, ami a helyén
+   fordul – a két oldal ugyanabban a cellában, a magasabb adja a méretet,
+   így fordításkor semmi nem ugrik, a szomszédok nem mozdulnak. */
+@media (prefers-reduced-motion: reduce) {
+  .pv .sz-plan__face { transition: none; }
+}
+/* a kiemelt kártya a lap színét viseli: a felső éle csak kerettel látszik –
+   enélkül a rajta ülő címke a kártya fölött lebegne, nem félig rajta */
+.pv .sz-plan[data-hi] > .sz-plan__face { outline: 1px solid var(--sz-bg2); }
+.pv[data-mode="dark"] .sz-plan:not([data-hi]) .sz-plan__face { outline: 1px solid color-mix(in srgb, var(--sz-bg2) 22%, transparent); }
+
+/* halk „Részletek +” / „← Vissza”: apró, ritkított, aláhúzott – de 44px a tapintási felület */
+.pv .sz-plan__flip {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 0.5rem;
+  border: 0;
+  background: none;
+  color: var(--c-sub);
+  font: 600 calc(0.68rem * var(--pv-fs)) / 1 var(--pv-font);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  text-underline-offset: 0.35em;
+  cursor: pointer;
+}
+.pv .sz-plan__flip:is(:hover, :focus-visible) { color: var(--c-ink); }
+.pv .sz-plan__flip:focus-visible { outline: 2px solid currentColor; outline-offset: -2px; border-radius: 0.4rem; }
+
+/* „Itt érdemes kezdeni” (Szandi mintája): bordó pirula a kártya felső élén,
+   középen – az előlappal együtt fordul el. Szöveg: site.json plans[].badge. */
+.pv .sz-plan__badge {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% -50%;
   margin: 0;
-  font-family: var(--pv-font);
-  font-weight: 700;
-  font-size: calc(1.15rem * var(--pv-fs));
-  color: inherit;
-}
-.pv .sz-plan__sub { margin: 0.3rem 0 0; font-size: calc(0.85rem * var(--pv-fs)); color: var(--sz-card-sub); }
-.pv .sz-plan[data-hi] :is(.sz-plan__sub, .sz-plan__price span) { color: inherit; }
-.pv .sz-plan__price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.1rem 0.4rem; margin: 1.4rem 0 0; }
-.pv .sz-plan__price b {
-  font-family: var(--pv-font);
-  font-weight: 700;
-  font-size: calc(clamp(1.8rem, 11.5cqi, 2.6rem) * var(--pv-fs));
-  line-height: 1;
-  letter-spacing: -0.03em;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  background: var(--sz-bd);
+  color: var(--sz-pf);
+  font: 700 calc(0.72rem * var(--pv-fs)) / 1 var(--pv-font);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   white-space: nowrap;
 }
-.pv .sz-plan__price span { font-size: calc(0.88rem * var(--pv-fs)); color: var(--sz-card-sub); }
-/* a kapcsoló: Bérlettel állásban a második ár látszik */
-.pv .sz-plan__price--pass,
-.pv .pv-section[data-sec="pricing"]:has(#sz-bill-pass:checked) .sz-plan__price:has(+ .sz-plan__price--pass) { display: none; }
-.pv .pv-section[data-sec="pricing"]:has(#sz-bill-pass:checked) .sz-plan__price--pass { display: flex; }
+/* a pirula alsó fele belóg a kártyába: a sarokgomb lejjebb csúszik alóla */
+.pv .sz-plan__badge ~ .sz-plan__flip { top: 1.1rem; }
+.pv .sz-plan__face:has(> .sz-plan__badge) { padding-top: calc(clamp(1.4rem, 4cqi, 1.9rem) + 1rem); }
 
-.pv .sz-plan__btn {
-  display: grid;
-  place-items: center;
-  min-height: 2.9rem;
-  margin: 1.4rem 0;
-  padding: 0.5rem 1rem;
-  border: 1.5px solid transparent;
-  border-radius: var(--sz-plan-r) 0;
-  font-size: calc(0.92rem * var(--pv-fs));
-  font-weight: 500;
-  text-align: center;
-  text-decoration: none;
-  transition: background-color 0.25s var(--ease), color 0.25s var(--ease), border-color 0.25s var(--ease);
-}
-.pv .sz-plan__btn[data-style="ghost"] { border-color: color-mix(in srgb, currentColor 35%, transparent); color: inherit; }
-.pv .sz-plan__btn[data-style="light"] { background: #F8F9F4; color: #26301C; }   /* mindkét módban világos: a kiemelt kártyán is kiugrik */
-.pv .sz-plan__btn[data-style="dark"]  { background: var(--sz-btn); color: var(--sz-btn-ink); }
-.pv .sz-plan__btn:is(:hover, :focus-visible) { background: var(--sz-hover); border-color: transparent; color: var(--sz-hover-ink); }
-
-.pv .sz-plan__list {
-  display: grid;
-  gap: 0.8rem;
+/* ikon: Szandi oliva-fehér változata (images/ikon-*.png, 256 px) */
+.pv .sz-plan__icon { width: 3.6rem; height: auto; margin-bottom: 0.9rem; }
+.pv .sz-plan h3 {
   margin: 0;
-  padding: 1.4rem 0 0;
-  border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
-  list-style: none;
+  padding-inline-end: 5.5rem;      /* a sarokgomb ne fedje */
+  font-family: var(--pv-font-head);
+  font-weight: 400;
+  font-size: calc(clamp(1.5rem, 5.5cqi, 1.75rem) * var(--pv-fs));
+  line-height: 1.1;
 }
+.pv .sz-plan .sz-plan__face h3 { color: var(--c-ink); }
+.pv .sz-plan__icon + h3 { padding-inline-end: 0; }
+.pv .sz-plan__sub {
+  margin: 0.35rem 0 0;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid var(--c-line);
+  font-size: calc(0.82rem * var(--pv-fs));
+  color: var(--c-sub);
+}
+
+.pv .sz-plan__list { display: grid; gap: 0.75rem; margin: 1.2rem 0 0; padding: 0; list-style: none; }
 .pv .sz-plan__list li {
   position: relative;
   padding-inline-start: 2rem;
-  font-size: calc(0.9rem * var(--pv-fs));
+  font-size: calc(0.88rem * var(--pv-fs));
   line-height: 1.4;
-  --chk-bg: color-mix(in srgb, currentColor 12%, transparent);
-  --chk: color-mix(in srgb, currentColor 45%, transparent);
 }
-.pv .sz-plan[data-hi] .sz-plan__list li { --chk-bg: currentColor; --chk: var(--sz-card-hi); }
 .pv .sz-plan__list li::before,
 .pv .sz-plan__list li::after {
   content: "";
   position: absolute;
   left: 0;
   top: 0.05rem;
-  width: 1.25rem;
+  width: 1.2rem;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: var(--chk-bg);
+  background: var(--c-chk-bg);
 }
 .pv .sz-plan__list li::after {
-  background: var(--chk);
+  background: var(--c-chk);
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 12.5l3.2 3.2L17 9'/%3E%3C/svg%3E") center / 100% no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 12.5l3.2 3.2L17 9'/%3E%3C/svg%3E") center / 100% no-repeat;
 }
 
-@container (min-width: 52rem) {
-  .pv .sz-plans { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.1rem, 2.4cqi, 1.8rem); align-items: start; }
-  .pv .sz-plan[data-hi] { order: 0; margin-top: -0.9rem; padding-bottom: calc(clamp(1.5rem, 4cqi, 2rem) + 0.9rem); }
+/* hátoldal: leírás, címkés szakaszok, ár-doboz */
+.pv .sz-plan__details { margin: 1.1rem 0 0; }
+.pv .sz-plan__details > p { margin: 0 0 0.8rem; font-size: calc(0.86rem * var(--pv-fs)); line-height: 1.55; }
+.pv .sz-plan__details > p:last-child { margin-bottom: 0; }
+.pv .sz-plan__price {
+  display: grid;
+  gap: 0.2rem;
+  margin: 0 0 1rem;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--c-line);
+  border-radius: 0.6rem;
+  text-align: center;
 }
+.pv .sz-plan__price b { font-size: calc(0.9rem * var(--pv-fs)); font-weight: 700; }
+.pv .sz-plan__price span { font-size: calc(0.72rem * var(--pv-fs)); line-height: 1.35; color: var(--c-sub); }
+.pv .sz-plan__details dt {
+  margin-top: 1rem;
+  font-size: calc(0.66rem * var(--pv-fs));
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-sub);
+}
+.pv .sz-plan__details dt:first-child { margin-top: 0; }
+.pv .sz-plan__details dd { margin: 0.3rem 0 0; font-size: calc(0.86rem * var(--pv-fs)); line-height: 1.5; }
 
-/* Az Árak a Szolgáltatások mögött (2026-10-15 óta) zsálya sávra esik: ott a
-   minta színei megfordulnak – világos kártyák, a kiemelt marad a Primary zsálya. */
-.pv[data-mode="light"] .pv-section[data-sec="pricing"][data-stripe="1"] {
-  --sz-card: var(--sz-box);
-  --sz-sw-on: var(--sz-sage);
+/* gomb: a kártya aljára tolva, mindhárom bordó (Blood God) – a szekció egyetlen jele */
+.pv .sz-plan__btn {
+  display: grid;
+  place-items: center;
+  align-self: center;              /* tartalomszéles, középre zárt gomb (Szandi mintája) */
+  min-height: 2.9rem;
+  margin-top: auto;
+  padding: 0.5rem 1.6rem;
+  border: 1.5px solid var(--sz-bd);
+  border-radius: 0.6rem;
+  background: var(--sz-bd);
+  color: var(--sz-pf);
+  font-size: calc(0.9rem * var(--pv-fs));
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.25s var(--ease), color 0.25s var(--ease), border-color 0.25s var(--ease);
+}
+.pv .sz-plan :is(.sz-plan__list, .sz-plan__details) { margin-bottom: 1.8rem; }
+.pv .sz-plan:not([data-hi]) .sz-plan__btn:is(:hover, :focus-visible) { border-color: var(--sz-pf); background: var(--sz-pf); color: var(--sz-bd); }
+.pv .sz-plan[data-hi] .sz-plan__btn:is(:hover, :focus-visible) { border-color: var(--sz-ts); background: var(--sz-ts); }
+.pv .sz-plan__btn:focus-visible { outline: 2px solid var(--c-ink); outline-offset: 3px; }
+
+/* Tágas lapon három oszlop: a két szélső egyforma magas, a középső fent-lent
+   kilóg belőlük (negatív margó) – mindig ez a legnagyobb. */
+@container (min-width: 52rem) {
+  .pv .sz-plans { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.1rem, 2.4cqi, 1.8rem); padding-block: 1.5rem; }
+  .pv .sz-plan[data-hi] { order: 0; margin-block: -1.5rem; }
+  .pv .sz-plan[data-hi] > .sz-plan__face { padding-block: 2.6rem; }
 }
 .pv[data-mode="light"] .pv-section[data-sec="pricing"][data-stripe="1"] .pv-head .pv-eyebrow { color: var(--sz-detail); }
 
@@ -5693,6 +5789,7 @@ iframe { border: 0; }
    Telefonon egymás alatt, tágas lapon három oszlop. Adat: site.json lists.stats
    (név = kártyacím, text = folytatás, tag = apró sor alul).
    ========================================================================== */
+.pv .pv-section[data-sec="stats"] { padding-top: clamp(1rem, 3cqi, 1.75rem); }   /* a lótusz közel üljön a hero íveléséhez */
 .pv .pv-section[data-sec="stats"] > .pv-wrap { display: block; }
 .pv .pv-section[data-sec="stats"] .pv-head {
   position: static;
@@ -5731,23 +5828,45 @@ iframe { border: 0; }
   max-width: 64rem;
   margin: clamp(1.6rem, 5cqi, 2.6rem) auto 0;
 }
+/* Ötszög kártya (Szandi Canva-mintája, 2026-10-16): fent kifelé álló csúcs, a
+   világos szövegpanel alja lefelé csúcsosan belelóg a képbe. --sz-peak a csúcsok
+   magassága. Kép nélkül a zsálya keret látszik (site.js LIST_SECS.stats.blank). */
 .pv .pv-section[data-sec="stats"] .pv-item {
+  --sz-peak: clamp(1rem, 5cqi, 1.6rem);
   display: grid;
-  align-content: center;
-  padding: clamp(1.3rem, 4cqi, 2.2rem) 1.2rem;
+  grid-template-rows: 1fr auto;   /* egy sorban a panelek egyforma magasak */
+  align-items: stretch;
+  gap: 0;
   border: 0;
-  border-radius: var(--sz-leaf) 0;
-  background: var(--sz-box);
-  box-shadow: var(--sz-shadow);
+  background: var(--sz-sage);
+  clip-path: polygon(0 var(--sz-peak), 50% 0, 100% var(--sz-peak), 100% 100%, 0 100%);
   text-align: center;
 }
+.pv .pv-section[data-sec="stats"] .pv-item__body {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  align-content: start;
+  padding: calc(var(--sz-peak) + clamp(1rem, 3cqi, 1.6rem)) 1.2rem calc(var(--sz-peak) + 1.2rem);
+  background: var(--sz-box);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--sz-peak)), 50% 100%, 0 calc(100% - var(--sz-peak)));
+}
+.pv .pv-section[data-sec="stats"] .pv-item__media {
+  order: 1;
+  margin-top: calc(-1 * var(--sz-peak));
+  aspect-ratio: 4 / 3;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.pv .pv-section[data-sec="stats"] .pv-item__media img { width: 100%; height: 100%; object-fit: cover; }
 .pv .pv-section[data-sec="stats"] .pv-item h3 {
   font-size: calc(clamp(1.8rem, 6cqi, 2.6rem) * var(--pv-fs));
   line-height: 1.1;
   font-variant-numeric: normal;
   color: var(--sz-head);
 }
-.pv .pv-section[data-sec="stats"] .pv-item p { margin: 0.5rem 0 0; font-size: calc(0.92rem * var(--pv-fs)); color: var(--pv-text); }
+.pv .pv-section[data-sec="stats"] .pv-item p { margin: 0.5rem 0 0; font-size: calc(0.92rem * var(--pv-fs)); font-style: italic; color: var(--pv-text); }
 .pv .pv-section[data-sec="stats"] .pv-item .sz-tagline { margin-top: 0.3rem; color: var(--sz-detail); }
 @container (min-width: 46rem) {
   .pv .pv-section[data-sec="stats"] .pv-items { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2rem; }

@@ -139,7 +139,8 @@ const LIST_SECS = {
   /* Bizalmi blokkok (pv.css 8.13): ugyanaz a három mező, más megjelenítés.
      `marquee`: a lista kétszer megy ki, az ismétlés adja a varrat nélküli kört. */
   /* Szandi: a „Jó helyen jársz, ha…” kártyák – a címke (tag) apró sorként a szöveg alatt */
-  stats:   { media: false, body: true, tagLine: true },
+  /* blank: kép nélkül nincs színes helykitöltő, a keret saját színe látszik */
+  stats:   { media: true,  body: true, tagLine: true, blank: true },
   reviews: { media: true,  body: true, avatar: true },
   process: { media: false, body: true  },
   logos:   { media: true,  body: false, marquee: true },
@@ -229,6 +230,7 @@ const I18N = {
     "pv.privacy": "Adatkezelési tájékoztató",
     "pv.imprint": "Impresszum",
     "sec.services": "Szolgáltatások",
+    "sec.pricing": "Árak",
     "sec.references": "Referenciák",
     "sec.about": "Rólunk",
     "sec.gallery": "Galéria",
@@ -311,6 +313,7 @@ const I18N = {
     "pv.privacy": "Privacy notice",
     "pv.imprint": "Legal notice",
     "sec.services": "Services",
+    "sec.pricing": "Prices",
     "sec.references": "References",
     "sec.about": "About",
     "sec.gallery": "Gallery",
@@ -809,6 +812,7 @@ function renderLists(c) {
       const img = $("img", li);
       if (!img) return;                          /* videónál a src a markupban van */
       const j = i % items.length;
+      if (cfg.blank && !items[j].image) { img.hidden = true; return; }
       /* ahol felirat kerül a képre (galéria), ott üres az alt – a felolvasó
          különben kétszer mondaná el ugyanazt */
       paintImg(img, items[j].image, j, cfg.cap ? "" : items[j].alt || items[j].name || "",
@@ -869,31 +873,50 @@ function szandiLotus(on) {
   if (lotus && head && lotus.parentNode !== head) head.append(lotus);
 }
 
-/* SZANDI: árcsomag-kártyák (site.json pricing.plans) a tétellista helyett –
-   Szandi „Vizuál” mintája. A szűrő helyén az Egyszeri/Bérlettel kapcsoló áll:
-   két rádiógomb, a váltást a pv.css (:has) intézi, JS-állapot nincs. */
+/* SZANDI: óra-kártyák (site.json pricing.plans) a tétellista helyett – a
+   Szolgáltatások és az Árak összevonva (Szandi mintája, 2026-10-16). Elöl ikon,
+   név, pipás lista, gomb; a „Részletek +” megfordítja a kártyát, hátul a
+   leírás (desc, details) és az ár. A rejtett oldal `inert`: se fókusz, se felolvasás. */
 function szandiPlans(p, list, chips) {
   if (!p?.plans?.length) return;
-  const tg = p.toggle, hasAlt = tg && p.plans.some((x) => x.alt);
-  if (chips) chips.innerHTML = hasAlt ? `
-    <div class="sz-bill">
-      <div class="sz-bill__switch" role="radiogroup" aria-label="Csoportos óra ára">
-        <label><input type="radio" name="sz-bill" value="once" checked><span>${esc(tg.once)}</span></label>
-        <label><input type="radio" name="sz-bill" value="pass" id="sz-bill-pass"><span>${esc(tg.pass)}</span></label>
-      </div>
-      ${tg.badge ? `<span class="sz-bill__badge">${esc(tg.badge)}</span>` : ""}
-    </div>` : "";
-  const price = (x, cls = "") => `<p class="sz-plan__price${cls}"><b>${esc(x.price)}</b> <span>${esc(x.unit || "")}</span></p>`;
+  if (chips) chips.innerHTML = "";
+  const btn = (x) => x.btn ? `<a class="sz-plan__btn" href="${esc(x.btn.href || "#sec-contact")}">${esc(x.btn.label)}</a>` : "";
+  const icon = (x) => x.icon ? `<img class="sz-plan__icon" src="${esc(imgSrc(x.icon))}" alt="" width="256" height="262">` : "";
+  const price = (x) => x.price ? `<p class="sz-plan__price"><b>${esc(x.price)}</b>${x.priceNote ? ` <span>${esc(x.priceNote)}</span>` : ""}</p>` : "";
   list.className = "sz-plans";
-  list.innerHTML = p.plans.map((x) => `
-    <li class="sz-plan"${x.badge ? " data-hi" : ""}>
-      ${x.badge ? `<span class="sz-plan__badge">${esc(x.badge)}</span>` : ""}
-      <h3>${esc(x.name)}</h3>
-      <p class="sz-plan__sub">${esc(x.sub || "")}</p>
-      ${price(x)}${x.alt && hasAlt ? price(x.alt, " sz-plan__price--pass") : ""}
-      ${x.btn ? `<a class="sz-plan__btn" data-style="${esc(x.btn.style || "ghost")}" href="${esc(x.btn.href || "#sec-contact")}">${esc(x.btn.label)}</a>` : ""}
-      <ul class="sz-plan__list">${(x.features || []).map((f) => `<li>${esc(f)}</li>`).join("")}</ul>
+  list.innerHTML = p.plans.map((x, i) => `
+    <li class="sz-plan"${x.hi ? " data-hi" : ""}>
+      <div class="sz-plan__face">
+        ${x.badge ? `<p class="sz-plan__badge">${esc(x.badge)}</p>` : ""}
+        ${x.details?.length || x.desc ? `<button type="button" class="sz-plan__flip" aria-controls="sz-plan-back-${i}">Részletek +</button>` : ""}
+        ${icon(x)}
+        <h3>${esc(x.name)}</h3>
+        <p class="sz-plan__sub">${esc(x.sub || "")}</p>
+        <ul class="sz-plan__list">${(x.features || []).map((f) => `<li>${esc(f)}</li>`).join("")}</ul>
+        ${btn(x)}
+      </div>
+      ${x.details?.length || x.desc ? `
+      <div class="sz-plan__face sz-plan__back" id="sz-plan-back-${i}" inert>
+        <button type="button" class="sz-plan__flip">← Vissza</button>
+        <h3>${esc(x.name)}</h3>
+        <p class="sz-plan__sub">Részletek</p>
+        <div class="sz-plan__details">
+          ${String(x.desc || "").split("\n\n").filter(Boolean).map((p) => `<p>${esc(p)}</p>`).join("")}
+          ${x.details?.length ? `<dl>${x.details.map((d) => `<dt>${esc(d.h)}</dt><dd>${esc(d.t)}</dd>`).join("")}</dl>` : ""}
+        </div>
+        ${price(x)}
+        ${btn(x)}
+      </div>` : ""}
     </li>`).join("");
+  /* fordítás: a kártya kapja az állapotot, a fókusz a másik oldal gombjára ugrik */
+  list.onclick = (e) => {
+    const b = e.target.closest(".sz-plan__flip");
+    if (!b) return;
+    const card = b.closest(".sz-plan"), back = card.toggleAttribute("data-flip");
+    const [front, rear] = $$(":scope > .sz-plan__face", card);
+    front.inert = back; rear.inert = !back;
+    $(".sz-plan__flip", back ? rear : front).focus({ preventScroll: true });
+  };
 }
 
 function applyContent() {
@@ -971,7 +994,7 @@ function applyContent() {
      címre. A felirat mindkét esetben a célból jön – nincs külön szövegmező. */
   const cta2 = $("#pv-cta2");
   if (cta2) {
-    const target = c.cta2 === "route" || SECTION_IDS.includes(c.cta2) ? c.cta2 : "services";
+    const target = c.cta2 === "route" || SECTION_IDS.includes(c.cta2) || EXTRAS.some((x) => x.id === c.cta2) ? c.cta2 : "services";
     if (target === "route") {
       delete cta2.dataset.ctaSec;              /* nem szekcióra mutat */
       cta2.href = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(String(c.address || "").trim())}`;

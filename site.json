@@ -121,19 +121,19 @@
       "stats": [
         {
           "name": "Belevágnál",
-          "text": "a jógázásba, de nem tudod, hogyan.",
-          "tag": "Csoportos · privát",
+          "text": "a jógázásba, de nem tudod hogyan",
+          "tag": "",
           "image": ""
         },
         {
           "name": "Mélyítenéd",
-          "text": "a gyakorlásodat és a tudásodat.",
-          "tag": "Csoportos · privát",
+          "text": "a tudásod és segítség kell",
+          "tag": "",
           "image": ""
         },
         {
-          "name": "A munkahelyen",
-          "text": "jógáznál a csapatoddal.",
+          "name": "Munkahelyi",
+          "text": "csapatodnak keresed a tökéletes mozgásformát",
           "tag": "",
           "image": ""
         }
@@ -164,34 +164,44 @@
     "pricing": {
       "enabled": true,
       "cards": false,
-      "_plans": "SZANDI: árcsomag-kártyák (Szandi „Vizuál” mintája). Ha van plans, az árak szekció ezeket mutatja az items lista helyett. alt = a „Bérlettel” kapcsolóra látszó ár; badge = kiemelt kártya.",
-      "toggle": { "once": "Egyszeri", "pass": "Bérlettel" },
+      "_plans": "SZANDI: óra-kártyák (a Szolgáltatások és az Árak összevonva). Ha van plans, a szekció ezeket mutatja az items lista helyett. hi = kiemelt középső kártya; icon = images/ PNG (mellette a -vonal.png maszk); details = a kártya hátoldala (Részletek +).",
       "plans": [
         {
           "name": "Privát óra",
-          "sub": "Egyéni vagy páros óra",
-          "price": "5–10 000 Ft",
-          "unit": "/ alkalom",
-          "btn": { "label": "Időpontot kérek", "href": "#sec-contact", "style": "ghost" },
-          "features": ["A saját tempódban", "Alapozás vagy a sorozat mélyítése", "Helyszín és időpont egyeztetéssel", "Ár az időtartam és a célok szerint"]
+          "sub": "Egyéni céljaidhoz mérten",
+          "icon": "ikon-privat.png",
+          "price": "5 000 – 10 000 Ft / alkalom",
+          "priceNote": "időtartam és egyéni célok függvényében",
+          "btn": { "label": "Írj nekem", "href": "#sec-contact" },
+          "features": ["A saját tempódban", "Alapozás vagy a sorozat mélyítése", "Helyszín és időpont egyeztetéssel", "Ár az időtartam és a célok szerint"],
+          "details": [
+            { "h": "Kinek való", "t": "Ha négyszemközt kezdenél, vagy a saját gyakorlásodhoz kérnél személyes iránymutatást." },
+            { "h": "Hogyan zajlik", "t": "A te céljaidhoz és tempódhoz igazítom: alapozás vagy a sorozat mélyítése, egyéni vagy páros órán. [időtartam, helyszín]" },
+            { "h": "Hogyan foglalj", "t": "Írj nekem, és megbeszéljük az időpontot. Az ár az időtartamtól és a céloktól függ." }
+          ]
         },
         {
           "name": "Csoportos óra",
           "sub": "Kezdőknek és haladóknak",
-          "badge": "Kedd 17:00",
-          "price": "3 800 Ft",
-          "unit": "/ fő",
-          "alt": { "price": "3 444 Ft", "unit": "/ alkalom" },
-          "btn": { "label": "Órarend és foglalás", "href": "#sec-contact", "style": "light" },
+          "hi": true,
+          "badge": "Itt érdemes kezdeni",
+          "icon": "ikon-csoportos.png",
+          "price": "3 800 Ft / fő",
+          "desc": "Személyesen, Szeged szívében, a Joy of Yoga Stúdióban tartok Ashtanga I. órákat.\n\nA csoportos vezetett Ashtanga órán bárki részt vehet: minden vendég állapotát személyesen mérem fel néhány egyszerű kérdéssel az óra előtt, és ennek figyelembevételével segítem a gyakorlását. Így kezdőként és haladóként is megtalálod a szintednek megfelelő kihívást.",
+          "btn": { "label": "Órarend és foglalás", "href": "#sec-contact" },
           "features": ["Vezetett Ashtanga, Half Led", "Joy of Yoga Stúdió, Szeged", "Szintfelmérés az óra előtt", "Matrac és eszköz a stúdióban", "Bérlet: 3, 6 vagy 9 alkalom"]
         },
         {
           "name": "Irodai jóga",
           "sub": "Cégeknek, csapatoknak",
-          "price": "Egyedi",
-          "unit": "/ ajánlat szerint",
-          "btn": { "label": "Árajánlatot kérek", "href": "#sec-contact", "style": "dark" },
-          "features": ["A munkahelyeden, akár a tárgyalóban", "Átöltözés nélkül", "Nyújtás és légzés az ülés ellen", "Időpont és létszám egyeztetéssel"]
+          "icon": "ikon-irodai.png",
+          "btn": { "label": "Árajánlatot kérek", "href": "#sec-contact" },
+          "features": ["A munkahelyeden, akár a tárgyalóban", "Átöltözés nélkül", "Nyújtás és légzés az ülés ellen", "Időpont és létszám egyeztetéssel"],
+          "details": [
+            { "h": "Kinek való", "t": "Cégeknek és csapatoknak, akiknek a munkanapjába mozgás és lazítás kell." },
+            { "h": "Hogyan zajlik", "t": "A munkahelyeden, akár a tárgyalóban, átöltözés nélkül: nyújtás és légzés az ülés ellen. [időtartam]" },
+            { "h": "Így kezdődik", "t": "Árajánlatot kérsz, egyeztetünk időpontról és létszámról, aztán jön az első óra." }
+          ]
         }
       ],
       "items": [
@@ -240,7 +250,7 @@
       ]
     },
     "hoursShow": false,
-    "cta2": "services",
+    "cta2": "pricing",
     "booking": {
       "enabled": false,
       "services": [],
@@ -251,7 +261,7 @@
     "references": [],
     "texts": {
       "pv.cta": "Jelentkezem",
-      "pv.contactTitle": "Gyere el egy keddi órára",
+      "pv.contactTitle": "Találkozzunk a stúdióban, a munkahelyen vagy egyéni helyszínen",
       "pv.lblAddress": "A stúdió címe",
       "sec.about": "Rólam",
       "pv.aboutEyebrow": "Rólam",
@@ -260,10 +270,11 @@
       "pv.servicesEyebrow": "Szolgáltatások",
       "pv.servicesTitle": "Jógaórák",
       "pv.servicesLead": "Stúdióban, az irodádban vagy négyszemközt – válaszd, ami a hetedbe illik.",
-      "pv.pricingEyebrow": "Árak",
-      "pv.pricingTitle": "Árak",
+      "pv.pricingEyebrow": "Szolgáltatások",
+      "pv.pricingTitle": "Szolgáltatások",
+      "sec.pricing": "Szolgáltatások",
       "sz.pricingHead": "Jóga, ahogy neked jó",
-      "sz.pricingLead": "Csoportban, négyszemközt vagy a munkahelyeden. Az első órára bérlet nélkül is jöhetsz.",
+      "sz.pricingLead": "Csoportban, egyénileg vagy a munkahelyeden. Az első órára bérlet nélkül is jöhetsz.",
       "sec.faq": "GYIK",
       "pv.faqTitle": "Gyakori kérdések",
       "pv.statsEyebrow": "",
@@ -345,7 +356,7 @@
     },
     {
       "id": "services",
-      "on": true,
+      "on": false,
       "nav": true,
       "plate": false,
       "sub": []
