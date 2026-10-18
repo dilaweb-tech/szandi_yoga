@@ -13,7 +13,7 @@
     "seoDescription": "Keddenként 17:00-kor vezetett Ashtanga óra a szegedi Joy of Yoga Stúdióban, kezdőknek is. Mellette irodai jóga cégeknek és privát óra.",
     "heroTitle": "Mozdulat a *légzés* ütemére",
     "heroEyebrow": "Joy of Yoga Stúdió · Szeged",
-    "heroImage": "gyertya-kezben.jpg",
+    "heroImage": "Yoga1.2.jpg",
     "social": { "instagram": "https://www.instagram.com/szandi_yoga" },
     "heroQuote": {
       "text": "„Gyakorolj, a többi jön magától.”",
@@ -40,11 +40,11 @@
         "alt": "Két jógapárna és három gyertya a stúdió fapadlóján"
       },
       {
-        "spot": "Jógaóra · Irodai jóga",
-        "src": "gyertya-kezben.jpg",
+        "spot": "Nyitókép",
+        "src": "Yoga1.2.jpg",
         "focus": "center",
         "media": "",
-        "alt": "Égő gyertya egy nyitott tenyéren, sötét háttér előtt"
+        "alt": "Jógázó harcos pózban a Joy of Yoga Stúdióban"
       },
       {
         "spot": "Nyitókép · Bemutatkozás",
@@ -123,38 +123,47 @@
           "name": "Belevágnál",
           "text": "a jógázásba, de nem tudod hogyan",
           "tag": "",
-          "image": ""
+          "image": "Yoga1.jpg",
+          "alt": "Jógázó harcos pózban a Joy of Yoga Stúdióban"
         },
         {
           "name": "Mélyítenéd",
           "text": "a tudásod és segítség kell",
           "tag": "",
-          "image": ""
+          "image": "lotusz.jpg",
+          "alt": "Lótuszvirág"
         },
         {
           "name": "Munkahelyi",
           "text": "csapatodnak keresed a tökéletes mozgásformát",
           "tag": "",
-          "image": ""
+          "image": "joga-parna-gyertya.jpg",
+          "alt": "Jógapárna és gyertya a stúdióban"
         }
       ],
       "reviews": [],
       "process": [
         {
-          "name": "Regisztrálj a stúdiónál",
-          "text": "Jelentkezni a Joy of Yoga online foglalási rendszerében lehet. Ha elakadsz, hívd a stúdiót.",
+          "name": "Gyere el a stúdióba",
+          "text": "Érkezz 10–15 perccel előbb: lesz időd átöltözni. A matrac és az eszközök biztosítottak.",
           "tag": "",
           "image": ""
         },
         {
-          "name": "Érkezz 10–15 perccel előbb",
-          "text": "Így lesz időd átöltözni és lecsendesedni. A matrac és az eszközök már ott várnak.",
+          "name": "Ráhangolódás",
+          "text": "Az óra első 1–2 percében megérkezünk a matracunkra, és tudatosítjuk az aznapi gyakorlást.",
           "tag": "",
           "image": ""
         },
         {
-          "name": "Kövesd a számolást",
-          "text": "Az óra a légzés ütemére halad. Ha elfáradsz, gyermekpózban megpihenhetsz, és onnan csatlakozol vissza.",
+          "name": "Jógázol",
+          "text": "Csak magadra kell figyelned. A tempó adott, de bármikor megállhatsz, ha jólesik.",
+          "tag": "",
+          "image": ""
+        },
+        {
+          "name": "Relaxáció",
+          "text": "A záró pózokat kivétel nélkül relaxáció követi, a teljes hatás érdekében.",
           "tag": "",
           "image": ""
         }
@@ -279,6 +288,9 @@
       "pv.faqTitle": "Gyakori kérdések",
       "pv.statsEyebrow": "",
       "pv.statsTitle": "Jó helyen jársz, ha…",
+      "pv.processEyebrow": "Az órákról",
+      "pv.processTitle": "Milyen egy óra nálam?",
+      "sz.processNote": "90 perc · kezdőként is · bármit kihagyhatsz",
       "sec.contact": "Kapcsolat"
     }
   },
@@ -304,7 +316,7 @@
     "radius": 0,
     "layout": "split",
     "hero": "banner",
-    "secHead": "side",
+    "secHead": "stack",
     "edge": "none",
     "flow": "stack",
     "cols": 3,
@@ -363,13 +375,21 @@
     },
     {
       "id": "about",
-      "on": true,
+      "on": false,
       "nav": true,
       "plate": false,
       "sub": []
     },
     {
       "id": "process",
+      "on": true,
+      "nav": false,
+      "plate": false,
+      "sub": []
+    },
+    {
+      "_id": "SZANDI: egyéni és irodai óra – sötét tábla a Menet után (index.html, sec-custom)",
+      "id": "custom",
       "on": true,
       "nav": false,
       "plate": false,

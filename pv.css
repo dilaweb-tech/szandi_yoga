@@ -2544,6 +2544,12 @@ iframe { border: 0; }
    ELÉ: a hero stacking-kontextusát feloldjuk, a kép és a fátyol a .pv-bg alá,
    a szöveg fölé. A többi szekció a DOM-sorrend miatt továbbra is fölötte ül. */
 .pv[data-hero="banner"] #pv-hero-slides > :nth-child(n + 2) { display: none; }
+/* a hero majdnem kitölti az első képernyőt: az alatta lévő szekció a hajtásnál
+   kezd, így a belépő animációja görgetéskor az elejétől játszódik le */
+.pv[data-hero="banner"] .pv-hero { display: grid; min-height: 85svh; }
+/* az auto margós grid-elem tartalomszélességre zsugorodna – a szöveg maradjon
+   balra, széles nézetben is a fejléc logójához igazodva */
+.pv[data-hero="banner"] .pv-hero__inner { width: 100%; margin-inline: 0 auto; }
 /* telefonon a szöveg a teljes szélességen fut, a sötét fotórészen is: ott egyenletes fátyol kell */
 .pv[data-hero="banner"] .pv-hero::after {
   background: linear-gradient(100deg, color-mix(in srgb, var(--pv-bg) 82%, transparent) 25%, color-mix(in srgb, var(--pv-bg) 60%, transparent));
@@ -2552,6 +2558,39 @@ iframe { border: 0; }
   .pv[data-hero="banner"] .pv-hero::after {
     background: linear-gradient(100deg, var(--pv-bg) 8%, color-mix(in srgb, var(--pv-bg) 55%, transparent) 55%, transparent 95%);
   }
+}
+/* világos módban a krémszínű fátyol tejes homályt tett a fotóra: csak a kép
+   bal oldalát fedi, és a szöveg jobb szélétől lágyan, sok lépcsős (ease-in-out
+   alakú) átmenettel cseng le – a két-pontos lineáris átmenet éles sávot rajzolt.
+   A szöveghez kötjük (nem a hero-hoz), így bármely szélességen a szöveg széléig
+   ér; felül, alul és balra a hero overflow-ja vágja le. */
+.pv[data-mode="light"][data-hero="banner"] .pv-hero::after { content: none; }
+.pv[data-mode="light"][data-hero="banner"] .pv-hero__copy { justify-self: start; }   /* a fátyol a szöveg szélességét kövesse, ne a sávét */
+.pv[data-mode="light"][data-hero="banner"] .pv-hero__copy::after {
+  --sz-veil: 66%;    /* a fátyol erőssége a szöveg mögött */
+  --sz-fade: 20rem;  /* a lecsengés hossza; 2rem-mel a szöveg széle előtt indul */
+  content: "";
+  position: absolute;
+  inset: -50rem calc(2rem - var(--sz-fade)) -50rem -100vw;
+  z-index: -1;
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--pv-bg) calc(var(--sz-veil) * 1), transparent) calc(100% - var(--sz-fade) * 1.000),
+    color-mix(in srgb, var(--pv-bg) calc(var(--sz-veil) * 0.987), transparent) calc(100% - var(--sz-fade) * 0.919),
+    color-mix(in srgb, var(--pv-bg) calc(var(--sz-veil) * 0.951), transparent) calc(100% - var(--sz-fade) * 0.845),
+    color-mix(in srgb, var(--pv-bg) calc(var(--sz-veil) * 0.896), transparent) calc(100% - var(--sz-fade) * 0.775),
+    color-mix(in srgb, var(--pv-bg) calc(var(--sz-veil) * 0.825), transparent) calc(100% - var(--sz-fade) * 0.710),
+    color-mix(in srgb, var(--pv-bg) calc(var(--sz-veil) * 0.741), transparent) calc(100% - var(--sz-fade) * 0.647),
+    color-mix(in srgb, var(--pv-bg) calc(var(--sz-veil) * 0.648), transparent) calc(100% - var(--sz-fade) * 0.588),
+    color-mix(in srgb, var(--pv-bg) calc(var(--sz-veil) * 0.55), transparent) calc(100% - var(--sz-fade) * 0.529),
+    color-mix(in srgb, var(--pv-bg) calc(var(--sz-veil) * 0.45), transparent) calc(100% - var(--sz-fade) * 0.471),
+    color-mix(in srgb, var(--pv-bg) calc(var(--sz-veil) * 0.352), transparent) calc(100% - var(--sz-fade) * 0.412),
+    color-mix(in srgb, var(--pv-bg) calc(var(--sz-veil) * 0.259), transparent) calc(100% - var(--sz-fade) * 0.353),
+    color-mix(in srgb, var(--pv-bg) calc(var(--sz-veil) * 0.175), transparent) calc(100% - var(--sz-fade) * 0.290),
+    color-mix(in srgb, var(--pv-bg) calc(var(--sz-veil) * 0.104), transparent) calc(100% - var(--sz-fade) * 0.225),
+    color-mix(in srgb, var(--pv-bg) calc(var(--sz-veil) * 0.049), transparent) calc(100% - var(--sz-fade) * 0.155),
+    color-mix(in srgb, var(--pv-bg) calc(var(--sz-veil) * 0.013), transparent) calc(100% - var(--sz-fade) * 0.081),
+    transparent);
+  pointer-events: none;
 }
 .pv[data-bg-art="candle"][data-hero="banner"] .pv-bg { z-index: 1; }
 .pv[data-bg-art="candle"][data-hero="banner"] .pv-hero { z-index: auto; }
@@ -2567,6 +2606,9 @@ iframe { border: 0; }
 .pv[data-hero="banner"] .pv-section.is-second::before {
   background: color-mix(in srgb, var(--pv-primary) 12%, var(--pv-bg));
 }
+/* a hullám a hero szövegrétege (és a fátyla, z-index: 2) fölött üljön, különben
+   a fátyol rálóg a hullám bal felére */
+.pv[data-hero="banner"] .pv-section.is-second { z-index: 3; }
 /* A meditáló figura a nyitóképen még nincs ott: az első görgetésre úszik be.
    A jelző a fejléc .is-scrolled osztálya (site.js, 8px után) – a scroll()
    idővonal itt nem jó, a .pv-fx overflow:hidden-je maga is görgetődoboz. */
@@ -2710,11 +2752,11 @@ iframe { border: 0; }
 /* Mélység: a világos oldal a sáv ELÉ kerül, és árnyékot vet rá. Az árnyék a
    sávon kívüli tartomány elmosott, a sáv felé tolt foltja – idomonként ugyanaz a
    path, páros-páratlan kitöltéssel kivonva egy nagy téglalapból. */
-.pv[data-divider="arc"] { --pv-shade: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cfilter id='b' filterUnits='userSpaceOnUse' x='-400' y='-500' width='2000' height='800'%3E%3CfeGaussianBlur stdDeviation='3 10'/%3E%3C/filter%3E%3Cpath filter='url(%23b)' fill-opacity='.26' fill-rule='evenodd' transform='translate(0 7)' d='M-300,-300H1500V100H-300Z M0,100 C320,8 880,8 1200,100 Z'/%3E%3C/svg%3E"); }
-.pv[data-divider="wave"] { --pv-shade: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cfilter id='b' filterUnits='userSpaceOnUse' x='-400' y='-500' width='2000' height='800'%3E%3CfeGaussianBlur stdDeviation='3 10'/%3E%3C/filter%3E%3Cpath filter='url(%23b)' fill-opacity='.26' fill-rule='evenodd' transform='translate(0 7)' d='M-300,-300H1500V100H-300Z M0,64 C180,112 320,16 600,52 C880,88 1020,8 1200,58 L1200,100 L0,100 Z'/%3E%3C/svg%3E"); }
-.pv[data-divider="slant"] { --pv-shade: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cfilter id='b' filterUnits='userSpaceOnUse' x='-400' y='-500' width='2000' height='800'%3E%3CfeGaussianBlur stdDeviation='3 10'/%3E%3C/filter%3E%3Cpath filter='url(%23b)' fill-opacity='.26' fill-rule='evenodd' transform='translate(0 7)' d='M-300,-300H1500V100H-300Z M0,100 L1200,14 L1200,100 Z'/%3E%3C/svg%3E"); }
-.pv[data-divider="zigzag"] { --pv-shade: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cfilter id='b' filterUnits='userSpaceOnUse' x='-400' y='-500' width='2000' height='800'%3E%3CfeGaussianBlur stdDeviation='3 10'/%3E%3C/filter%3E%3Cpath filter='url(%23b)' fill-opacity='.26' fill-rule='evenodd' transform='translate(0 7)' d='M-300,-300H1500V100H-300Z M0,100 L0,58 L75,22 L150,58 L225,22 L300,58 L375,22 L450,58 L525,22 L600,58 L675,22 L750,58 L825,22 L900,58 L975,22 L1050,58 L1125,22 L1200,58 L1200,100 Z'/%3E%3C/svg%3E"); }
-.pv[data-divider="torn"] { --pv-shade: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cfilter id='b' filterUnits='userSpaceOnUse' x='-400' y='-500' width='2000' height='800'%3E%3CfeGaussianBlur stdDeviation='3 10'/%3E%3C/filter%3E%3Cpath filter='url(%23b)' fill-opacity='.26' fill-rule='evenodd' transform='translate(0 7)' d='M-300,-300H1500V100H-300Z M0,100 L0,52 L38,60 L71,47 L112,58 L150,44 L196,55 L231,49 L268,62 L310,46 L352,57 L389,43 L433,55 L470,50 L515,63 L552,48 L598,58 L640,45 L676,56 L719,50 L758,61 L797,46 L842,57 L880,44 L921,55 L963,49 L1002,62 L1044,47 L1083,58 L1121,45 L1162,56 L1200,50 L1200,100 Z'/%3E%3C/svg%3E"); }
+.pv[data-divider="arc"] { --pv-shade: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cfilter id='b' filterUnits='userSpaceOnUse' x='-400' y='-500' width='2000' height='800'%3E%3CfeGaussianBlur stdDeviation='3 10'/%3E%3C/filter%3E%3Cpath filter='url(%23b)' fill-opacity='.312' fill-rule='evenodd' transform='translate(0 7)' d='M-300,-300H1500V100H-300Z M0,100 C320,8 880,8 1200,100 Z'/%3E%3C/svg%3E"); }
+.pv[data-divider="wave"] { --pv-shade: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cfilter id='b' filterUnits='userSpaceOnUse' x='-400' y='-500' width='2000' height='800'%3E%3CfeGaussianBlur stdDeviation='3 10'/%3E%3C/filter%3E%3Cpath filter='url(%23b)' fill-opacity='.312' fill-rule='evenodd' transform='translate(0 7)' d='M-300,-300H1500V100H-300Z M0,64 C180,112 320,16 600,52 C880,88 1020,8 1200,58 L1200,100 L0,100 Z'/%3E%3C/svg%3E"); }
+.pv[data-divider="slant"] { --pv-shade: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cfilter id='b' filterUnits='userSpaceOnUse' x='-400' y='-500' width='2000' height='800'%3E%3CfeGaussianBlur stdDeviation='3 10'/%3E%3C/filter%3E%3Cpath filter='url(%23b)' fill-opacity='.312' fill-rule='evenodd' transform='translate(0 7)' d='M-300,-300H1500V100H-300Z M0,100 L1200,14 L1200,100 Z'/%3E%3C/svg%3E"); }
+.pv[data-divider="zigzag"] { --pv-shade: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cfilter id='b' filterUnits='userSpaceOnUse' x='-400' y='-500' width='2000' height='800'%3E%3CfeGaussianBlur stdDeviation='3 10'/%3E%3C/filter%3E%3Cpath filter='url(%23b)' fill-opacity='.312' fill-rule='evenodd' transform='translate(0 7)' d='M-300,-300H1500V100H-300Z M0,100 L0,58 L75,22 L150,58 L225,22 L300,58 L375,22 L450,58 L525,22 L600,58 L675,22 L750,58 L825,22 L900,58 L975,22 L1050,58 L1125,22 L1200,58 L1200,100 Z'/%3E%3C/svg%3E"); }
+.pv[data-divider="torn"] { --pv-shade: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cfilter id='b' filterUnits='userSpaceOnUse' x='-400' y='-500' width='2000' height='800'%3E%3CfeGaussianBlur stdDeviation='3 10'/%3E%3C/filter%3E%3Cpath filter='url(%23b)' fill-opacity='.312' fill-rule='evenodd' transform='translate(0 7)' d='M-300,-300H1500V100H-300Z M0,100 L0,52 L38,60 L71,47 L112,58 L150,44 L196,55 L231,49 L268,62 L310,46 L352,57 L389,43 L433,55 L470,50 L515,63 L552,48 L598,58 L640,45 L676,56 L719,50 L758,61 L797,46 L842,57 L880,44 L921,55 L963,49 L1002,62 L1044,47 L1083,58 L1121,45 L1162,56 L1200,50 L1200,100 Z'/%3E%3C/svg%3E"); }
 
 /* Az idom a sáv SZÍNÉT viszi tovább a szomszéd szekció belső margójára: fölé
    az ál-elem eredeti állásában, alá függőlegesen tükrözve. Új idom felvételéhez
@@ -2763,7 +2805,7 @@ iframe { border: 0; }
       animation-name: var(--pv-rv);
       animation-duration: auto;
       animation-timing-function: linear;
-      animation-fill-mode: both;
+      animation-fill-mode: backwards;   /* nem both: a megtartott végállapot külön rétegen tartotta, a szöveg homályos lett */
       animation-timeline: view();
       animation-range: entry 4% cover 24%;
     }
@@ -4333,20 +4375,31 @@ iframe { border: 0; }
 /* Ahogy fogy róla a szőnyeg, a henger vékonyodik – az átmérő a maradék hossz
    gyökével arányos: d = √(0,2² + (1,4² − 0,2²)·(1 − p)) · roll – és egyre
    gyorsabban forog (fordulat = ∫ út / kerület, 8 fordulatra normálva).
-   Tíz fázis: a görbe sima, nem érződnek a töréspontok. */
+   Zárt alakban: fordulat = 8 · (1,4 − d/roll) / 1,2.
+   Húsz fázis: a görbe sima, nem érződnek a töréspontok. */
 @property --pv-mat-d { syntax: "<length>"; inherits: true; initial-value: 0px; }
 @property --pv-mat-turn { syntax: "<number>"; inherits: true; initial-value: 0; }
 @keyframes pv-mat-roll {
   0%   { --pv-mat-d: calc(var(--pv-mat-roll) * 1.4);   --pv-mat-turn: 0; }
-  10%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1.33);  --pv-mat-turn: 0.44; }
-  20%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1.255); --pv-mat-turn: 0.92; }
-  30%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1.176); --pv-mat-turn: 1.41; }
-  40%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1.092); --pv-mat-turn: 1.95; }
-  50%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1);     --pv-mat-turn: 2.53; }
-  60%  { --pv-mat-d: calc(var(--pv-mat-roll) * 0.899); --pv-mat-turn: 3.17; }
-  70%  { --pv-mat-d: calc(var(--pv-mat-roll) * 0.785); --pv-mat-turn: 3.9; }
-  80%  { --pv-mat-d: calc(var(--pv-mat-roll) * 0.651); --pv-mat-turn: 4.75; }
-  90%  { --pv-mat-d: calc(var(--pv-mat-roll) * 0.482); --pv-mat-turn: 5.85; }
+  5%   { --pv-mat-d: calc(var(--pv-mat-roll) * 1.365); --pv-mat-turn: 0.23; }
+  10%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1.33);  --pv-mat-turn: 0.47; }
+  15%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1.293); --pv-mat-turn: 0.71; }
+  20%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1.255); --pv-mat-turn: 0.96; }
+  25%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1.217); --pv-mat-turn: 1.22; }
+  30%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1.176); --pv-mat-turn: 1.49; }
+  35%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1.135); --pv-mat-turn: 1.77; }
+  40%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1.092); --pv-mat-turn: 2.05; }
+  45%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1.047); --pv-mat-turn: 2.35; }
+  50%  { --pv-mat-d: calc(var(--pv-mat-roll) * 1);     --pv-mat-turn: 2.67; }
+  55%  { --pv-mat-d: calc(var(--pv-mat-roll) * 0.951); --pv-mat-turn: 2.99; }
+  60%  { --pv-mat-d: calc(var(--pv-mat-roll) * 0.899); --pv-mat-turn: 3.34; }
+  65%  { --pv-mat-d: calc(var(--pv-mat-roll) * 0.844); --pv-mat-turn: 3.71; }
+  70%  { --pv-mat-d: calc(var(--pv-mat-roll) * 0.785); --pv-mat-turn: 4.1; }
+  75%  { --pv-mat-d: calc(var(--pv-mat-roll) * 0.721); --pv-mat-turn: 4.53; }
+  80%  { --pv-mat-d: calc(var(--pv-mat-roll) * 0.651); --pv-mat-turn: 4.99; }
+  85%  { --pv-mat-d: calc(var(--pv-mat-roll) * 0.573); --pv-mat-turn: 5.52; }
+  90%  { --pv-mat-d: calc(var(--pv-mat-roll) * 0.482); --pv-mat-turn: 6.12; }
+  95%  { --pv-mat-d: calc(var(--pv-mat-roll) * 0.369); --pv-mat-turn: 6.87; }
   100% { --pv-mat-d: calc(var(--pv-mat-roll) * 0.2);   --pv-mat-turn: 8; }
 }
 /* az utolsó szakaszban, már vékonyan, elfogy (nyugalomban eleve nincs ott) */
@@ -4732,7 +4785,7 @@ iframe { border: 0; }
   max-width: 34rem;
   padding: 0.3rem clamp(1rem, 4cqi, 1.8rem);
   border: 0;
-  border-radius: calc(var(--pv-radius) * 1.1);
+  border-radius: var(--sz-leaf) 0;   /* levél, mint a mellette álló órarend-kártya */
   background: var(--sz-box);
   box-shadow: var(--sz-shadow);
 }
@@ -4784,6 +4837,7 @@ iframe { border: 0; }
   margin: 1rem 0 0;
   max-width: none;
   padding: 0.6rem 0;
+  text-align: start;             /* a középre zárt fej ne tolja el az ikontól */
 }
 .pv .sz-addr > * { grid-column: 2; }
 .pv .sz-addr::before {
@@ -4801,23 +4855,24 @@ iframe { border: 0; }
 .pv .sz-addr span { font-size: calc(0.7rem * var(--pv-fs)); letter-spacing: 0.08em; text-transform: uppercase; color: var(--sz-detail); }
 .pv .sz-addr a { font-weight: 500; line-height: 1.4; color: var(--sz-head); text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); text-underline-offset: 0.2em; }
 .pv .sz-addr a::after { content: ""; position: absolute; inset: 0; }
-/* Kapcsolat-fej (Szandi, 2026-10-16): a felülcím és a cím kiszabadul a jobb
-   hasábból, és a szekció tetején, középen áll – fölötte a nyomdai ornamens
-   (ugyanaz a forma, mint a tervező `ornament` jegyénél). A .pv-head
-   `display: contents`, így a gyerekei a burok rácsába kerülnek. */
-.pv .pv-section.pv-contact > .pv-wrap > .pv-head { display: contents; }
-.pv .pv-section.pv-contact .pv-head > :is(.pv-eyebrow, h2) { justify-self: center; text-align: center; }
-.pv .pv-section.pv-contact .pv-head > .pv-eyebrow {
+/* a Rólam kollázsának lótusz-árnya jobbra kilógott: a lap vízszintesen görgött */
+.pv .pv-about { overflow-x: clip; }
+/* Szekciófej (Szandi, 2026-10-18: „mindegyik szekcióra”): a felülcím és a cím
+   középen áll, a felülcím fölött a nyomdai ornamens (ugyanaz a forma, mint a
+   tervező `ornament` jegyénél). A Rólam dobozában ugyanígy; a hero kimarad. */
+.pv .pv-section .pv-head { align-items: center; text-align: center; }
+.pv .pv-section :is(.pv-head, .pv-about__copy) > .pv-eyebrow {
   display: grid;
   justify-items: center;
   gap: 0.9rem;
   margin: 0;
-  font-size: calc(1.05rem * var(--pv-fs));
+  font-size: calc(clamp(0.82rem, 2.6cqi, 1.05rem) * var(--pv-fs));   /* telefonon egy sorban férjen ki */
   font-weight: 600;
-  letter-spacing: 0.32em;
+  letter-spacing: clamp(0.2em, 0.6cqi, 0.32em);
   color: var(--sz-head);
 }
-.pv .pv-section.pv-contact .pv-head > .pv-eyebrow::before {
+.pv .pv-section .pv-about__copy > h2 { text-align: center; }
+.pv .pv-section :is(.pv-head, .pv-about__copy) > .pv-eyebrow::before {
   content: "";
   width: 6.5rem;
   height: 1.2rem;
@@ -4827,7 +4882,10 @@ iframe { border: 0; }
   -webkit-mask: var(--m) center / contain no-repeat;
   mask: var(--m) center / contain no-repeat;
 }
-.pv .pv-section.pv-contact .pv-head > .pv-eyebrow .pv-dot { display: none; }
+.pv .pv-section :is(.pv-head, .pv-about__copy) > .pv-eyebrow .pv-dot { display: none; }
+/* Kapcsolat: a .pv-head `display: contents`, így a gyerekei a burok rácsába kerülnek */
+.pv .pv-section.pv-contact > .pv-wrap > .pv-head { display: contents; }
+.pv .pv-section.pv-contact .pv-head > :is(.pv-eyebrow, h2) { justify-self: center; text-align: center; }
 .pv .pv-section.pv-contact .pv-head > h2 {
   max-width: 34rem;
   margin: 0.4rem 0 clamp(0.6rem, 2cqi, 1.4rem);
@@ -4838,6 +4896,8 @@ iframe { border: 0; }
 .pv .pv-section.pv-contact .pv-head > .sz-week { margin-top: 0; }
 @container (min-width: 52rem) {
   .pv[data-sec-head] .pv-section.pv-contact[data-stripe] > .pv-wrap:has(> .pv-head) {
+    display: grid;   /* a rácsot eddig a side-fej adta; stack fejnél is kell */
+    gap: 0 clamp(1.6rem, 4cqi, 3.6rem);
     grid-template-columns: minmax(0, 1fr) minmax(0, 21rem);
     align-items: start;
   }
@@ -5297,6 +5357,15 @@ iframe { border: 0; }
 /* a lótusz a Szolgáltatások alján, egészében – 40%-on a színes Árak-sáv takarta.
    ponytail: a lap magasságának %-a; ha a szekció-sorrend változik, újra kell lőni */
 .pv[data-bg-art="candle"] .pv-bg i:nth-child(2) { top: 32%; }
+/* a háttér-lótusz a lélegző .sz-lotus kidolgozott rajza (hét hegyes szirom, erezet,
+   tőárnyék): az áttetsző szirmok egymásra fedve adják a mélységet. Zsályában,
+   erősebben, mint a többi háttérjel – de háttér marad. */
+.pv[data-bg-art="candle"] .pv-bg i:nth-child(2) {
+  --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 56'%3E%3Cellipse cx='0' cy='3' rx='30' ry='2.4' opacity='.3'/%3E%3Cg fill-opacity='.2' stroke='%23000' stroke-width='.7' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath transform='rotate(-53)' d='M0 0C-9-8-10-22 0-32C10-22 9-8 0 0ZM0-4V-27'/%3E%3Cpath transform='rotate(53)' d='M0 0C-9-8-10-22 0-32C10-22 9-8 0 0ZM0-4V-27'/%3E%3Cpath transform='rotate(-32)' d='M0 0C-11-10-12-27 0-39C12-27 11-10 0 0ZM0-4V-33'/%3E%3Cpath transform='rotate(32)' d='M0 0C-11-10-12-27 0-39C12-27 11-10 0 0ZM0-4V-33'/%3E%3Cpath transform='rotate(-14)' d='M0 0C-12-11-13-30 0-43C13-30 12-11 0 0ZM0-4V-37'/%3E%3Cpath transform='rotate(14)' d='M0 0C-12-11-13-30 0-43C13-30 12-11 0 0ZM0-4V-37'/%3E%3Cpath d='M0 0C-13-12-13-32 0-46C13-32 13-12 0 0ZM0-4V-40'/%3E%3C/g%3E%3C/svg%3E");
+  background: linear-gradient(200deg, var(--sz-sage), color-mix(in srgb, var(--sz-sage) 55%, transparent) 90%);
+  opacity: 0.45;
+}
+.pv[data-bg-art="candle"][data-bg-motion][data-mode="dark"] .pv-bg i:nth-child(2) { opacity: 0.28; }
 .pv[data-bg-art="candle"][data-bg-motion] .pv-bg::before,
 .pv[data-bg-art="candle"][data-bg-motion] .pv-bg::after { content: none; }
 
@@ -5371,7 +5440,7 @@ iframe { border: 0; }
       animation-name: var(--pv-rv);
       animation-duration: auto;
       animation-timing-function: linear;
-      animation-fill-mode: both;
+      animation-fill-mode: backwards;   /* nem both: a megtartott végállapot külön rétegen tartotta, a szöveg homályos lett */
       animation-timeline: view();
       animation-range: entry 4% cover 24%;
     }
@@ -5391,23 +5460,31 @@ iframe { border: 0; }
 /* a Számokban közvetlenül a nyitókép alatt áll: betöltéskor félig látszik,
    ott a halványítás fakónak hat – teljes színnel áll, mint a hero */
 .pv .pv-section[data-sec="stats"] .pv-head { animation: none; }
-/* A három kártya viszont beúszik: a bal balról, a jobb jobbról, a középső
-   alulról – telefonon egymás alatt is ugyanígy. Csak a mozdulat cserélődik, az
-   ütem a közös 8.11-es szabályé. Az oldalról érkező kártya ne tolja ki a lapot. */
-.pv .pv-section[data-sec="stats"] { overflow-x: clip; }
-.pv .pv-section[data-sec="stats"] .pv-item:nth-child(1) { --pv-rv: sz-rv-from-l; }
-.pv .pv-section[data-sec="stats"] .pv-item:nth-child(2) { --pv-rv: sz-rv-from-b; }
-.pv .pv-section[data-sec="stats"] .pv-item:nth-child(3) { --pv-rv: sz-rv-from-r; }
+/* OLDALRÓL BEÚSZÓ elemek (Szandi, 2026-10-18): a Számok három kártyája (bal
+   balról, közép alulról, jobb jobbról), a Kapcsolat listája (balról) és
+   órarendje (jobbról), a GYIK kérdései felváltva. NEM görgetéshez kötött:
+   amikor az elem a képbe ér, a site.js (szandiReveal) `is-in`-t tesz rá, és
+   az átmenet magától végigfut – görgetés közben sem áll meg félúton. Az
+   oldalról érkező elem ne tolja ki a lapot. */
+.pv :is(.pv-section[data-sec="stats"], .pv-section[data-sec="faq"], .pv-contact) { overflow-x: clip; }
+.pv :is(.pv-section[data-sec="stats"] .pv-item, .pv-contact__list, .pv-contact__list li, .sz-week, .pv-faq) { animation: none; }
 @media (prefers-reduced-motion: no-preference) {
-  /* tartalék (site.js) ugyanerről az oldalról */
-  .pv .pv-section[data-sec="stats"] .pv-item.sz-rv:not(.is-in) { opacity: 0; scale: none; }
-  .pv .pv-section[data-sec="stats"] .pv-item.sz-rv:not(.is-in):nth-child(1) { translate: -3rem 0; }
-  .pv .pv-section[data-sec="stats"] .pv-item.sz-rv:not(.is-in):nth-child(2) { translate: 0 3rem; }
-  .pv .pv-section[data-sec="stats"] .pv-item.sz-rv:not(.is-in):nth-child(3) { translate: 3rem 0; }
+  .pv .sz-rv:where(.pv-section[data-sec="stats"] .pv-item, .pv-contact__list, .sz-week, .pv-faq) {
+    transition: opacity 0.5s var(--ease), translate 0.9s var(--ease), scale 0.9s var(--ease), rotate 0.9s var(--ease);
+  }
+  .pv .sz-rv:not(.is-in):where(.pv-section[data-sec="stats"] .pv-item, .pv-contact__list, .sz-week, .pv-faq) {
+    opacity: 0; scale: 0.9; translate: -7rem 0; rotate: -3deg;
+  }
+  .pv .sz-rv:not(.is-in):where(.pv-section[data-sec="stats"] .pv-item:nth-child(3), .sz-week, .pv-faq:nth-child(even)) { translate: 7rem 0; rotate: 3deg; }
+  .pv .sz-rv:not(.is-in):where(.pv-section[data-sec="stats"] .pv-item:nth-child(2)) { translate: 0 6rem; rotate: none; }
+  /* a széles GYIK-sornál a 3° a szélén már fél sornyi billenés – ott enyhébb */
+  .pv .sz-rv:not(.is-in).pv-faq { rotate: -1deg; }
+  .pv .sz-rv:not(.is-in).pv-faq:nth-child(even) { rotate: 1deg; }
+  /* ami egyszerre ér a képbe, egymás után érkezik */
+  .pv .pv-section[data-sec="stats"] .pv-item.sz-rv:nth-child(2) { transition-delay: 0.12s; }
+  .pv .pv-section[data-sec="stats"] .pv-item.sz-rv:nth-child(3),
+  .pv .sz-week.sz-rv { transition-delay: 0.24s; }
 }
-@keyframes sz-rv-from-l { from { opacity: 0; translate: -3rem 0; } to { opacity: 1; translate: none; } }
-@keyframes sz-rv-from-b { from { opacity: 0; translate: 0 3rem; }  to { opacity: 1; translate: none; } }
-@keyframes sz-rv-from-r { from { opacity: 0; translate: 3rem 0; }  to { opacity: 1; translate: none; } }
 
 
 @container (min-width: 52rem) {
@@ -5577,8 +5654,11 @@ iframe { border: 0; }
    Két szélső: Turtle Skin kártya, Glade folt, Picket Fence írás. A középső
    (data-hi): Picket Fence kártya, Turtle Skin folt és írás, bordó gomb.
    A paletta mindkét módban ugyanaz – a kártya maga a kontraszt. */
-.pv .sz-plans {
+/* az órarend-kártya (.sz-week) és a kapcsolat-lista is ebből a palettából veszi a keretét */
+.pv :is(.sz-plans, .sz-week, .pv-contact__list, .sz-mat-foot, .sz-custom) {
   --sz-pf: #F1F2EB;  --sz-bg2: #B8BFA8;  --sz-gl: #9BA685;  --sz-ts: #33401F;  --sz-bd: #650909;
+}
+.pv .sz-plans {
   display: grid;
   gap: 1.1rem;
   max-width: 64rem;
@@ -5633,7 +5713,9 @@ iframe { border: 0; }
 }
 /* a kiemelt kártya a lap színét viseli: a felső éle csak kerettel látszik –
    enélkül a rajta ülő címke a kártya fölött lebegne, nem félig rajta */
-.pv .sz-plan[data-hi] > .sz-plan__face { outline: 1px solid var(--sz-bg2); }
+.pv .sz-plan[data-hi] > .sz-plan__face,
+.pv .sz-week,
+.pv .pv-section.pv-contact .pv-contact__list { outline: 1px solid var(--sz-bg2); }   /* az órarend-kártya és mellette a kapcsolat-lista ugyanazt a vékony keretet kapja */
 .pv[data-mode="dark"] .sz-plan:not([data-hi]) .sz-plan__face { outline: 1px solid color-mix(in srgb, var(--sz-bg2) 22%, transparent); }
 
 /* halk „Részletek +” / „← Vissza”: apró, ritkított, aláhúzott – de 44px a tapintási felület */
@@ -5789,7 +5871,7 @@ iframe { border: 0; }
    Telefonon egymás alatt, tágas lapon három oszlop. Adat: site.json lists.stats
    (név = kártyacím, text = folytatás, tag = apró sor alul).
    ========================================================================== */
-.pv .pv-section[data-sec="stats"] { padding-top: clamp(1rem, 3cqi, 1.75rem); }   /* a lótusz közel üljön a hero íveléséhez */
+.pv .pv-section[data-sec="stats"] { padding-block: clamp(0.25rem, 1.5cqi, 0.75rem) clamp(1rem, 2.5cqi, 1.5rem); }   /* a lótusz közel üljön a hero íveléséhez, alul se legyen üres sáv */
 .pv .pv-section[data-sec="stats"] > .pv-wrap { display: block; }
 .pv .pv-section[data-sec="stats"] .pv-head {
   position: static;
@@ -5806,6 +5888,8 @@ iframe { border: 0; }
   grid-column: auto;
   grid-row: auto;
   width: clamp(7.5rem, 30cqi, 10.5rem);
+  position: relative;   /* a szekció íves árnyék-rétege (::before) fölé – különben levágja a csúcsát */
+  z-index: 1;
 }
 .pv .pv-section[data-sec="stats"] .pv-head h2 {
   display: flex;
@@ -5826,7 +5910,7 @@ iframe { border: 0; }
   grid-template-columns: minmax(0, 1fr);
   gap: 0.9rem;
   max-width: 64rem;
-  margin: clamp(1.6rem, 5cqi, 2.6rem) auto 0;
+  margin: clamp(1.2rem, 4cqi, 2rem) auto 0;
 }
 /* Ötszög kártya (Szandi Canva-mintája, 2026-10-16): fent kifelé álló csúcs, a
    világos szövegpanel alja lefelé csúcsosan belelóg a képbe. --sz-peak a csúcsok
@@ -5847,26 +5931,33 @@ iframe { border: 0; }
   z-index: 1;
   display: grid;
   align-content: start;
-  padding: calc(var(--sz-peak) + clamp(1rem, 3cqi, 1.6rem)) 1.2rem calc(var(--sz-peak) + 1.2rem);
+  /* a felső csúcs közepén ül a cím, ott van hely: a csúcsnak csak ~70%-a kell (Szandi, 10-18: ~20%-kal alacsonyabb panel, nagyobb kép) */
+  padding: calc(var(--sz-peak) * 0.7 + clamp(0.5rem, 1.5cqi, 0.8rem)) 1.2rem calc(var(--sz-peak) + 0.35rem);
   background: var(--sz-box);
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--sz-peak)), 50% 100%, 0 calc(100% - var(--sz-peak)));
 }
 .pv .pv-section[data-sec="stats"] .pv-item__media {
   order: 1;
   margin-top: calc(-1 * var(--sz-peak));
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 8 / 7;
   border: 0;
   border-radius: 0;
   background: transparent;
 }
-.pv .pv-section[data-sec="stats"] .pv-item__media img { width: 100%; height: 100%; object-fit: cover; }
+.pv .pv-section[data-sec="stats"] .pv-item__media img { width: 100%; height: 100%; object-fit: cover; object-position: 60% 0; }   /* Yoga1.2: a jógázó a kép közepétől jobbra, a feje fent */
+/* az olíva-fehér ikon nem vágható: egészében ül a zsálya keretben, a csúcs alatt.
+   ponytail: fájlnév-alapú, ha több ikon jön, legyen rá saját mező a site.json-ban */
+.pv .pv-section[data-sec="stats"] .pv-item__media img[src*="oliva"] {
+  object-fit: contain;
+  padding: calc(var(--sz-peak) + 0.6rem) 1rem 1rem;
+}
 .pv .pv-section[data-sec="stats"] .pv-item h3 {
   font-size: calc(clamp(1.8rem, 6cqi, 2.6rem) * var(--pv-fs));
   line-height: 1.1;
   font-variant-numeric: normal;
   color: var(--sz-head);
 }
-.pv .pv-section[data-sec="stats"] .pv-item p { margin: 0.5rem 0 0; font-size: calc(0.92rem * var(--pv-fs)); font-style: italic; color: var(--pv-text); }
+.pv .pv-section[data-sec="stats"] .pv-item p { margin: 0.3rem 0 0; font-size: calc(0.92rem * var(--pv-fs)); font-style: italic; color: var(--pv-text); }
 .pv .pv-section[data-sec="stats"] .pv-item .sz-tagline { margin-top: 0.3rem; color: var(--sz-detail); }
 @container (min-width: 46rem) {
   .pv .pv-section[data-sec="stats"] .pv-items { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2rem; }
@@ -5886,3 +5977,136 @@ iframe { border: 0; }
   border-radius: calc(var(--pv-radius) * 1.1) calc(var(--pv-radius) * 1.1) 0 0;
 }
 .pv .pv-section[data-sec="services"] .pv-item__media img { object-fit: contain; background: none; }
+
+/* SZŐNYEG-LÁB (Szandi, 2026-10-18): a szőnyeg alatt balra a halk sor (90 perc ·
+   kezdőként is …), jobbra a bordó „Jelentkezem” – az órarend-kártyához visz. */
+.pv .sz-mat-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem 1.2rem;
+  margin-top: 1rem;
+}
+/* a szőnyeg-szekció tömörebb: kevesebb levegő fölötte és alatta (Szandi, 10-18).
+   A felső szorzó azért kisebb, mert a sáv íve középen felfelé domborodik – így
+   a látható rés a Szolgáltatásokéval egyezik. */
+.pv .pv-section[data-sec="process"] { padding-block: calc(var(--pv-pad-y) * 0.35) calc(var(--pv-pad-y) * 0.7); }
+.pv .sz-mat-foot p { margin: 0; font-size: calc(0.8rem * var(--pv-fs)); letter-spacing: 0.04em; color: var(--sz-detail); }
+.pv .sz-mat-foot .sz-plan__btn { margin: 0 0 0 auto; }
+.pv .sz-mat-foot .sz-plan__btn:is(:hover, :focus-visible) { border-color: var(--sz-ts); background: var(--sz-ts); }
+
+/* EGYÉNI ÓRA · IRODAI JÓGA (Szandi, 2026-10-18): sötét olíva tábla a szőnyeg
+   után, mindkét módban. Négy lépés pöttyökkel (mint a szőnyegen), alatta a két
+   kérdéslista egy keretben. Jobb felső sarokban halk koncentrikus gyűrűk –
+   háttérkép, nem elem, így nem kell hozzá túlcsordulás-vágás. */
+.pv[data-band] .pv-section.sz-custom[data-sec] {
+  --pv-bg: #33401F;
+  --pv-text: #EEF0E6;
+  --pv-muted: #CDD4C0;
+  --pv-line: color-mix(in srgb, #F1F2EB 26%, transparent);
+  --sz-head: #F1F2EB;
+  --sz-detail: #CDD4C0;
+  --sz-ring: color-mix(in srgb, #F1F2EB 16%, transparent);
+  background:
+    radial-gradient(circle closest-side, transparent 39.4%, var(--sz-ring) 39.4% 40%, transparent 40% 59.4%,
+      var(--sz-ring) 59.4% 60%, transparent 60% 79.4%, var(--sz-ring) 79.4% 80%, transparent 80% 99.4%,
+      var(--sz-ring) 99.4% 100%, transparent 100%) right -5rem top -5rem / 16rem 16rem no-repeat,
+    var(--pv-bg);
+  color: var(--pv-text);
+  padding-top: calc(var(--pv-pad-y) * 0.5);
+}
+.pv[data-mode="dark"][data-band] .pv-section.sz-custom[data-sec] { --pv-bg: #252E1B; }
+/* a szekcióhatár íve a tábla saját színét viszi, nem a sávét */
+.pv:not([data-band="none"]) .pv-section.sz-custom[data-sec]::after { background: var(--pv-shade) top / 100% 100% no-repeat, var(--pv-bg); }
+.pv .sz-custom .pv-head .pv-muted { max-width: 44rem; color: var(--pv-muted); }
+
+.pv .sz-steps {
+  display: grid;
+  gap: 1.4rem;
+  max-width: 64rem;
+  margin: 2rem auto 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: sz-step;
+}
+.pv .sz-steps li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  column-gap: 1rem;
+  counter-increment: sz-step;
+  align-content: start;   /* egyforma magas oszlopokban a címek egy vonalban */
+}
+.pv .sz-steps li::before {
+  content: counter(sz-step);
+  grid-row: 1 / span 2;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #F1F2EB;
+  color: #33401F;
+  font-family: var(--pv-font-head);
+  font-size: calc(1.05rem * var(--pv-fs));
+  line-height: 1;
+}
+/* a pöttyöket szaggatott vonal köti össze – telefonon lefelé, tágasan jobbra */
+.pv .sz-steps li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  inset: 2.9rem auto -1.1rem 1.25rem;
+  border-inline-start: 1px dashed var(--pv-line);
+}
+.pv .sz-steps h3 { margin: 0.3rem 0 0.3rem; font-size: calc(1.3rem * var(--pv-fs)); line-height: 1.2; }
+.pv .sz-steps p { margin: 0; font-size: calc(0.9rem * var(--pv-fs)); line-height: 1.5; color: var(--pv-muted); }
+
+.pv .sz-ask {
+  display: grid;
+  gap: 1.6rem;
+  max-width: 64rem;
+  margin: 2.4rem auto 0;
+  padding: 1.4rem;
+  border: 1px solid var(--pv-line);
+  border-radius: var(--sz-leaf) 0;
+  background: color-mix(in srgb, #F1F2EB 5%, transparent);
+}
+.pv .sz-ask h3 {
+  margin: 0 0 1rem;
+  font-family: var(--pv-font);
+  font-size: calc(0.72rem * var(--pv-fs));
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sz-detail);
+}
+.pv .sz-ask ul { display: grid; gap: 0.75rem; margin: 0; padding: 0; list-style: none; }
+.pv .sz-ask li {
+  display: grid;
+  grid-template-columns: 1.15rem minmax(0, 1fr);
+  gap: 0.7rem;
+  font-size: calc(0.9rem * var(--pv-fs));
+  line-height: 1.45;
+}
+/* zsálya pötty fehér pipával */
+.pv .sz-ask li::before {
+  content: "";
+  width: 1.15rem;
+  aspect-ratio: 1;
+  margin-top: 0.1rem;
+  border-radius: 50%;
+  background: var(--sz-sage) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center / 70% no-repeat;
+}
+.pv .sz-ask .sz-plan__btn { justify-self: start; margin: 0; }
+.pv .sz-ask .sz-plan__btn:is(:hover, :focus-visible) { border-color: var(--sz-pf); background: var(--sz-pf); color: var(--sz-bd); }
+.pv .sz-ask .sz-plan__btn:focus-visible { outline-color: var(--sz-pf); }
+
+@container (min-width: 46rem) {
+  .pv[data-band] .pv-section.sz-custom[data-sec] { background-position: right -7rem top -7rem, 0 0; background-size: 24rem 24rem, auto; }
+  .pv .sz-steps { grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 2rem; }
+  .pv .sz-steps li { grid-template-columns: minmax(0, 1fr); row-gap: 0.9rem; }
+  .pv .sz-steps li::before { grid-row: auto; }
+  .pv .sz-steps li:not(:last-child)::after { inset: 1.25rem -1.4rem auto 3.1rem; border-inline-start: 0; border-top: 1px dashed var(--pv-line); }
+  .pv .sz-ask { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 3rem; padding: 1.8rem 2rem; }
+}

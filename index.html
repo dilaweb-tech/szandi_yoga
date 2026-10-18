@@ -283,6 +283,46 @@
       </div>
     </section>
 
+    <!-- SZANDI: egyéni és irodai óra – sötét tábla a szőnyeg után (a helyét a
+         site.json sections „custom” sora adja). Négy lépés, alatta a két
+         kérdéslista: mit írjon, aki privát vagy irodai órát kér. -->
+    <section class="pv-section sz-custom" id="sec-custom" data-sec="custom" hidden>
+      <div class="pv-wrap">
+        <header class="pv-head">
+          <p class="pv-eyebrow"><span class="pv-dot" aria-hidden="true"></span><span>Egyéni óra · Irodai jóga</span></p>
+          <h2>Jógaóra egyedi igényekre szabva</h2>
+          <p class="pv-muted">Oktatói képzésem alatt biztos tudást szereztem az Ashtanga vinyasa flow terén. Erre a szilárd alapra építem fel egyéni és irodai óráimat, különböző tematikákban: ilyen például a könnyed átmozgatás, a csípőnyitás vagy az ülőmunka kompenzálása.</p>
+        </header>
+        <ol class="sz-steps">
+          <li><h3>Írj nekem</h3><p>E-mailben írd meg, mire van szükséged (a kérdéseket lent találod).</p></li>
+          <li><h3>Egyeztessünk</h3><p>Elolvasom az üzeneted, és egy vázlatos tervvel jelentkezem. Közösen egyeztetjük az árat és az időpontot.</p></li>
+          <li><h3>Próbáljuk ki</h3><p>Kipróbáljuk a gyakorlatban a megbeszélt tervet.</p></li>
+          <li><h3>Finomítsuk</h3><p>Valódi segítséget szeretnék adni, ezért az elején és később is kérek visszajelzést. Bármikor pontosíthatunk.</p></li>
+        </ol>
+        <div class="sz-ask">
+          <div>
+            <h3>Erről írj, ha privát órára jönnél:</h3>
+            <ul>
+              <li>A célod a gyakorlással (pl. alapozás, a sorozat mélyítése vagy egyszerűen támogatás)</li>
+              <li>Mennyi jógatapasztalatod van?</li>
+              <li>Van-e valami, amire figyeljek? (pl. korábbi sérülés vagy panasz, ha szeretnéd megosztani)</li>
+              <li>Egyedül vagy párban jönnél, és mikor érsz rá?</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Erről írj, ha irodai jógát szeretnél:</h3>
+            <ul>
+              <li>A cég neve és a csapat létszáma</li>
+              <li>Hol tartanánk az órát (tárgyaló, iroda, más hely)? A hely címe.</li>
+              <li>Milyen gyakorisággal és mennyi időt szánnátok rá?</li>
+              <li>A csapat összetétele (pl. korosztály), és mikor lenne jó az időpont?</li>
+            </ul>
+          </div>
+          <a href="#sec-contact" class="sz-plan__btn">Írj nekem!</a>
+        </div>
+      </div>
+    </section>
+
     <!-- KAPCSOLAT -->
     <section class="pv-section pv-contact" id="sec-contact" data-sec="contact">
       <div class="pv-wrap">
@@ -302,7 +342,8 @@
             <path style="--a:0deg" d="M0 0C-13-12-13-32 0-46C13-32 13-12 0 0Z"></path>
           </svg>
           <!-- SZANDI: órarend és a stúdió címe a cím alatt (pv.css, ÓRAREND + CÍM) -->
-          <aside class="sz-week" aria-label="Mikor tartok órát">
+          <!-- id: ide visz a szőnyeg alatti „Jelentkezem” (site.js → szandiMatFoot); a sec- előtag a sima görgetésért -->
+          <aside class="sz-week" id="sec-orarend" aria-label="Mikor tartok órát">
             <!-- a napsor csak kép: ugyanezt a szöveg alatta kimondja -->
             <ol class="sz-week__days" aria-hidden="true">
               <li>H</li><li class="is-on">K<small>17:00</small></li><li>Sz</li><li>Cs</li><li>P</li><li>Sz</li><li>V</li>

@@ -211,6 +211,7 @@ const I18N = {
     "pv.pricingTitle": "Árjegyzék",
     "sz.pricingHead": "Árak",
     "sz.pricingLead": "",
+    "sz.processNote": "",
     "pv.bookingEyebrow": "Időpontfoglalás",
     "pv.bookingTitle": "Foglaljon időpontot",
     "pv.refEyebrow": "Munkáink",
@@ -294,6 +295,7 @@ const I18N = {
     "pv.pricingTitle": "Price list",
     "sz.pricingHead": "Prices",
     "sz.pricingLead": "",
+    "sz.processNote": "",
     "pv.bookingEyebrow": "Online booking",
     "pv.bookingTitle": "Book an appointment",
     "pv.refEyebrow": "Our work",
@@ -846,18 +848,21 @@ function szandiBreath() {
 /* SZANDI: görgetésre érkező elemek ott, ahol a CSS nézet-idővonala nem megy
    (iOS 26 előtti Safari, Firefox). Ugyanazok az elemek, mint a pv.css 8.11-ben
    és a SZANDI kiegészítésben; ahol a CSS megy, ott ez nem csinál semmit. A
-   hero és a Számokban címe kimarad: betöltéskor már a helyén van (a kártyái beúsznak). Gomb és gombszerű sor (GYIK,
-   órarend-kártya) sem úszik: görgetéskor nem csúszhat szét. */
-const RV_SEL = ".pv-head, .pv-item, .pv-contact__list li, .pv-prices li, .pv-about__media, .pv-about__copy, " +
+   hero és a Számokban címe kimarad: betöltéskor már a helyén van (a kártyái beúsznak).
+   Az OLDALRÓL beúszók (RV_SIDE) MINDIG innen jönnek, nézet-idővonal mellett is:
+   a görgetéshez kötött mozdulat megállás után félúton ragadt (pv.css, OLDALRÓL BEÚSZÓ). */
+const RV_SEL = ".pv-head, .pv-item, .pv-prices li, .pv-about__media, .pv-about__copy, " +
   ".pv-map__frame, .pv-slider, .sz-count > span";
-const rvIO = !CSS.supports("animation-timeline: view()") && "IntersectionObserver" in window &&
-  !matchMedia("(prefers-reduced-motion: reduce)").matches &&
+const RV_SIDE = "[data-sec='stats'] .pv-item, .pv-contact__list, .sz-week, .pv-faq";
+const RV_VIEW = CSS.supports("animation-timeline: view()");
+const rvIO = "IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches &&
   new IntersectionObserver((es) => es.forEach((e) => {
-    if (e.isIntersecting) { e.target.classList.add("is-in"); rvIO.unobserve(e.target); }
-  }), { rootMargin: "0px 0px -8% 0px" });
+    /* a fölé ugrott elem (menüből a Kapcsolatra) is a helyén legyen visszagörgetéskor */
+    if (e.isIntersecting || e.boundingClientRect.bottom < 0) { e.target.classList.add("is-in"); rvIO.unobserve(e.target); }
+  }));   /* rootMargin nélkül: az első képbe lógó pixelnél indul, mire teljesen látszik, a helyén van */
 function szandiReveal() {
   if (!rvIO || DESIGN.reveal === "none") return;
-  $$(RV_SEL).forEach((el) => {
+  $$(RV_VIEW ? RV_SIDE : RV_SEL + ", " + RV_SIDE).forEach((el) => {
     if (el.closest(".pv-hero") || el.matches("[data-sec='stats'] .pv-head") || el.classList.contains("sz-rv")) return;
     el.classList.add("sz-rv");
     rvIO.observe(el);
@@ -871,6 +876,18 @@ function szandiReveal() {
 function szandiLotus(on) {
   const lotus = $(".sz-lotus"), head = on && $('[data-sec="stats"] .pv-head');
   if (lotus && head && lotus.parentNode !== head) head.append(lotus);
+}
+
+/* SZANDI: a szőnyeg alatt egy halk sor (sz.processNote) és a „Jelentkezem” –
+   az a Kapcsolat órarend-kártyájához visz (#sec-orarend). A szekciót a
+   renderLists() minden körben újraírja, ezért minden kör után kerül be. */
+function szandiMatFoot() {
+  const wrap = $('[data-sec="process"] > .pv-wrap');
+  if (!wrap || $(".sz-mat-foot", wrap)) return;
+  const note = t("sz.processNote");
+  wrap.insertAdjacentHTML("beforeend", `<div class="sz-mat-foot">
+    ${note ? `<p>${esc(note)}</p>` : ""}
+    <a class="sz-plan__btn" href="#sec-orarend">${esc(t("pv.cta"))}</a></div>`);
 }
 
 /* SZANDI: óra-kártyák (site.json pricing.plans) a tétellista helyett – a
@@ -928,6 +945,7 @@ function applyContent() {
   const bookingOn = !!c.booking?.enabled;
   renderLists(c);                              /* előbb legyen meg a szekció, aztán rendezzük */
   szandiBreath();
+  szandiMatFoot();
   szandiLotus(sections.some((s) => s.id === "stats" && s.on));
   szandiReveal();
   /* betűméret-kivételek szekciónként – a generált listásakra is */
