@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Eszköz-teszt</title>
+<style>
+  /* Belső fejlesztői eszköz – nem kerül az ügyfél elé. */
+  :root { --bg: #f4f4f1; --ink: #1f2419; --sub: #5d6452; --line: #d6d9cc; --err: #a11d1d; --warn: #8a5a00; --ok: #2f6b2f; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #171a14; --ink: #e9ebe2; --sub: #a3a993; --line: #343a2c; --err: #ff8a80; --warn: #f0c060; --ok: #8fd18f; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 16px; background: var(--bg); color: var(--ink); font: 14px/1.45 system-ui, sans-serif; }
+  h1 { margin: 0 0 0.3rem; font-size: 1.3rem; }
+  p { margin: 0 0 0.8rem; color: var(--sub); max-width: 60rem; }
+  .bar { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: center; margin-bottom: 1rem; }
+  button { min-height: 44px; padding: 0 1.2rem; border: 0; border-radius: 0.5rem; background: var(--ink); color: var(--bg); font: inherit; font-weight: 600; cursor: pointer; }
+  button:disabled { opacity: 0.5; cursor: progress; }
+  button:focus-visible, tr:focus-visible { outline: 2px solid var(--err); outline-offset: 2px; }
+  label { display: inline-flex; gap: 0.4rem; align-items: center; min-height: 44px; }
+  #status { font-weight: 600; }
+  .wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 0.45rem 0.6rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  tbody tr { cursor: pointer; }
+  tbody tr:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); }
+  .err { color: var(--err); font-weight: 700; }
+  .warn { color: var(--warn); font-weight: 700; }
+  .ok { color: var(--ok); font-weight: 700; }
+  code { font-size: 12px; word-break: break-all; }
+  #preview { margin-top: 1.2rem; }
+  #stage { position: relative; overflow: hidden; border: 1px solid var(--line); background: #fff; }
+  #stage iframe { position: absolute; left: 0; top: 0; border: 0; transform-origin: 0 0; }
+  pre { white-space: pre-wrap; font-size: 12px; }
+</style>
+</head>
+<body>
+<h1>Eszköz-teszt</h1>
+<p>Az oldalt betölti minden telefon- és tabletméreten (iOS és Android), álló és fekvő nézetben, és megkeresi, ami szétcsúszott: vízszintes görgetést, a képernyőről kilógó vagy levágott elemet, egymásra csúszott dobozt, a szomszédainál keskenyebb, balra ragadt dobozt, torzított képet, kicsi gombot. Egy sorra kattintva a hibás elem pirossal keretezve megjelenik lent.</p>
+<div class="bar">
+  <button id="run" type="button">Teszt futtatása</button>
+  <label><input type="checkbox" id="all"> minden aloldal (foglalás, impresszum, adatkezelés, 404)</label>
+  <label><input type="checkbox" id="warn"> figyelmeztetések is (gombméret egér-módban mérve – érintőképernyőn a <code>pointer: coarse</code> szabályok nagyobbítanak)</label>
+  <span id="status" role="status"></span>
+</div>
+<div class="wrap"><table>
+  <thead><tr><th>Oldal</th><th>Eszköz</th><th>Nézet</th><th>Szint</th><th>Hiba</th><th>Elem</th></tr></thead>
+  <tbody id="out"></tbody>
+</table></div>
+<h2 style="font-size:1rem;margin-top:1.4rem">Galéria – egy szekció minden eszközön</h2>
+<div class="bar">
+  <label>Csoport <select id="g-group">
+    <option value="phone-p">Telefon, álló</option><option value="phone-l">Telefon, fekvő</option>
+    <option value="tab-p">Tablet, álló</option><option value="tab-l">Tablet, fekvő</option>
+  </select></label>
+  <label>Szekció <select id="g-sec"></select></label>
+  <button id="g-run" type="button">Mutasd</button>
+</div>
+<div id="gallery" style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start"></div>
+<section id="preview" hidden>
+  <h2 id="pv-title" style="font-size:1rem"></h2>
+  <div id="stage"></div>
+</section>
+<pre id="summary"></pre>
+
+<script>
+/* CSS-pixeles nézetméretek (álló). A fekvőt a felcserélt méret adja. */
+const DEVICES = [
+  ["iPhone SE (1. gen.)", "iOS", 320, 568],
+  ["iPhone SE (2–3. gen.)", "iOS", 375, 667],
+  ["iPhone 13 mini", "iOS", 375, 812],
+  ["iPhone 14", "iOS", 390, 844],
+  ["iPhone 15 / 16", "iOS", 393, 852],
+  ["iPhone 16 Pro", "iOS", 402, 874],
+  ["iPhone 15 Pro Max / Plus", "iOS", 430, 932],
+  ["iPhone 16 Pro Max", "iOS", 440, 956],
+  ["Kis Android", "Android", 360, 640],
+  ["Galaxy S24", "Android", 360, 780],
+  ["Galaxy S24+", "Android", 384, 832],
+  ["Pixel 8 / Galaxy A55", "Android", 412, 915],
+  ["Pixel 9 Pro XL", "Android", 448, 998],
+  ["Galaxy Z Fold (nyitva)", "Android", 673, 841],
+  ["Android tablet 8″", "Android", 600, 960],
+  ["Galaxy Tab A9+", "Android", 800, 1280],
+  ["Galaxy Tab S9+", "Android", 900, 1440],
+  ["iPad mini", "iPadOS", 744, 1133],
+  ["iPad (9. gen.)", "iPadOS", 810, 1080],
+  ["iPad 11 / Air 11", "iPadOS", 820, 1180],
+  ["iPad Pro 11", "iPadOS", 834, 1194],
+  ["iPad Air 13", "iPadOS", 1024, 1366],
+  ["iPad Pro 13", "iPadOS", 1032, 1376],
+];
+const PAGES = ["index.html"];
+const SUBPAGES = ["foglalas.html", "impresszum.html", "adatkezeles.html", "404.html"];
+const MIN_TAP = 44;
+
+const $ = (s) => document.querySelector(s);
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/* Az oldal végállapota: mozgás ki, minden feltárulós elem látszik – a teszt
+   az elrendezést nézi, nem az animáció egy köztes képkockáját. */
+function prep(w) {
+  const d = w.document;
+  const st = d.createElement("style");
+  /* a görgetősáv mobilon a tartalom fölött úszik, nem vesz el szélességet */
+  st.textContent = "html{scrollbar-width:none}*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}";
+  d.head.append(st);
+  d.querySelectorAll(".sz-rv").forEach((e) => e.classList.add("is-in"));
+}
+
+function frame(stage, src, wid, hei) {
+  return new Promise((res) => {
+    const f = document.createElement("iframe");
+    f.width = wid; f.height = hei;
+    f.style.width = wid + "px"; f.style.height = hei + "px";
+    f.title = "Előnézet";
+    f.onload = async () => {
+      const w = f.contentWindow;
+      /* friss CSS: szerkesztés után a böngésző gyorsítótára a régit adná */
+      await Promise.all([...w.document.querySelectorAll("link[rel=stylesheet]")]
+        .filter((l) => l.href.startsWith(location.origin))
+        .map((l) => new Promise((ok) => { l.onload = l.onerror = ok; l.href = l.href.split("?")[0] + "?t=" + Date.now(); })));
+      try { await w.document.fonts.ready; } catch {}
+      await sleep(700);          // a site.js a site.json-ból épít – várjunk, amíg kész
+      prep(w);
+      await sleep(150);
+      res(f);
+    };
+    f.src = src;
+    stage.append(f);
+  });
+}
+
+/* Egyedi CSS-út az elemhez, hogy az előnézet újra megtalálja */
+function cssPath(e) {
+  const out = [];
+  while (e && e.nodeType === 1 && e.tagName !== "HTML") {
+    if (e.id) { out.unshift("#" + CSS.escape(e.id)); break; }
+    const i = [...e.parentNode.children].indexOf(e) + 1;
+    out.unshift(e.tagName.toLowerCase() + ":nth-child(" + i + ")");
+    e = e.parentElement;
+  }
+  return out.join(" > ");
+}
+function label(e) {
+  const n = (x) => x.tagName.toLowerCase() + (x.id ? "#" + x.id : "") +
+    (typeof x.className === "string" && x.className.trim() ? "." + x.className.trim().split(/\s+/).slice(0, 2).join(".") : "");
+  const s = e.parentElement && e.parentElement.closest("section, header, footer, nav, dialog");
+  return (s ? n(s) + " › " : "") + n(e);
+}
+
+function audit(w) {
+  const d = w.document, root = d.documentElement, vw = root.clientWidth, found = [];
+  const cs = (e, pseudo) => w.getComputedStyle(e, pseudo);
+  const add = (lvl, what, e, extra = "") => found.push({ lvl, what: what + (extra ? " – " + extra : ""), el: e ? label(e) : "", path: e ? cssPath(e) : "" });
+
+  const visible = (e) => {
+    if (e.closest("[hidden], [inert], [aria-hidden='true'], details:not([open]) > :not(summary)")) return false;
+    for (let a = e; a && a !== root; a = a.parentElement) {
+      const s = cs(a);
+      if (s.display === "none" || s.visibility === "hidden" || s.opacity === "0") return false;
+    }
+    const r = e.getBoundingClientRect();
+    return r.width > 0.5 && r.height > 0.5;
+  };
+  const isBox = (s) =>
+    (s.backgroundColor !== "rgba(0, 0, 0, 0)" && s.backgroundColor !== "transparent") ||
+    s.backgroundImage !== "none" || s.boxShadow !== "none" ||
+    parseFloat(s.borderTopWidth) + parseFloat(s.borderLeftWidth) > 0 || s.outlineStyle !== "none";
+  /* van-e saját (nem html/body) vágó őse, ami maga a képernyőn belül marad */
+  const clipped = (e) => {
+    for (let a = e.parentElement; a && a !== d.body && a !== root; a = a.parentElement) {
+      const s = cs(a);
+      if (s.overflowX !== "visible" || s.clipPath !== "none" || s.contain.includes("paint")) {
+        const r = a.getBoundingClientRect();
+        if (r.left >= -1 && r.right <= vw + 1) return true;
+      }
+    }
+    return false;
+  };
+
+  // 1. vízszintes görgetés
+  const sw = Math.max(root.scrollWidth, d.body.scrollWidth);
+  if (sw > vw + 1) add("err", "Vízszintes görgetés", null, `${sw - vw}px-szel szélesebb a képernyőnél`);
+
+  const els = [...d.body.querySelectorAll("*")].filter((e) =>
+    !/^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE|BR|SOURCE|TRACK|META|LINK)$/.test(e.tagName) && !e.closest("svg:not(:scope)") && visible(e));
+  const flagged = new Set();
+
+  for (const e of els) {
+    const s = cs(e), r = e.getBoundingClientRect();
+    if (s.position === "fixed" && (r.right <= 0 || r.left >= vw)) continue;
+
+    // 2. képernyőről részben kilógó elem (ami teljesen kint van, az szándékos, pl. fiók-menü)
+    const partly = (r.left < -1 && r.right > 0) || (r.right > vw + 1 && r.left < vw);
+    if (partly && !clipped(e) && ![...flagged].some((f) => f.contains(e))) {
+      flagged.add(e);
+      add("err", "Kilóg a képernyőről", e, `bal ${Math.round(r.left)}, jobb ${Math.round(r.right)} / ${vw}px`);
+    }
+
+    // 3. levágott vagy dobozából kifutó szöveg (csak a szöveges levélelemeknél)
+    const hasText = [...e.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim());
+    if (hasText && s.display !== "inline" && e.clientWidth > 0) {
+      const cutX = e.scrollWidth > e.clientWidth + 1, cutY = e.scrollHeight > e.clientHeight + 2;
+      if ((s.overflowX !== "visible" && cutX) || (s.overflowY !== "visible" && s.overflowY !== "auto" && s.overflowY !== "scroll" && cutY))
+        add("err", "Levágott szöveg", e, s.textOverflow === "ellipsis" ? "három ponttal rövidítve" : "");
+      else if (s.overflowX === "visible" && e.children.length === 0 && cutX)
+        add("err", "Szöveg kifut a dobozából", e, `${e.scrollWidth - e.clientWidth}px`);
+    }
+
+    // e-mail cím, telefonszám ne törjön két sorba (a <wbr>-rel jelölt, szándékos törés – @ előtt – kivétel)
+    if (e.matches("a[href^='mailto:'], a[href^='tel:']") && !e.querySelector("wbr") && (e.getClientRects().length > 1 || r.height > parseFloat(s.fontSize) * 2.2))
+      add("err", "Kettétört e-mail / telefonszám", e, `${Math.round(r.height)}px magas`);
+
+    // 7. olvashatatlanul apró betű
+    if (hasText && parseFloat(s.fontSize) < 11) add("warn", "Túl apró betű", e, s.fontSize);
+
+    // 8. torzított kép
+    if (e.tagName === "IMG" && e.naturalWidth && (s.objectFit === "fill" || s.objectFit === "")) {
+      const a1 = e.naturalWidth / e.naturalHeight, a2 = r.width / r.height;
+      if (Math.abs(a1 - a2) / a1 > 0.04) add("err", "Torzított kép", e, `arány ${a1.toFixed(2)} → ${a2.toFixed(2)}`);
+    }
+
+    // 6. kicsi tapintási felület (a szövegközi link kivétel; a ::after-rel kinagyított is)
+    if (e.matches("a[href], button, select, input:not([type=hidden]), summary, [role=button]") && s.display !== "inline") {
+      const big = (() => { const p = cs(e, "::after"); return p.content !== "none" && p.position === "absolute"; })();
+      if (!big && (r.height < MIN_TAP - 0.5 || r.width < MIN_TAP - 0.5))
+        add("warn", "Kicsi gomb / link", e, `${Math.round(r.width)}×${Math.round(r.height)}px`);
+    }
+  }
+
+  // 4–5. dobozok egymáshoz képest: balra ragadt keskeny doboz, egymásra csúszás
+  /* a `display: contents` szülő gyerekei a nagyszülő rácsában állnak – ott is testvérek */
+  const layoutKids = (p) => [...p.children].flatMap((k) => (cs(k).display === "contents" ? layoutKids(k) : [k]));
+  const parents = new Set(els.map((e) => e.parentElement).filter((p) => p && cs(p).display !== "contents"));
+  for (const p of parents) {
+    const kids = layoutKids(p).filter((k) => els.includes(k) && !/^(absolute|fixed)$/.test(cs(k).position) && cs(k).float === "none");
+    if (kids.length < 2) continue;
+    const ps = cs(p), pr = p.getBoundingClientRect();
+    const cl = pr.left + parseFloat(ps.borderLeftWidth) + parseFloat(ps.paddingLeft);
+    const cr = pr.right - parseFloat(ps.borderRightWidth) - parseFloat(ps.paddingRight);
+    const cw = cr - cl;
+    const rects = kids.map((k) => k.getBoundingClientRect());
+    kids.forEach((k, i) => {
+      const r = rects[i];
+      if (!isBox(cs(k))) return;
+      const besideSomething = rects.some((o, j) => j !== i && o.top < r.bottom - 1 && o.bottom > r.top + 1);
+      const fullSibling = rects.some((o, j) => j !== i && o.width >= cw * 0.97);
+      // gomb, link: tartalomszéles és balra zárt – az szándékos, nem hiba
+      if (!k.matches("a, button") && !besideSomething && fullSibling && r.width < cw * 0.92 && Math.abs(r.left - cl) < 2 && cr - r.right > 24)
+        add("err", "Keskeny doboz balra ragadt", k, `${Math.round(r.width)}px a ${Math.round(cw)}px-ből, a testvére teljes széles`);
+      for (let j = i + 1; j < kids.length; j++) {
+        const o = rects[j];
+        if (!isBox(cs(kids[j]))) continue;
+        const ox = Math.min(r.right, o.right) - Math.max(r.left, o.left);
+        const oy = Math.min(r.bottom, o.bottom) - Math.max(r.top, o.top);
+        if (ox > 4 && oy > 4) add("err", "Egymásra csúszott dobozok", k, `${label(kids[j])} – ${Math.round(ox)}×${Math.round(oy)}px átfedés`);
+      }
+    });
+  }
+  return found;
+}
+
+const views = (dev) => {
+  const [name, os, a, b] = dev;
+  return [[name, os, "álló", a, b], [name, os, "fekvő", b, a]];
+};
+
+$("#run").addEventListener("click", async () => {
+  const btn = $("#run"), out = $("#out"), showWarn = $("#warn").checked;
+  btn.disabled = true; out.textContent = "";
+  const pages = $("#all").checked ? [...PAGES, ...SUBPAGES] : PAGES;
+  const runs = pages.flatMap((pg) => DEVICES.flatMap(views).map((v) => [pg, ...v]));
+  const hidden = document.createElement("div");
+  hidden.style.cssText = "position:fixed;left:0;top:0;width:0;height:0;overflow:hidden;";
+  document.body.append(hidden);
+  let errs = 0, warns = 0, clean = 0, n = 0;
+  const lines = [];
+  for (const [pg, name, os, orient, wid, hei] of runs) {
+    $("#status").textContent = `${++n}/${runs.length} · ${pg} · ${name} ${orient} (${wid}×${hei})`;
+    const f = await frame(hidden, "../" + pg, wid, hei);
+    let res;
+    try { res = audit(f.contentWindow); } catch (x) { res = [{ lvl: "err", what: "A teszt elakadt: " + x.message, el: "", path: "" }]; }
+    f.remove();
+    const shown = res.filter((x) => showWarn || x.lvl === "err");
+    if (!res.some((x) => x.lvl === "err")) clean++;
+    for (const x of shown) {
+      x.lvl === "err" ? errs++ : warns++;
+      const tr = document.createElement("tr");
+      tr.tabIndex = 0;
+      tr.innerHTML = `<td>${pg}</td><td>${name} <small>(${os})</small></td><td>${orient} ${wid}×${hei}</td>` +
+        `<td class="${x.lvl}">${x.lvl === "err" ? "Hiba" : "Figyelm."}</td><td>${x.what}</td><td><code>${x.el}</code></td>`;
+      const open = () => show(pg, name, orient, wid, hei, x.path, x.what);
+      tr.addEventListener("click", open);
+      tr.addEventListener("keydown", (ev) => ev.key === "Enter" && open());
+      out.append(tr);
+      lines.push(`${x.lvl.toUpperCase()} | ${pg} | ${name} ${orient} ${wid}x${hei} | ${x.what} | ${x.el}`);
+    }
+  }
+  hidden.remove();
+  const total = runs.length;
+  $("#status").innerHTML = errs
+    ? `<span class="err">${errs} hiba</span>, ${warns} figyelmeztetés · ${clean}/${total} nézet hibátlan`
+    : `<span class="ok">Hibátlan</span> – ${total} nézet, ${warns} figyelmeztetés`;
+  $("#summary").textContent = `ÖSSZESEN: ${errs} hiba, ${warns} figyelmeztetés, ${clean}/${total} nézet hibátlan\n` + lines.join("\n");
+  btn.disabled = false;
+});
+
+/* Galéria: a választott szekció tetejére görgetve, minden eszközön egyszerre */
+const SECTIONS = [["", "Nyitókép (lap teteje)"], ["#sec-stats", "Jó helyen jársz"], ["#sec-pricing", "Szolgáltatások"],
+  ["#sec-process", "Az órákról"], ["#sec-custom", "Egyéni / irodai"], ["#sec-faq", "GYIK"], ["#sec-contact", "Kapcsolat"], ["footer", "Lábléc"]];
+$("#g-sec").innerHTML = SECTIONS.map(([v, t]) => `<option value="${v}">${t}</option>`).join("");
+$("#g-run").addEventListener("click", async () => {
+  const g = $("#g-group").value, sel = $("#g-sec").value, gal = $("#gallery"), btn = $("#g-run");
+  btn.disabled = true; gal.textContent = "";
+  const list = DEVICES.filter((d) => (g.startsWith("tab") ? Math.min(d[2], d[3]) >= 600 : Math.min(d[2], d[3]) < 600))
+    .map(([n, os, a, b]) => (g.endsWith("l") ? [n, os, b, a] : [n, os, a, b]));
+  const W = { "phone-p": 180, "phone-l": 380, "tab-p": 260, "tab-l": 380 }[g];
+  for (const [n, os, wid, hei] of list) {
+    const cell = document.createElement("figure");
+    const scale = W / wid;
+    cell.style.cssText = `margin:0;width:${W}px`;
+    cell.innerHTML = `<div style="position:relative;overflow:hidden;width:${W}px;height:${hei * scale}px;border:1px solid var(--line);background:#fff"></div><figcaption style="font-size:11px">${n} · ${wid}×${hei}</figcaption>`;
+    gal.append(cell);
+    const f = await frame(cell.firstChild, "../index.html", wid, hei);
+    f.style.cssText += `;position:absolute;left:0;top:0;border:0;transform-origin:0 0;transform:scale(${scale})`;
+    const el = sel && f.contentDocument.querySelector(sel);
+    if (el) f.contentWindow.scrollTo(0, el.getBoundingClientRect().top + f.contentWindow.scrollY - 60);
+    else if (sel === "footer") f.contentWindow.scrollTo(0, 1e6);
+  }
+  btn.disabled = false;
+});
+
+/* Előnézet: az eszköz méretében, kicsinyítve, a hibás elem pirossal keretezve */
+async function show(pg, name, orient, wid, hei, path, what) {
+  const box = $("#preview"), stage = $("#stage");
+  box.hidden = false; stage.textContent = "";
+  $("#pv-title").textContent = `${pg} · ${name} · ${orient} ${wid}×${hei} · ${what}`;
+  const scale = Math.min(1, (box.clientWidth - 2) / wid);
+  stage.style.width = wid * scale + "px"; stage.style.height = hei * scale + "px";
+  const f = await frame(stage, "../" + pg, wid, hei);
+  f.style.transform = `scale(${scale})`;
+  const el = path && f.contentDocument.querySelector(path);
+  if (el) {
+    el.style.outline = "3px solid #e00"; el.style.outlineOffset = "-1px";
+    el.scrollIntoView({ block: "center" });
+  }
+  box.scrollIntoView({ block: "start" });
+}
+</script>
+</body>
+</html>

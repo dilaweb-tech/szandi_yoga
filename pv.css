@@ -4775,6 +4775,11 @@ iframe { border: 0; }
      balra üres fél képernyő maradt. Itt a saját rácsuk dönt. */
   .pv[data-sec-head="side"] .pv-wrap:not(:has(> .pv-head)) > * { grid-column: auto; }
 }
+/* Szőnyeg vízszintesen: rövidebb szövegnél a többletmagasság ne a pötty-sort
+   nyújtsa – a lépéscímek egy vonalban (a sablonba is át kell vinni) */
+@container (min-width: 46rem) {
+  .pv[data-sig="mat"] .pv-list--process .pv-item { align-content: start; }
+}
 
 /* KAPCSOLAT: egy nyugodt panel soronként, a sor elején ikonnal – nem három
    szétszórt doboz üres cellával. A panel a LAP színét kapja, így a sávos
@@ -4782,7 +4787,6 @@ iframe { border: 0; }
 .pv .pv-section.pv-contact .pv-contact__list {
   grid-template-columns: 1fr;
   gap: 0;
-  max-width: 34rem;
   padding: 0.3rem clamp(1rem, 4cqi, 1.8rem);
   border: 0;
   border-radius: var(--sz-leaf) 0;   /* levél, mint a mellette álló órarend-kártya */
@@ -4894,7 +4898,8 @@ iframe { border: 0; }
   text-wrap: balance;
 }
 .pv .pv-section.pv-contact .pv-head > .sz-week { margin-top: 0; }
-@container (min-width: 52rem) {
+/* 60rem: 52rem-nél (iPad Pro 11 álló) a lista hasábja keskeny volt, az e-mail két sorba tört */
+@container (min-width: 60rem) {
   .pv[data-sec-head] .pv-section.pv-contact[data-stripe] > .pv-wrap:has(> .pv-head) {
     display: grid;   /* a rácsot eddig a side-fej adta; stack fejnél is kell */
     gap: 0 clamp(1.6rem, 4cqi, 3.6rem);
@@ -5611,7 +5616,7 @@ iframe { border: 0; }
 }
 .pv .sz-social svg { width: 1.3rem; height: 1.3rem; }
 .pv .sz-social:is(:hover, :focus-visible) { color: #F5F6F0; background: color-mix(in srgb, var(--sz-foot) 16%, transparent); }
-@container (min-width: 52rem) {
+@container (min-width: 60rem) {   /* 52rem-nél (iPad Pro 11 álló) egy sorba szorítva tördeltek a linkek */
   .pv .pv-footer { flex-wrap: nowrap; justify-content: flex-start; padding-inline-end: 5rem; text-align: start; }   /* jobbra a „fel" gomb */
   .pv .pv-footer .sz-social { margin-inline: auto; }   /* a két csoport közé, középre */
   .pv .pv-footer > [data-i18n="pv.rights"] { display: inline; }
@@ -5662,7 +5667,7 @@ iframe { border: 0; }
 .pv .sz-plans {
   display: grid;
   gap: 1.1rem;
-  max-width: 64rem;
+  max-width: 30rem;   /* egy hasábban (álló tablet) se nyúljon képernyőszélesre – három hasábnál 64rem */
   margin: clamp(2rem, 6cqi, 3rem) auto 0;
   padding: 0;
   list-style: none;
@@ -5859,7 +5864,7 @@ iframe { border: 0; }
 /* Tágas lapon három oszlop: a két szélső egyforma magas, a középső fent-lent
    kilóg belőlük (negatív margó) – mindig ez a legnagyobb. */
 @container (min-width: 52rem) {
-  .pv .sz-plans { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.1rem, 2.4cqi, 1.8rem); padding-block: 1.5rem; }
+  .pv .sz-plans { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.1rem, 2.4cqi, 1.8rem); padding-block: 1.5rem; max-width: 64rem; }
   .pv .sz-plan[data-hi] { order: 0; margin-block: -1.5rem; }
   .pv .sz-plan[data-hi] > .sz-plan__face { padding-block: 2.6rem; }
 }
@@ -5910,7 +5915,7 @@ iframe { border: 0; }
 .pv .pv-section[data-sec="stats"] .pv-items {
   grid-template-columns: minmax(0, 1fr);
   gap: 0.9rem;
-  max-width: 64rem;
+  max-width: 26rem;   /* egy hasábban telefonnyi széles marad: fekvő telefonon, kis tableten se nőjön képernyőnyi kártyává */
   margin: clamp(1.2rem, 4cqi, 2rem) auto 0;
 }
 /* Ötszög kártya (Szandi Canva-mintája, 2026-10-16): fent kifelé álló csúcs, a
@@ -5960,8 +5965,10 @@ iframe { border: 0; }
 }
 .pv .pv-section[data-sec="stats"] .pv-item p { margin: 0.3rem 0 0; font-size: calc(0.92rem * var(--pv-fs)); font-style: italic; color: var(--pv-text); }
 .pv .pv-section[data-sec="stats"] .pv-item .sz-tagline { margin-top: 0.3rem; color: var(--sz-detail); }
-@container (min-width: 46rem) {
-  .pv .pv-section[data-sec="stats"] .pv-items { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2rem; }
+@container (min-width: 40rem) {
+  .pv .pv-section[data-sec="stats"] .pv-items { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2rem; max-width: 64rem; }
+  /* három keskeny hasábban a leghosszabb szó („Munkahelyi”) is kiférjen */
+  .pv .pv-section[data-sec="stats"] .pv-item h3 { font-size: calc(clamp(1.5rem, 4.6cqi, 2.6rem) * var(--pv-fs)); }
 }
 
 /* ==========================================================================
