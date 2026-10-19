@@ -13,6 +13,12 @@
       "port": 5599
     },
     {
+      "name": "dilaweb-gyoker",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "5597", "--bind", "127.0.0.1", "--directory", "C:/DilaWEB"],
+      "port": 5597
+    },
+    {
       "name": "node-ellenorzes",
       "runtimeExecutable": "npx",
       "runtimeArgs": ["-y", "http-server", "-p", "5598", "-a", "127.0.0.1", "-c-1", "-s"],
