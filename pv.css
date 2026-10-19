@@ -4943,8 +4943,8 @@ iframe { border: 0; }
   --sz-sub:       #5E6E48;   /* középzöld – alfeliratok világos dobozon */
   --sz-box:       #F8F9F4;   /* a legvilágosabb árnyalat – szövegdoboz */
   --sz-box-warm:  #F1F2EB;   /* egy fokkal mélyebb – jógaórák, órarend */
-  --sz-btn:       #33401F;   /* gomb nyugalomban: Ink */
-  --sz-btn-ink:   #F8F9F4;
+  --sz-btn:       #650909;   /* gomb nyugalomban: bordó – a lapon minden fő gomb ez, így a szem megtanulja: bordó = cselekvés */
+  --sz-btn-ink:   #FFFFFF;
   --sz-hover:     #556B2F;   /* gomb/ikon rámutatásra */
   --sz-hover-ink: #FFFFFF;
   --sz-foot-bg:   #33401F;   /* lábléc: Ink … */
@@ -4972,7 +4972,7 @@ iframe { border: 0; }
   --sz-box:       #2C3525;
   --sz-box-warm:  #303A28;
   --sz-shadow:    0 22px 44px -26px #000;
-  --sz-btn:       #C4CDB3;
+  --sz-btn:       #C46A6A;   /* éjszakai bordó, sötét felirattal (5,0) */
   --sz-btn-ink:   #1A1F16;
   --sz-hover:     #A7B58C;
   --sz-hover-ink: #141414;
@@ -5075,7 +5075,8 @@ iframe { border: 0; }
   box-shadow: 0 14px 30px -18px var(--sz-btn);
   transition: transform 0.2s var(--ease), background-color 0.2s var(--ease), color 0.2s var(--ease);
 }
-.pv .pv-btn--ghost { background: var(--sz-box); color: var(--sz-head); }
+/* a második gomb hátrébb lép: keret, kitöltés nélkül – az első gomb vezet */
+.pv .pv-btn--ghost { background: transparent; color: var(--sz-head); border-color: color-mix(in srgb, var(--sz-head) 35%, transparent); }
 .pv :is(.pv-mode, .pv-burger) { background: transparent; }
 .pv :is(.pv-btn, .pv-nav__cta, .pv-mode, .pv-burger, .pv-top):is(:hover, :focus-visible) {
   background: var(--sz-hover);
@@ -5398,8 +5399,8 @@ iframe { border: 0; }
   .pv .sz-lotus { width: clamp(7rem, 10cqi, 8.5rem); }
 }
 /* a hero-cím kiemelt szava („légzés") a lótusz bordóját kapja */
-.pv .pv-hero__copy h1 .pv-emph,
-.pv .sz-quote p { color: var(--sz-accent); }
+.pv .pv-hero__copy h1 .pv-emph { color: var(--sz-accent); }
+.pv .sz-quote p { color: var(--sz-sub); }   /* halk: a heróban a bordó csak „légzés” és a gomb – a szem köztük fut */
 .pv .sz-quote p { font-style: italic; }
 .pv .sz-quote cite { color: var(--sz-head); }
 .pv .sz-lotus path {
