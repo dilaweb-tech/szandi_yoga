@@ -1305,8 +1305,8 @@ function applySeo() {
      `pages[]` adja). A főoldalon a cégnév és a keresőleírás a lényeg. */
   const ownTitle = $("#pv-error") || $("[data-legal]");
   const own = PAGE?.title || (ownTitle ? document.title : "");
-  if (own) document.title = `${own}${c.company ? " – " + c.company : ""}`;
-  else if (c.company) document.title = c.seoTitle || `${c.company}${c.tagline ? " – " + String(c.tagline).split(/[.!?]/)[0] : ""}`;
+  if (own) document.title = `${own}${c.company ? " – " + plain(c.company) : ""}`;
+  else if (c.company) document.title = plain(c.seoTitle || `${c.company}${c.tagline ? " – " + String(c.tagline).split(/[.!?]/)[0] : ""}`);
 
   /* A jogi oldalak és a 404 saját leírást hoznak a HTML-ben – azt nem írjuk át. */
   const desc = PAGE?.description || c.seoDescription || c.tagline || "";
